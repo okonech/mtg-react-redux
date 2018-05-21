@@ -1,5 +1,5 @@
 import React from 'react';
-import Player from '../containers/Player/Player';
+import Player from '../containers/Player/';
 
 const MenuStyle = {
     height: '3%', /* Full-height: remove this if you want "auto" height */
@@ -11,7 +11,7 @@ const MenuStyle = {
     'background-color': '#333',
 };
 
-const MenuItemStyle = {
+const MenuItemStyle: any = {
     color: 'white',
     display: 'block',
     float: 'left',
@@ -25,7 +25,7 @@ export default class SinglePlayerGame extends React.Component {
         return(
             <div className='fullSize'>
                 <ul style={MenuStyle}>
-                    <li style={MenuItemStyle}><a style={MenuItemStyle} class='active' href='#home'>Home</a></li>
+                    <li style={MenuItemStyle}><a style={MenuItemStyle} href='#home'>Home</a></li>
                     <li style={MenuItemStyle}><a style={MenuItemStyle} href='#news'>News</a></li>
                     <li style={MenuItemStyle}><a style={MenuItemStyle} href='#contact'>Contact</a></li>
                     <li style={MenuItemStyle}><a style={MenuItemStyle} href='#about'>About</a></li>

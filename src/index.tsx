@@ -12,6 +12,7 @@ import store from './store';
 
 
 ReactDOM.render(
+    <div className= 'fullSize' >
     <Provider store= {store} >
         <HashRouter>
             <div className= 'fullSize' >
@@ -20,6 +21,7 @@ ReactDOM.render(
                 <Route path = '/test-game' component = {SinglePlayerGame}/>
             </div>
         </HashRouter>
-    </Provider>,
+    </Provider>
+    </div>,
     document.getElementById('root'));
 registerServiceWorker();

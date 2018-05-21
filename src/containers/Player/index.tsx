@@ -1,7 +1,6 @@
 import React from 'react';
-import Card from '../../components/Card/Card';
 import BattleField from '../BattleField';
-import Hand from '../Hand/Hand';
+import Hand from '../Hand';
 import InfoArea from '../InfoArea';
 
 const PlayerStyle = {
@@ -18,13 +17,13 @@ const InfoAreaStyle: any  = {
 
 const HandStyle: any = {
     float: 'bottom',
-    height: '15%',
+    height: '25%',
     marginLeft: '20%',
     width: '60%'
 };
 
 const BattleFieldStyle = {
-    height: '85%',
+    height: '75%',
     width: '100%'
 };
 
@@ -138,11 +137,11 @@ const cards = [
 ];
 
 export default class Player extends React.Component {
-    public cards: [Card];
+    public cards: string[];
 
     constructor(props: any) {
         super(props);
-        // assign cards here
+        this.cards = cards;
       }
 
     public render() {

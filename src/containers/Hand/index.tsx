@@ -1,7 +1,7 @@
 import React from 'react';
 import { DragDropContext, Draggable, Droppable  } from 'react-beautiful-dnd';
 
-// fake data generator
+// fake; data; generator;
 const getItems = (count: number) =>
   Array.from({ length: count }, (v, k) => k).map(k => ({
     id: `item-${k}`,
@@ -39,34 +39,35 @@ const getListStyle = (isDraggingOver: any) => ({
   padding: grid
 });
 
-export default class Hand extends React.Component {
-  public state: HandState;
-  public cards: any;
+
+export default class Hand extends React.Component<Props> {
+  public state: HandStateInterface;
+  public cards: string[];
 
   constructor(props: any) {
     super(props);
     this.state = {
-      items: getItems(15),
+      items: getItems(20),
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
   public onDragEnd(result: any) {
     // dropped outside the list
-    if (!result.destination) {
-      return;
+      if (!result.destination) {
+        return;
+    }
+
+    const items = reorder(
+      this.state.items,
+      result.source.index,
+      result.destination.index
+    );
+
+    this.setState({
+      items,
+    });
   }
-
-  const items = reorder(
-    this.state.items,
-    result.source.index,
-    result.destination.index
-  );
-
-  this.setState({
-    items,
-  });
-}
 
 
     public render() {
@@ -105,6 +106,10 @@ export default class Hand extends React.Component {
       }
 }
 
-interface HandState {
+interface Props {
+  cards: string[];
+}
+
+interface HandStateInterface {
   items: any;
 }
