@@ -24,9 +24,9 @@
         "variables-before-functions"
     ],
     "no-arg": true,
-    "no-debugger": true,
     "no-duplicate-variable": true,
     "no-eval": true,
+    "no-console":false,
     "no-require-imports": false,
     "no-inferrable-types": true,
     "no-internal-module": true,

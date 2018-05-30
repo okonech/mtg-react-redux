@@ -1,10 +1,10 @@
 import React from 'react';
-import BattleField from '../BattleField';
-import Hand from '../Hand';
+import BattleField from '../BattleField/BattleField';
+import Hand from '../Hand/Hand';
 import InfoArea from '../InfoArea';
 
 const PlayerStyle = {
-    height: '90%',
+    height: 'calc(100% - 30px)',
     width: '100%',
 };
 
@@ -16,7 +16,6 @@ const InfoAreaStyle: any  = {
 };
 
 const HandStyle: any = {
-    float: 'bottom',
     height: '25%',
     marginLeft: '20%',
     width: '60%'
@@ -136,7 +135,7 @@ const cards = [
     'Merchant Scroll'
 ];
 
-export default class Player extends React.Component {
+export default class Player extends React.Component<{}, {}> {
     public cards: string[];
 
     constructor(props: any) {
@@ -145,6 +144,12 @@ export default class Player extends React.Component {
       }
 
     public render() {
+        const cardsById = cards.map((cardName: string, index: number) => (
+            {
+              id: index,
+              name: cardName
+            }
+        ));
         return (
             <div style={PlayerStyle}>
                 <div style={InfoAreaStyle}>
@@ -152,10 +157,10 @@ export default class Player extends React.Component {
                 </div>
                 <div style={ActiveAreaStyle}>
                     <div style={BattleFieldStyle}>
-                        <BattleField />
+                        <BattleField cards={[]} />
                     </div>
                     <div style={HandStyle}>
-                        <Hand cards = {this.cards}/>
+                        <Hand cards = {cardsById}/>
                     </div>
 
                 </div>

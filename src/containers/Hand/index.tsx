@@ -1,5 +1,5 @@
 import React from 'react';
-import { DragDropContext, Draggable, Droppable  } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 // fake; data; generator;
 const getItems = (count: number) =>
@@ -40,8 +40,7 @@ const getListStyle = (isDraggingOver: any) => ({
 });
 
 
-export default class Hand extends React.Component<Props> {
-  public state: HandStateInterface;
+export default class Hand extends React.Component<Props, State> {
   public cards: string[];
 
   constructor(props: any) {
@@ -110,6 +109,6 @@ interface Props {
   cards: string[];
 }
 
-interface HandStateInterface {
+interface State {
   items: any;
 }

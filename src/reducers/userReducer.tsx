@@ -1,12 +1,12 @@
 export default function reducer(state= {
     user: {
-      id: null,
-      name: null,
-      age: null,
+      id: 'null',
+      name: 'null',
+      age: 'null',
     },
     fetching: false,
     fetched: false,
-    error: null,
+    error: 'null',
   }, action: any) {
 
     switch (action.type) {

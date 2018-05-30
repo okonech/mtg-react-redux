@@ -1,26 +1,28 @@
 import React from 'react';
-import Player from '../containers/Player/';
+import {DragDropContext} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import Player from '../containers/Player/Player';
 
-const MenuStyle = {
-    height: '3%', /* Full-height: remove this if you want "auto" height */
-    width: '100%', /* Set the width of the sidebar */
-    'list-style-type': 'none',
+const MenuStyle: object = {
+    height: '30px',
+    width: '100%',
+    listStyleType: 'none',
     margin: '0',
     padding: '0',
     overflow: 'hidden',
-    'background-color': '#333',
+    backgroundColor: '#333',
 };
 
-const MenuItemStyle: any = {
+const MenuItemStyle: object = {
     color: 'white',
     display: 'block',
     float: 'left',
     padding: '3px 16px',
-    'text-align': 'center',
-    'text-decoration': 'none',
+    'textAlign': 'center',
+    'textDecoration': 'none',
 };
 
-export default class SinglePlayerGame extends React.Component {
+class SinglePlayerGame extends React.Component {
     public render() {
         return(
             <div className='fullSize'>
@@ -35,3 +37,5 @@ export default class SinglePlayerGame extends React.Component {
         );
     }
 }
+
+export default DragDropContext(HTML5Backend)(SinglePlayerGame);

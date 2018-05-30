@@ -3,9 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/react-dnd": "^2.0.36",
+    "@types/react-dnd-html5-backend": "^2.1.9",
+    "immutability-helper": "^2.7.0",
     "node-sass": "^4.9.0",
     "react": "^16.3.2",
     "react-beautiful-dnd": "^7.1.0",
+    "react-dnd": "^2.6.0",
+    "react-dnd-html5-backend": "^2.6.0",
     "react-dom": "^16.3.2",
     "react-logger": "^1.1.0",
     "react-redux": "^5.0.7",
@@ -13,7 +18,7 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.1",
     "react-scripts-ts": "^2.16.0",
-    "redux":"^3.7.2",
+    "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-promise-middleware": "^5.1.1",
     "redux-thunk": "^2.2.0",
@@ -34,7 +39,7 @@
     "@types/react-redux": "^5.0.19",
     "@types/react-router": "^4.0.25",
     "@types/react-router-dom": "^4.2.6",
-    "@types/redux-logger":"^3.0.6",
+    "@types/redux-logger": "^3.0.6",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3"
   }
