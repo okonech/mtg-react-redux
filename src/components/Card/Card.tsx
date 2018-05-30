@@ -68,10 +68,14 @@ class Card extends Component<CardProps, {}> {
   public render() {
     const connectDragSource = this.props!.connectDragSource;
     const connectDropTarget = this.props!.connectDropTarget;
+    const isDragging = this.props.isDragging;
+    // set currently dragged card to invisible while dragging it
+    // gives appearance of the dragged card being the actual dragged card and not the copy
+    const opacity = isDragging ? 0 : 1;
     if (connectDragSource && connectDropTarget) {
       return connectDragSource (
         connectDropTarget(
-        <div style = {CardStyle}>
+        <div style = {{ ...CardStyle, opacity }}>
           {this.props.name}
         </div>
       ));
