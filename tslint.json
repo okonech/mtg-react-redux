@@ -7,6 +7,13 @@
     ]
   },
   "rules": {
+    "align": [
+        true, 
+        "arguments",
+        "elements",
+        "members",
+        "parameters",
+        "statements"],
     "class-name": true,
     "comment-format": [
         true,
@@ -15,7 +22,8 @@
     "curly": true,
     "indent": [
         true,
-        "spaces"
+        "spaces",
+        4
     ],
     "jsdoc-format": true,
     "member-ordering": [

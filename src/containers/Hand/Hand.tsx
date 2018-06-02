@@ -4,9 +4,12 @@ import {ConnectDropTarget, DropTarget, DropTargetCollector, DropTargetSpec} from
 import Card from '../../components/Card/Card';
 import {Types} from '../../Constants';
 
-const FullSizeStyle = {
+const HandStyle = {
   height: '100%',
-  width: '100%'
+  width: '96%',
+  display: 'flex',
+  overflowX: 'scroll' as 'scroll',
+  marginLeft: '2%',
 };
 
 const handTarget: DropTargetSpec<HandProps> = {
@@ -14,7 +17,7 @@ const handTarget: DropTargetSpec<HandProps> = {
       // console.log('Can drop hand' + props.cards.length);
         return true;
     },
-      drop(props) {
+    drop(props) {
         return true;
       }
 };
@@ -113,14 +116,8 @@ class Hand extends React.Component<HandProps, HandState> {
     this.state.frameUpdate.func = {};
   }
 
-
-    public render() {
-      // const cards2 = this.state.cardsByIndex.map((name: string, index: number) => (
-      //   console.log(name + ' ' + index)
-      // ));
-      // console.log(cards2.length);
-
-      const cards = this.state.cardsByIndex.map((card: CardProp) => (
+  public render() {
+    const cards = this.state.cardsByIndex.map((card: CardProp) => (
         <Card
           name={card.name}
           id={card.id}
@@ -129,12 +126,12 @@ class Hand extends React.Component<HandProps, HandState> {
         />
       ));
 
-      return (
-        <div style = {FullSizeStyle}>
-        {cards}
-        </div>
-      );
-    }
+    return (
+        <section style = {HandStyle}>
+          {cards}
+        </section>
+    );
+  }
 }
 
 export default DropTarget(Types.CARD, handTarget, collect)(Hand);

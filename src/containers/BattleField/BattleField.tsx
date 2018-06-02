@@ -13,9 +13,9 @@ const dropTargetSpec: DropTargetSpec<BattleFieldProps> = {
         // console.log('Can drop battlefield' + props.cards.length);
         return true;
     },
-      drop(props) {
+    drop(props) {
         return true;
-      }
+    }
 };
 
 interface BattleFieldProps {

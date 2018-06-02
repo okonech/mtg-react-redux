@@ -3,11 +3,6 @@ import BattleField from '../BattleField/BattleField';
 import Hand from '../Hand/Hand';
 import InfoArea from '../InfoArea';
 
-const PlayerStyle = {
-    height: 'calc(100% - 30px)',
-    width: '100%',
-};
-
 const InfoAreaStyle: any  = {
     height: '100%',
     width: '15%',
@@ -17,8 +12,7 @@ const InfoAreaStyle: any  = {
 
 const HandStyle: any = {
     height: '25%',
-    marginLeft: '20%',
-    width: '60%'
+    width: '100%'
 };
 
 const BattleFieldStyle = {
@@ -151,7 +145,7 @@ export default class Player extends React.Component<{}, {}> {
             }
         ));
         return (
-            <div style={PlayerStyle}>
+            <div className='fullSize'>
                 <div style={InfoAreaStyle}>
                     <InfoArea />
                 </div>
@@ -160,13 +154,9 @@ export default class Player extends React.Component<{}, {}> {
                         <BattleField cards={[]} />
                     </div>
                     <div style={HandStyle}>
-                        <Hand cards = {cardsById}/>
+                            <Hand cards = {cardsById}/>
                     </div>
-
                 </div>
-
-
-
             </div>
         );
       }

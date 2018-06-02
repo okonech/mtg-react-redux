@@ -57,19 +57,19 @@ export default class Hand extends React.Component<Props, State> {
         return;
     }
 
-    const items = reorder(
+      const items = reorder(
       this.state.items,
       result.source.index,
       result.destination.index
     );
 
-    this.setState({
+      this.setState({
       items,
     });
   }
 
 
-    public render() {
+  public render() {
         return (
             <DragDropContext onDragEnd={this.onDragEnd}>
               <Droppable droppableId='droppable' direction='horizontal'>

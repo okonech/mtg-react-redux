@@ -22,6 +22,11 @@ const MenuItemStyle: object = {
     'textDecoration': 'none',
 };
 
+const PlayerStyle = {
+    height: 'calc(100% - 30px)',
+    width: '100%',
+};
+
 class SinglePlayerGame extends React.Component {
     public render() {
         return(
@@ -32,7 +37,9 @@ class SinglePlayerGame extends React.Component {
                     <li style={MenuItemStyle}><a style={MenuItemStyle} href='#contact'>Contact</a></li>
                     <li style={MenuItemStyle}><a style={MenuItemStyle} href='#about'>About</a></li>
                 </ul>
-                <Player />
+                <div style={PlayerStyle}>
+                    <Player />
+                </div>
             </div>
         );
     }

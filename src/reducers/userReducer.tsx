@@ -1,4 +1,5 @@
-export default function reducer(state= {
+export default function reducer(
+state= {
     user: {
       id: 'null',
       name: 'null',
@@ -7,7 +8,8 @@ export default function reducer(state= {
     fetching: false,
     fetched: false,
     error: 'null',
-  }, action: any) {
+  },
+action: any) {
 
     switch (action.type) {
       case 'FETCH_USER': {
