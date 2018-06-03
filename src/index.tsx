@@ -1,28 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import {Route} from 'react-router';
-import { HashRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
-import LoggedInLandingPage from './pages/LoggedInLandingPage';
-import SinglePlayerGame from './pages/SinglePlayerGame';
-import TwoPlayerGame from './pages/TwoPlayerGame';
 import registerServiceWorker from './registerServiceWorker';
 import store from './store';
 
-
+// TODO: break everything here out into app.tsx and wrap that component with dragsource
 ReactDOM.render(
     <div className= 'fullSize' >
     <Provider store= {store} >
-        <HashRouter>
-            <div className= 'fullSize' >
-                <Route exact={true} path = '/' component = {App} />
-                <Route path= '/player' component = {LoggedInLandingPage}/>
-                <Route path = '/test-game' component = {SinglePlayerGame}/>
-                <Route path = '/test-two-player-game' component = {TwoPlayerGame}/>
-            </div>
-        </HashRouter>
+        <App />
     </Provider>
     </div>,
     document.getElementById('root'));

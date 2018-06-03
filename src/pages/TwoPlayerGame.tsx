@@ -1,6 +1,4 @@
 import React from 'react';
-import {DragDropContext} from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import Menu from '../components/Menu/Menu';
 import Player from '../containers/Player/Player';
 
@@ -9,7 +7,7 @@ const PlayerStyle = {
     width: '100%',
 };
 
-class SinglePlayerGame extends React.Component {
+export default class SinglePlayerGame extends React.Component {
     public render() {
         return(
             <div className='fullSize'>
@@ -22,5 +20,3 @@ class SinglePlayerGame extends React.Component {
         );
     }
 }
-
-export default DragDropContext(HTML5Backend)(SinglePlayerGame);

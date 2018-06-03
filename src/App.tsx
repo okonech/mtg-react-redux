@@ -1,23 +1,26 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import './App.css';
-import logo from './logo.svg';
+import {DragDropContext} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import {Route} from 'react-router';
+import { HashRouter } from 'react-router-dom';
+import LoggedInLandingPage from './pages/LoggedInLandingPage';
+import LoginPage from './pages/LoginPage';
+import SinglePlayerGame from './pages/SinglePlayerGame';
+import TwoPlayerGame from './pages/TwoPlayerGame';
 
 class App extends Component {
   public render() {
     return (
-      <div className='App'>
-        <header className='App-header'>
-          <img src={logo} className='App-logo' alt='logo'/>
-          <h1 className='App-title'>Welcome to React</h1>
-        </header>
-        <p className='App-intro'>
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <Link to='player'>landing page</Link>
-      </div>
+      <HashRouter>
+            <div className= 'fullSize' >
+                <Route exact={true} path = '/' component = {LoginPage} />
+                <Route path= '/player' component = {LoggedInLandingPage}/>
+                <Route path = '/test-game' component = {SinglePlayerGame}/>
+                <Route path = '/test-two-player-game' component = {TwoPlayerGame}/>
+            </div>
+        </HashRouter>
     );
   }
 }
 
-export default App;
+export default DragDropContext(HTML5Backend)(App);
