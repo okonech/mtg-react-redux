@@ -6,7 +6,6 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import store from './store';
 
-// TODO: break everything here out into app.tsx and wrap that component with dragsource
 ReactDOM.render(
     <div className= 'fullSize' >
     <Provider store= {store} >
