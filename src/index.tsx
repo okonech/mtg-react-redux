@@ -7,6 +7,7 @@ import App from './App';
 import './index.css';
 import LoggedInLandingPage from './pages/LoggedInLandingPage';
 import SinglePlayerGame from './pages/SinglePlayerGame';
+import TwoPlayerGame from './pages/TwoPlayerGame';
 import registerServiceWorker from './registerServiceWorker';
 import store from './store';
 
@@ -19,6 +20,7 @@ ReactDOM.render(
                 <Route exact={true} path = '/' component = {App} />
                 <Route path= '/player' component = {LoggedInLandingPage}/>
                 <Route path = '/test-game' component = {SinglePlayerGame}/>
+                <Route path = '/test-two-player-game' component = {TwoPlayerGame}/>
             </div>
         </HashRouter>
     </Provider>

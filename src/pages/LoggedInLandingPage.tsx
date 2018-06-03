@@ -6,7 +6,8 @@ export default class SinglePlayerGame extends React.Component {
         return(
             <div>
                 <h1>This is the landing page for logged in players</h1>
-                <Link to='/test-game'>Test a deck in a single player game!</Link>
+                <p><Link to='/test-game'>Test a deck in a single player game!</Link></p>
+                <p><Link to='/test-two-player-game'>Test a deck in a two player game!</Link></p>
             </div>
         );
     }
