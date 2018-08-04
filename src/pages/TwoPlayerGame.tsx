@@ -1,6 +1,6 @@
 import React from 'react';
 import Menu from '../components/Menu/Menu';
-import Player from '../containers/Player/Player';
+// import Player from '../containers/Player/Player';
 
 const PlayerStyle = {
     height: 'calc(50% - 15px)',
@@ -13,8 +13,7 @@ export default class SinglePlayerGame extends React.Component {
             <div className='fullSize'>
                 <Menu />
                 <div style={PlayerStyle}>
-                    <Player />
-                    <Player />
+                    aaa
                 </div>
             </div>
         );
