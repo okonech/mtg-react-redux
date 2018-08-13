@@ -120,7 +120,7 @@ export function playersAddPlayer(name: string, deckId: string) {
         poison: 0,
         library: cardsById,
         hand: cardsById,
-        battlefield: [],
+        battlefield: cardsById,
         graveyard: [],
         exile: []
       } as stateInterface.Player

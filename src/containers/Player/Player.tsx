@@ -42,7 +42,7 @@ export default class Player extends React.Component<PlayerProps, {}> {
                 </div>
                 <div style={ActiveAreaStyle}>
                     <div style={BattleFieldStyle}>
-                        <BattleField cards={[]} />
+                        <BattleField cards={this.props.battlefield} />
                     </div>
                     <div style={HandStyle}>
                             <Hand cards = {this.props.hand}/>

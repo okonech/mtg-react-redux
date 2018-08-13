@@ -3,6 +3,7 @@ import React from 'react';
 import {ConnectDropTarget, DropTarget, DropTargetCollector, DropTargetSpec} from 'react-dnd';
 import Card from '../../components/Card/Card';
 import {Types} from '../../Constants';
+import {Card as CardProp} from '../../reduxDefs/stateInterface';
 
 const HandStyle = {
   height: '100%',
@@ -29,11 +30,6 @@ const collect: DropTargetCollector = (connect, monitor) => {
     canDrop: monitor.canDrop()
   };
 };
-
-interface CardProp {
-  id: number;
-  name: string;
-}
 
 interface HandProps {
     cards: CardProp[];
