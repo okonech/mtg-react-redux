@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { ConnectDragSource, DragSource, DragSourceCollector, DragSourceSpec } from 'react-dnd';
-import { ConnectDropTarget, DropTarget, DropTargetCollector, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
+import { ConnectDropTarget, DropTarget, DropTargetCollector, DropTargetConnector, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
+import { compose } from 'redux';
 import { Types } from '../../Constants';
 
-const cardDragSpec: DragSourceSpec<CardProps> = {
+const cardSource: DragSourceSpec<CardProps> = {
   beginDrag(props: CardProps) {
     console.log('Start drag ' + props.name + ' ' + props.id);
     return {
@@ -20,9 +21,8 @@ const cardDragSpec: DragSourceSpec<CardProps> = {
   }
 };
 
-const dropTargetSpec: DropTargetSpec<CardProps> = {
+const cardTarget: DropTargetSpec<CardProps> = {
   hover(props: CardProps, monitor: DropTargetMonitor) {
-    console.log(monitor.getItem());
     const draggedId = (monitor.getItem() as CardProps).id;
     console.log('hover: ' + draggedId + ' ' + props.id);
     if (draggedId !== props.id) {
@@ -39,9 +39,11 @@ const dropTargetSpec: DropTargetSpec<CardProps> = {
   }
 };
 
-const collectDrop: DropTargetCollector = (connect) => {
+const collectDrop: DropTargetCollector = (connect: DropTargetConnector, monitor: DropTargetMonitor) => {
   return {
-    connectDropTarget: connect.dropTarget()
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop()
   };
 };
 
@@ -60,11 +62,12 @@ interface CardProps {
   name: string;
   id: number;
   key: number;
+  top?: number;
+  left?: number;
 }
 
 const CardStyle: React.CSSProperties = {
-  // casting due to position being a choice of strings rather than string
-  position: 'relative' as 'relative',
+  position: 'relative',
   minWidth: '14.9vh',
   margin: '1px 1px 1px 1px'
 };
@@ -77,15 +80,14 @@ const ImgStyle: React.CSSProperties = {
 };
 
 const CardTextStyle: React.CSSProperties = {
-  // casting due to position being a choice of strings rather than string
-  position: 'absolute' as 'absolute',
+  position: 'absolute',
   top: 0,
   bottom: 0,
   left: 0,
   right: 0
 };
 
-class Card extends Component<CardProps, {}> {
+class Card extends React.Component<CardProps> {
 
   public render() {
     const connectDragSource = this.props!.connectDragSource;
@@ -109,5 +111,9 @@ class Card extends Component<CardProps, {}> {
     }
   }
 }
-const HocDragCard = DragSource(Types.CARD, cardDragSpec, collectDrag)(Card);
-export default DropTarget(Types.CARD, dropTargetSpec, collectDrop)(HocDragCard);
+
+export default compose(
+  DragSource(Types.CARD, cardSource, collectDrag),
+  DropTarget(Types.CARD, cardTarget, collectDrop),
+)(Card);
+

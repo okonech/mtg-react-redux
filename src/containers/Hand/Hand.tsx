@@ -9,7 +9,7 @@ const HandStyle: React.CSSProperties = {
   height: '100%',
   width: '96%',
   display: 'flex',
-  overflowX: 'scroll' as 'scroll',
+  overflowX: 'scroll',
   marginLeft: '2%',
 };
 

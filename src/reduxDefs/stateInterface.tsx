@@ -17,6 +17,8 @@ export interface Player {
 export interface Card {
     id: number;
     name: string;
+    top?: number;
+    left?: number;
 }
 
 export interface Game {
