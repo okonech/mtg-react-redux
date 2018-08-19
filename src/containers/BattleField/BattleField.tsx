@@ -4,9 +4,10 @@ import Card from '../../components/Card/Card';
 import {Types} from '../../Constants';
 import {Card as CardProp} from '../../reduxDefs/stateInterface';
 
-const FullSizeStyle = {
+const FullSizeStyle: React.CSSProperties = {
     height: '100%',
-    width: '100%'
+    width: '100%',
+    backgroundColor: 'green'
   };
 
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
@@ -38,14 +39,20 @@ const collect: DropTargetCollector = (connect, monitor) => {
   };
 };
 
+const CardCellStyle: React.CSSProperties = {
+    height: '33.3%'
+};
+
 class BattleField extends React.Component<BattleFieldProps, BattleFieldState>  {
     public render() {
         const cards = this.props.cards.map((card: CardProp) => (
-            <Card
-              name={card.name}
-              id={card.id}
-              key={card.id}
-            />
+            <div style = {CardCellStyle}>
+                <Card
+                name={card.name}
+                id={card.id}
+                key={card.id}
+                />
+            </div>
           ));
 
         return (

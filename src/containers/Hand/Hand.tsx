@@ -5,7 +5,7 @@ import Card from '../../components/Card/Card';
 import {Types} from '../../Constants';
 import {Card as CardProp} from '../../reduxDefs/stateInterface';
 
-const HandStyle = {
+const HandStyle: React.CSSProperties = {
   height: '100%',
   width: '96%',
   display: 'flex',

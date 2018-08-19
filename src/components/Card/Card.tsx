@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { ConnectDragSource, DragSource, DragSourceCollector, DragSourceSpec } from 'react-dnd';
 import { ConnectDropTarget, DropTarget, DropTargetCollector, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
 import { Types } from '../../Constants';
-import {CardStyle} from './CardStyle';
 
 const cardDragSpec: DragSourceSpec<CardProps> = {
   beginDrag(props: CardProps) {
@@ -63,6 +62,29 @@ interface CardProps {
   key: number;
 }
 
+const CardStyle: React.CSSProperties = {
+  // casting due to position being a choice of strings rather than string
+  position: 'relative' as 'relative',
+  minWidth: '14.9vh',
+  margin: '1px 1px 1px 1px'
+};
+
+const ImgStyle: React.CSSProperties = {
+  height: '100%',
+  width: 'auto',
+  display: 'block',
+  borderRadius: '5%',
+};
+
+const CardTextStyle: React.CSSProperties = {
+  // casting due to position being a choice of strings rather than string
+  position: 'absolute' as 'absolute',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0
+};
+
 class Card extends Component<CardProps, {}> {
 
   public render() {
@@ -76,7 +98,10 @@ class Card extends Component<CardProps, {}> {
       return connectDragSource (
         connectDropTarget(
         <div style = {{ ...CardStyle, opacity }}>
-          {this.props.name}
+          <img style = {ImgStyle} src= '/images/cardback.jpg' width='745' height='1080' />
+          <div style ={CardTextStyle}>
+            {this.props.name}
+          </div>
         </div>
       ));
     } else {

@@ -6,7 +6,7 @@ import Menu from '../components/Menu/Menu';
 import Player from '../containers/Player/Player';
 import {Game, Player as PlayerInterface, State} from '../reduxDefs/stateInterface';
 
-const PlayerStyle = {
+const PlayerStyle: React.CSSProperties = {
     height: 'calc(100% - 30px)',
     width: '100%',
 };

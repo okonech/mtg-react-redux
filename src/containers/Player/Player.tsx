@@ -4,24 +4,24 @@ import BattleField from '../BattleField/BattleField';
 import Hand from '../Hand/Hand';
 import InfoArea from '../InfoArea';
 
-const InfoAreaStyle: any  = {
+const InfoAreaStyle: React.CSSProperties  = {
     height: '100%',
     width: '15%',
     float: 'left',
-    'backgroundColor': '#111',
+    backgroundColor: '#111'
 };
 
-const HandStyle: any = {
-    height: '25%',
+const HandStyle: React.CSSProperties = {
+    height: '33.3%',
     width: '100%'
 };
 
-const BattleFieldStyle = {
-    height: '75%',
+const BattleFieldStyle: React.CSSProperties = {
+    height: '66.6%',
     width: '100%'
 };
 
-const ActiveAreaStyle = {
+const ActiveAreaStyle: React.CSSProperties = {
     height: '100%',
     marginLeft: '15%', /* Same as the width of the sidebar */
     width: '85%'
