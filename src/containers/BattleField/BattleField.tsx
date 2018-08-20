@@ -1,6 +1,6 @@
 import React from 'react';
-import {ConnectDropTarget, DropTarget, DropTargetCollector, DropTargetSpec} from 'react-dnd';
-import Card from '../../components/Card/Card';
+import {ConnectDropTarget, DropTarget, DropTargetSpec} from 'react-dnd';
+import DraggableCard from '../../components/DraggableCard';
 import {Types} from '../../Constants';
 import {Card as CardProp} from '../../reduxDefs/stateInterface';
 
@@ -32,24 +32,21 @@ interface BattleFieldState {
     items: any;
 }
 
-const collect: DropTargetCollector = (connect, monitor) => {
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop(),
-  };
-};
-
 const CardCellStyle: React.CSSProperties = {
     height: '25%',
     position: 'absolute'
 };
 
-class BattleField extends React.Component<BattleFieldProps, BattleFieldState>  {
+@DropTarget(Types.CARD, battlefieldTarget, (connect, monitor) => ({
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop()
+  }))
+export default class BattleField extends React.Component<BattleFieldProps, BattleFieldState>  {
     public render() {
         const cards = this.props.cards.map((card: CardProp) => (
             <div style = {{...CardCellStyle, top: card.top, left: card.left}}>
-                <Card
+                <DraggableCard
                 name={card.name}
                 id={card.id}
                 key={card.id}
@@ -59,10 +56,8 @@ class BattleField extends React.Component<BattleFieldProps, BattleFieldState>  {
 
         return (
             <section style = {BattleFieldStyle}>
-            {cards}
+                {cards}
             </section>
         );
     }
 }
-
-export default DropTarget(Types.CARD, battlefieldTarget, collect)(BattleField);

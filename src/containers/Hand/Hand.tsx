@@ -1,7 +1,8 @@
 import update from 'immutability-helper';
 import React from 'react';
-import {ConnectDropTarget, DropTarget, DropTargetCollector, DropTargetSpec} from 'react-dnd';
-import Card from '../../components/Card/Card';
+import {ConnectDropTarget, DropTarget, DropTargetSpec} from 'react-dnd';
+import CardCustomDragLayer from '../../components/Card/CardCustomDragLayer';
+import DraggableCard from '../../components/DraggableCard';
 import {Types} from '../../Constants';
 import {Card as CardProp} from '../../reduxDefs/stateInterface';
 
@@ -23,14 +24,6 @@ const handTarget: DropTargetSpec<HandProps> = {
       }
 };
 
-const collect: DropTargetCollector = (connect, monitor) => {
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
-  };
-};
-
 interface HandProps {
     cards: CardProp[];
     connectDropTarget?: ConnectDropTarget;
@@ -44,7 +37,12 @@ interface HandState {
     frameUpdate: {frame: number, func: {}};
 }
 
-class Hand extends React.Component<HandProps, HandState> {
+@DropTarget(Types.CARD, handTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
+}))
+export default class Hand extends React.Component<HandProps, HandState> {
 
   constructor(props: HandProps) {
     super(props);
@@ -114,7 +112,7 @@ class Hand extends React.Component<HandProps, HandState> {
 
   public render() {
     const cards = this.state.cardsByIndex.map((card: CardProp) => (
-        <Card
+        <DraggableCard
           name={card.name}
           id={card.id}
           key={card.id}
@@ -125,9 +123,10 @@ class Hand extends React.Component<HandProps, HandState> {
     return (
         <section style = {HandStyle}>
           {cards}
+          <CardCustomDragLayer
+            snapToGrid={true}
+          />
         </section>
     );
   }
 }
-
-export default DropTarget(Types.CARD, handTarget, collect)(Hand);
