@@ -60,7 +60,7 @@ export default class CardCustomDragLayer extends React.Component<CardCustomDragL
             <div style={{...getItemStyles(this.props), ...layerStyles}}>
                 <Card
                     name={item.name}
-                    opacity={1}
+                    opacity={.9}
                 />
             </div>
         );
