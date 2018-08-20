@@ -105,7 +105,8 @@ const cards = [
 
 const cardsById = cards.map((cardName: string, index: number) => (
   {
-    id: index,
+    key: index.toString(),
+    id: index.toString(),
     name: cardName
   }
 ));

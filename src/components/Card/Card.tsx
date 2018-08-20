@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+// pure card render component
+
 interface CardProps {
   opacity: number;
   name: string;

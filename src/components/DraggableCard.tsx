@@ -1,56 +1,59 @@
 import * as React from 'react';
-import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceSpec} from 'react-dnd';
+import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceMonitor, DragSourceSpec} from 'react-dnd';
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { Types } from '../Constants';
 import Card from './Card/Card';
+
+// draggable card component with id, key, x, y position
 
 const cardSource: DragSourceSpec<DraggableCardProps, any> = {
   beginDrag(props: DraggableCardProps) {
     console.log('Start drag ' + props.name + ' ' + props.id);
     return {
       id: props.id,
-      name: props.name
+      name: props.name,
+      originalIndex: props.findCard(props.id).index,
     };
   },
-  endDrag(props: DraggableCardProps) {
-    console.log('end drag ' + props.name);
-    return {
-      id: props.id,
-      name: props.name
-    };
+
+  endDrag(props: DraggableCardProps, monitor: DragSourceMonitor) {
+    const { id: droppedId, originalIndex } = monitor.getItem();
+    const didDrop = monitor.didDrop();
+    console.log('End drag ' + props.name + ' ' + props.id);
+    if (!didDrop) {
+        props.moveCard(droppedId, originalIndex);
+        console.log('End drag returned ' + props.name + ' to original index ' + originalIndex);
+    }
   }
 };
 
 const cardTarget: DropTargetSpec<DraggableCardProps> = {
   hover(props: DraggableCardProps, monitor: DropTargetMonitor) {
-    const draggedId = (monitor.getItem() as DraggableCardProps).id;
-    console.log('hover: ' + draggedId + ' ' + props.id);
-    if (draggedId !== props.id) {
-      if (props.moveCard) {
-        props.moveCard(draggedId, props.id);
-      } else {
-        throw console.error();
-      }
+    const { id: draggedId } = monitor.getItem();
+    const { id: overId } = props;
+
+    if (draggedId !== overId) {
+            const { index: overIndex } = props.findCard(overId);
+            props.moveCard(draggedId, overIndex);
     }
   },
+
   canDrop(props: DraggableCardProps, monitor: DropTargetMonitor) {
-    console.log('Can drop ' + props.name);
     return true;
   }
 };
 
 interface DraggableCardProps {
-  connectDragPreview?: ConnectDragPreview;
-  connectDragSource?: ConnectDragSource;
-  isDragging?: boolean;
-  connectDropTarget?: ConnectDropTarget;
-  moveCard?: (id: number, afterId: number) => void;
-  name: string;
-  id: number;
-  key: number;
-  top?: number;
-  left?: number;
+    connectDragPreview?: ConnectDragPreview;
+    connectDragSource?: ConnectDragSource;
+    isDragging?: boolean;
+    connectDropTarget?: ConnectDropTarget;
+    moveCard: (id: string, to: number) => void;
+    findCard: (id: string) => { index: number };
+    name: string;
+    key: string;
+    id: string;
 }
 
 @DropTarget(Types.CARD, cardTarget, (connect, monitor) => ({
@@ -81,6 +84,7 @@ export default class DraggableCard extends React.Component<DraggableCardProps, a
 
   public render() {
     const {
+            name,
             isDragging,
             connectDragSource,
             connectDropTarget,
@@ -96,7 +100,7 @@ export default class DraggableCard extends React.Component<DraggableCardProps, a
           connectDropTarget(
             <div style = {{height: '100%'}}>
                 <Card
-                    name={this.props.name}
+                    name={name}
                     opacity={opacity}/>
             </div>
           ),

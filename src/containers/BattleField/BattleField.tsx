@@ -1,3 +1,4 @@
+import update from 'immutability-helper';
 import React from 'react';
 import {ConnectDropTarget, DropTarget, DropTargetSpec} from 'react-dnd';
 import DraggableCard from '../../components/DraggableCard';
@@ -29,7 +30,7 @@ interface BattleFieldProps {
 }
 
 interface BattleFieldState {
-    items: any;
+    cards: CardProp[];
 }
 
 const CardCellStyle: React.CSSProperties = {
@@ -43,13 +44,28 @@ const CardCellStyle: React.CSSProperties = {
     canDrop: monitor.canDrop()
   }))
 export default class BattleField extends React.Component<BattleFieldProps, BattleFieldState>  {
+
+    constructor(props: BattleFieldProps) {
+        super(props);
+
+        this.moveCard = this.moveCard.bind(this);
+        this.findCard = this.findCard.bind(this);
+
+        this.state = {
+          cards: props.cards
+        };
+
+      }
+
     public render() {
-        const cards = this.props.cards.map((card: CardProp) => (
-            <div style = {{...CardCellStyle, top: card.top, left: card.left}}>
+        const cards = this.state.cards.map((card: CardProp) => (
+            <div style = {CardCellStyle}>
                 <DraggableCard
-                name={card.name}
-                id={card.id}
-                key={card.id}
+                    name={card.name}
+                    id={card.id}
+                    key={card.key}
+                    moveCard={this.moveCard}
+                    findCard={this.findCard}
                 />
             </div>
           ));
@@ -59,5 +75,26 @@ export default class BattleField extends React.Component<BattleFieldProps, Battl
                 {cards}
             </section>
         );
+    }
+
+    private moveCard(id: string, atIndex: number) {
+        const { card, index } = this.findCard(id);
+        this.setState(
+            update(this.props, {
+                cards: {
+                    $splice: [[index, 1], [atIndex, 0, card]],
+                },
+            }),
+        );
+      }
+
+    private findCard(id: string) {
+      const { cards } = this.props;
+      const card = cards.filter(c => c.id === id)[0];
+
+      return {
+          card,
+          index: cards.indexOf(card),
+      };
     }
 }

@@ -15,10 +15,9 @@ export interface Player {
 }
 
 export interface Card {
-    id: number;
+    id: string;
+    key: string;
     name: string;
-    top?: number;
-    left?: number;
 }
 
 export interface Game {
