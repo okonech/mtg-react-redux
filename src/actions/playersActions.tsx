@@ -119,7 +119,7 @@ export function playersAddPlayer(name: string, deckId: string) {
         life: 40,
         poison: 0,
         library: cardsById,
-        hand: cardsById,
+        hand: cardsById.slice(0, 7),
         battlefield: [],
         graveyard: [],
         exile: []

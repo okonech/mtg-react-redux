@@ -1,7 +1,6 @@
 import update from 'immutability-helper';
 import React from 'react';
 import {ConnectDropTarget, DropTarget, DropTargetSpec} from 'react-dnd';
-import CardCustomDragLayer from '../../components/Card/CardCustomDragLayer';
 import DraggableCard from '../../components/DraggableCard';
 import {Types} from '../../Constants';
 import {Card as CardProp} from '../../reduxDefs/stateInterface';
@@ -123,9 +122,6 @@ export default class Hand extends React.Component<HandProps, HandState> {
     return (
         <section style = {HandStyle}>
           {cards}
-          <CardCustomDragLayer
-            snapToGrid={true}
-          />
         </section>
     );
   }

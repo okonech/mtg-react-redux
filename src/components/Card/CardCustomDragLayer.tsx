@@ -4,9 +4,18 @@ import { Types } from '../../Constants';
 import snapToGrid from '../../util/snapToGrid';
 import Card from './Card';
 
+const layerStyles: React.CSSProperties = {
+    position: 'fixed',
+    pointerEvents: 'none',
+    zIndex: 100,
+    left: 0,
+    top: 0,
+    height: 'calc((100% - 60px)/3)',
+};
+
 function getItemStyles(props: CardCustomDragLayerProps) {
-    const { initialOffset, currentOffset } = props;
-    if (!initialOffset || !currentOffset) {
+    const {currentOffset } = props;
+    if (!currentOffset) {
         return {
             display: 'none',
         };
@@ -15,13 +24,8 @@ function getItemStyles(props: CardCustomDragLayerProps) {
     let { x, y } = currentOffset;
 
     if (props.snapToGrid) {
-        x -= initialOffset.x;
-        y -= initialOffset.y;
         [x, y] = snapToGrid(x, y);
-        x += initialOffset.x;
-        y += initialOffset.y;
     }
-
     const transform = `translate(${x}px, ${y}px)`;
     return {
         transform,
@@ -49,11 +53,11 @@ export default class CardCustomDragLayer extends React.Component<CardCustomDragL
 
     public render() {
         const { item, itemType, isDragging } = this.props;
-        if (!isDragging || itemType !== Types.CARD) {
+        if (!isDragging || (itemType !== Types.CARD)) {
             return null;
         }
         return (
-            <div style={getItemStyles(this.props)}>
+            <div style={{...getItemStyles(this.props), ...layerStyles}}>
                 <Card
                     name={item.name}
                     opacity={1}

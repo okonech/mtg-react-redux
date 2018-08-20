@@ -1,4 +1,5 @@
 import React from 'react';
+import CardCustomDragLayer from '../../components/Card/CardCustomDragLayer';
 import {Player as PlayerProps} from '../../reduxDefs/stateInterface';
 import BattleField from '../BattleField/BattleField';
 import Hand from '../Hand/Hand';
@@ -48,6 +49,9 @@ export default class Player extends React.Component<PlayerProps, {}> {
                             <Hand cards = {this.props.hand}/>
                     </div>
                 </div>
+                <CardCustomDragLayer
+                    snapToGrid={true}
+                />
             </div>
         );
       }
