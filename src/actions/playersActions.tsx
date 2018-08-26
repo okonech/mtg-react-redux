@@ -119,7 +119,7 @@ export function playersAddPlayer(name: string, deckId: string) {
         name,
         life: 40,
         poison: 0,
-        library: cardsById,
+        library: cardsById.slice(8, 99),
         hand: cardsById.slice(0, 7),
         battlefield: [],
         graveyard: [],
@@ -137,9 +137,25 @@ export function setUserName(name: string) {
 }
 
 // not used
-export function setUserAge(deck: string) {
+export function setUserDeck(deck: string) {
     return {
       type: 'SET_USER_DECK',
       payload: deck,
     };
+}
+
+interface PlayerZone {
+  player: number;
+  zone: string;
+}
+
+export function cardsDND(from: PlayerZone, to: PlayerZone, draggedCards: stateInterface.Card[]) {
+  return {
+    type: 'PLAYERS_CARDS_DND',
+    payload: {
+      from,
+      to,
+      cards: draggedCards
+    },
+  };
 }
