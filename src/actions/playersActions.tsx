@@ -1,5 +1,3 @@
-import * as stateInterface from '../reduxDefs/stateInterface';
-
 const cards = [
   'Lotus Petal',
   'Mana Crypt',

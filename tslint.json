@@ -13,23 +13,33 @@
         "elements",
         "members",
         "parameters",
-        "statements"],
+        "statements"
+    ],
     "class-name": true,
     "comment-format": [
         true,
         "check-space"
     ],
     "curly": true,
-    "indent": [
-        true,
-        "spaces",
-        4
-    ],
+    "indent": [true, "spaces", 4],
     "jsdoc-format": true,
     "member-ordering": [
         true,
-        "static-before-instance",
-        "variables-before-functions"
+        {
+            "order": [
+                "static-before-instance",
+                "variables-before-functions",
+                "public-static-field",
+                "public-instance-field",
+                "public-constructor",
+                "private-static-field",
+                "private-instance-field",
+                "private-constructor",
+                "public-instance-method",
+                "protected-instance-method",
+                "private-instance-method"
+            ]
+        }
     ],
     "no-arg": true,
     "no-duplicate-variable": true,

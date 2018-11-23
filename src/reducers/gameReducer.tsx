@@ -1,18 +1,24 @@
-import {initialState} from '../reduxDefs/initialState';
-import {Game} from '../reduxDefs/stateInterface';
+export interface GameState {
+    turn: number;
+    currentPlayer: string|undefined;
+}
 
-export default function reducer(
-state: Game = initialState.game,
-action: any) {
+const initialState: GameState = {
+    turn: 0,
+    currentPlayer: undefined
+};
+
+interface GameAction {
+    type: string;
+}
+
+export default function gameReducer( state: GameState = initialState, action: GameAction) {
 
     switch (action.type) {
-      case 'N/A': {
-          // drag drop from container to container
-          // handles dnd between player items
-          console.log(action);
-          return {...state};
-      }
+        case 'NEXT_TURN':
+            console.log(action);
+            return {...state, turn: state.turn++};
+        default:
+            return state;
     }
-
-    return state;
 }
