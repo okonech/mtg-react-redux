@@ -11,14 +11,13 @@ const PlayerStyle: React.CSSProperties = {
 
 interface TwoPlayerGameProps {
     player: string;
+    loading: boolean;
 }
 
-function mapStateToProps(state: AppState) {
-    console.log(state);
-    return {
-        player: state.players.playerIds[0]
-    };
-}
+const mapStateToProps = (state: AppState) => ({
+    player: state.players.playerIds[0],
+    loading: state.isLoading
+});
 
 const mapDispatchToProps = () => ({});
 
@@ -26,7 +25,7 @@ class TwoPlayerGame extends React.Component<TwoPlayerGameProps, {}> {
 
     public render() {
         const props = this.props;
-        if (props.player) {
+        if (!props.loading) {
             return (
                 <div className='fullSize'>
                     <Menu />

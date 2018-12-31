@@ -15,13 +15,10 @@ interface SinglePlayerGameProps {
     loading: boolean;
 }
 
-function mapStateToProps(state: AppState) {
-    console.log(state);
-    return {
-        player: state.players.playerIds[0],
-        loading: state.isLoading
-    };
-}
+const mapStateToProps = (state: AppState) => ({
+    player: state.players.playerIds[0],
+    loading: state.isLoading
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     initPlayers: (game: string) => dispatch(({ type: 'INIT_PLAYERS', payload: game }))

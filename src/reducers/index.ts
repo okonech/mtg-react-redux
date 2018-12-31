@@ -1,4 +1,5 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
 import epics from '../epics';
@@ -26,7 +27,9 @@ const reducer = combineReducers({
 
 const epicMiddleware = createEpicMiddleware<any, any, AppState>();
 
-const middleware = applyMiddleware(logger, epicMiddleware);
+const middleware = process.env.NODE_ENV === 'production' ?
+    applyMiddleware(epicMiddleware) :
+    composeWithDevTools(applyMiddleware(logger, epicMiddleware));
 
 export default createStore(reducer, middleware);
 
