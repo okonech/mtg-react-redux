@@ -3,7 +3,7 @@ import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceMonitor, D
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { Types } from '../Constants';
-import Card from './Card/Card';
+import Card from './Card';
 
 // draggable card component with id, key, x, y position
 

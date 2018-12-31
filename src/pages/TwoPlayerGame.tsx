@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Menu from '../components/Menu/Menu';
+import Menu from '../components/Menu';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
 

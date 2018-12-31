@@ -1,9 +1,9 @@
 import update from 'immutability-helper';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
-import DraggableCard from '../../components/DraggableCard';
-import { Types } from '../../Constants';
-import { Card as CardProp } from '../../reducers/cardsReducer';
+import DraggableCard from '../components/DraggableCard';
+import { Types } from '../Constants';
+import { Card as CardProp } from '../reducers/cardsReducer';
 
 const HandStyle: React.CSSProperties = {
   height: '100%',

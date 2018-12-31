@@ -1,9 +1,9 @@
 import update from 'immutability-helper';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
-import DraggableCard from '../../components/DraggableCard';
-import { Types } from '../../Constants';
-import { Card } from '../../reducers/cardsReducer';
+import DraggableCard from '../components/DraggableCard';
+import { Types } from '../Constants';
+import { Card } from '../reducers/cardsReducer';
 
 const BattleFieldStyle: React.CSSProperties = {
     height: '100%',

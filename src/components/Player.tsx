@@ -1,10 +1,10 @@
 import React from 'react';
-import BattleField from '../containers/BattleField/BattleField';
-import Hand from '../containers/Hand/Hand';
+import BattleField from '../containers/BattleField';
+import Hand from '../containers/Hand';
 import InfoArea from '../containers/InfoArea';
 import { Card } from '../reducers/cardsReducer';
 import { PlayerData } from '../selectors/player';
-import CardCustomDragLayer from './Card/CardCustomDragLayer';
+import CardCustomDragLayer from './CardCustomDragLayer';
 
 const InfoAreaStyle: React.CSSProperties = {
     height: '100%',

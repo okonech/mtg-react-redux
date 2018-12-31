@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DragLayer, XYCoord } from 'react-dnd';
-import { Types } from '../../Constants';
-import snapToGrid from '../../util/snapToGrid';
+import { Types } from '../Constants';
+import snapToGrid from '../util/snapToGrid';
 import Card from './Card';
 
 const layerStyles: React.CSSProperties = {
