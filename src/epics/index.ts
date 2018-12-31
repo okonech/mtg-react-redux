@@ -1,9 +1,9 @@
 
-import { combineEpics } from "redux-observable";
-import initPlayers from "./initPlayers";
+import { combineEpics } from 'redux-observable';
+import initPlayers from './initPlayers';
 
 const epics = combineEpics(
-    initPlayers,
+    initPlayers
 );
 
 export default epics;

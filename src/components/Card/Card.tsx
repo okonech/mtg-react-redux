@@ -17,7 +17,7 @@ const ImgStyle: React.CSSProperties = {
   height: '100%',
   width: 'auto',
   display: 'block',
-  borderRadius: '5%',
+  borderRadius: '5%'
 };
 
 const CardTextStyle: React.CSSProperties = {
@@ -30,16 +30,15 @@ const CardTextStyle: React.CSSProperties = {
 
 export default class Card extends React.Component<CardProps, any> {
 
-    public render() {
-      const opacity = this.props.opacity;
-      return (
-        <div style = {{ ...CardStyle, opacity }}>
-          <img style = {ImgStyle} src= '/images/cardback.jpg' width='745' height='1080'/>
-          <div style ={CardTextStyle}>
-            {this.props.name}
-          </div>
+  public render() {
+    const opacity = this.props.opacity;
+    return (
+      <div style={{ ...CardStyle, opacity }}>
+        <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
+        <div style={CardTextStyle}>
+          {this.props.name}
         </div>
-      );
-    }
+      </div>
+    );
+  }
 }
-

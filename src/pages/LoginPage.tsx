@@ -5,8 +5,8 @@ class LoginPage extends Component {
   public render() {
     return (
       <div>
-            <h1>This is a login page</h1>
-            <p><Link to='player'>Login</Link></p>
+        <h1>This is a login page</h1>
+        <p><Link to='player'>Login</Link></p>
       </div>
     );
   }

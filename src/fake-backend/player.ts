@@ -1,13 +1,13 @@
 import { v1 as uuid } from 'uuid';
-import { players, Player as RawPlayer } from './playerData';
-import { Player } from '../reducers/playersReducer';
 import { Card } from '../reducers/cardsReducer';
+import { Player } from '../reducers/playersReducer';
 import { Zone } from '../reducers/zonesReducer';
+import { Player as RawPlayer, players } from './playerData';
 
 export interface PlayersData {
     cards: Card[];
     zones: Zone[];
-    players: Player[]
+    players: Player[];
 }
 
 export async function initPlayers(game: string): Promise<PlayersData> {
@@ -20,18 +20,18 @@ export async function initPlayers(game: string): Promise<PlayersData> {
 
         const cards = mapRawToCards(rawPlayer.library);
         const player = mapRawToPlayer(rawPlayer);
-        const zones = mapDataToZones(player, cards)
+        const zones = mapDataToZones(player, cards);
 
         allCards.push(...cards);
         allPlayers.push(player);
         allZones.push(...zones);
-    })
+    });
 
     return {
         cards: allCards,
         zones: allZones,
         players: allPlayers
-    }
+    };
 
 }
 
@@ -46,21 +46,21 @@ function mapRawToPlayer(player: RawPlayer): Player {
         battlefield: uuid(),
         graveyard: uuid(),
         exile: uuid()
-    }
+    };
 }
 
 function mapRawToCards(cards: string[]): Card[] {
-    return cards.map(card => (
+    return cards.map((card) => (
         {
             id: uuid(),
             name: card
-        }))
-};
+        }));
+}
 
 function mapDataToZones(player: Player, cards: Card[]): Zone[] {
-    const idToZone = (id: string, cards: string[] = []) => ({
+    const idToZone = (id: string, cardIds: string[] = []) => ({
         id,
-        cards
+        cards: cardIds
     });
 
     return [
@@ -68,6 +68,6 @@ function mapDataToZones(player: Player, cards: Card[]): Zone[] {
         idToZone(player.battlefield),
         idToZone(player.hand, cards.slice(93).map((card) => card.id)),
         idToZone(player.graveyard),
-        idToZone(player.exile),
-    ]
+        idToZone(player.exile)
+    ];
 }

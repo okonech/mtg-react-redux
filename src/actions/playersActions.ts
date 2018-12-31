@@ -1,11 +1,11 @@
-import { Player } from '../reducers/playersReducer'
+import { Player } from '../reducers/playersReducer';
 
 export interface PlayersAction {
   type: 'ADD_PLAYERS' | 'UPDATE_PLAYERS' | 'DELETE_PLAYERS';
   payload: {
     ids?: string[];
     items?: Player[];
-  }
+  };
 }
 
 export function addPlayers(players: Player[]): PlayersAction {
@@ -35,7 +35,6 @@ export function deletePlayers(ids: string[]): PlayersAction {
   };
 }
 
-
 interface PlayerZone {
   player: number;
   zone: string;
@@ -48,6 +47,6 @@ export function cardsDND(from: PlayerZone, to: PlayerZone, draggedCards: any[]) 
       from,
       to,
       cards: draggedCards
-    },
+    }
   };
 }

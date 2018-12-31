@@ -110,4 +110,4 @@ export const players: Player[] =
                 'Merchant Scroll'
             ]
         }
-    ]
+    ];

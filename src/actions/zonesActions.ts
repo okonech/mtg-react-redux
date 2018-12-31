@@ -5,7 +5,7 @@ export interface ZonesAction {
     payload: {
         items?: Zone[];
         ids?: string[];
-    }
+    };
 }
 
 export function addZones(zones: Zone[]): ZonesAction {

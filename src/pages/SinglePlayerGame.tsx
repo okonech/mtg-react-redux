@@ -7,7 +7,7 @@ import { AppState } from '../reducers/index';
 
 const PlayerStyle: React.CSSProperties = {
     height: 'calc(100% - 30px)',
-    width: '100%',
+    width: '100%'
 };
 
 interface SinglePlayerGameProps {
@@ -24,7 +24,7 @@ function mapStateToProps(state: AppState) {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    initPlayers: (game: string) => dispatch(({ type: 'INIT_PLAYERS', payload: game })),
+    initPlayers: (game: string) => dispatch(({ type: 'INIT_PLAYERS', payload: game }))
 });
 
 class SinglePlayerGame extends React.Component<SinglePlayerGameProps, {}> {

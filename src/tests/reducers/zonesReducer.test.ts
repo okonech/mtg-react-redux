@@ -1,6 +1,6 @@
-import zonesReducer, { Zone, ZonesState, singleZoneSelector, zonesSelector } from '../../reducers/zonesReducer';
-import { addZones, updateZones, deleteZones } from '../../actions/zonesActions';
 import deepFreeze from 'deep-freeze';
+import { addZones, deleteZones, updateZones } from '../../actions/zonesActions';
+import zonesReducer, { singleZoneSelector, Zone, zonesSelector, ZonesState } from '../../reducers/zonesReducer';
 
 let state: ZonesState = {};
 let zones: Zone[] = [
@@ -33,9 +33,9 @@ it('adds zones', () => {
     deepFreeze(action);
     state = zonesReducer(oldState, action);
     expect(state).toEqual({
-        '1': zones[0],
-        '2': zones[1]
-    })
+        1: zones[0],
+        2: zones[1]
+    });
 });
 
 it('updates zones', () => {
@@ -47,7 +47,7 @@ it('updates zones', () => {
             '32'
         ]
     },
-    zones[1]
+             zones[1]
     ];
     const action = updateZones(zones);
     const oldState = { ...state };
@@ -55,16 +55,16 @@ it('updates zones', () => {
     deepFreeze(action);
     state = zonesReducer(oldState, action);
     expect(state).toEqual({
-        '1': zones[0],
-        '2': zones[1]
-    })
+        1: zones[0],
+        2: zones[1]
+    });
 });
 
 it('select zone', () => {
     const oldState = { ...state };
     deepFreeze(oldState);
-    expect(singleZoneSelector(oldState, '1')).toEqual(zones[0])
-})
+    expect(singleZoneSelector(oldState, '1')).toEqual(zones[0]);
+});
 
 it('select zones', () => {
     const oldState = { ...state };
@@ -72,8 +72,8 @@ it('select zones', () => {
     expect(zonesSelector(oldState, ['1', '2'])).toEqual([
         zones[0],
         zones[1]
-    ])
-})
+    ]);
+});
 
 it('deletes zones', () => {
     const action = deleteZones(['1', '2']);
@@ -81,5 +81,5 @@ it('deletes zones', () => {
     deepFreeze(oldState);
     deepFreeze(action);
     state = zonesReducer(oldState, action);
-    expect(state).toEqual({})
+    expect(state).toEqual({});
 });

@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux';
 import produce from 'immer';
+import { combineReducers } from 'redux';
 import { PlayersAction } from '../actions/playersActions';
 
 export interface PlayersState {
@@ -24,28 +24,28 @@ export interface Player {
 }
 
 function playersById(state: PlayersById = {}, action: PlayersAction) {
-    return produce(state, draft => {
+    return produce(state, (draft) => {
         switch (action.type) {
             case 'ADD_PLAYERS':
             case 'UPDATE_PLAYERS':
-                action.payload.items.forEach(player => draft[player.id] = player);
+                action.payload.items.forEach((player) => draft[player.id] = player);
                 break;
             case 'DELETE_PLAYERS':
-                action.payload.ids.forEach(id => delete draft[id]);
+                action.payload.ids.forEach((id) => delete draft[id]);
                 break;
         }
     });
 }
 
 function playerIds(state: string[] = [], action: PlayersAction) {
-    return produce(state, draft => {
+    return produce(state, (draft) => {
         switch (action.type) {
             case 'ADD_PLAYERS':
-                action.payload.items.forEach(player => draft.push(player.id));
+                action.payload.items.forEach((player) => draft.push(player.id));
                 break;
             case 'DELETE_PLAYERS':
                 const toDelete = action.payload.ids;
-                toDelete.forEach(delId => draft.splice(draft.findIndex(id => id === delId), 1))
+                toDelete.forEach((delId) => draft.splice(draft.findIndex((id) => id === delId), 1));
                 break;
         }
     });
@@ -63,5 +63,5 @@ export function singlePlayerSelector(state: PlayersState, id: string): Player {
 }
 
 export function allPlayersSelector(state: PlayersState): Player[] {
-    return state.playerIds.map(id => singlePlayerSelector(state, id));
+    return state.playerIds.map((id) => singlePlayerSelector(state, id));
 }

@@ -1,6 +1,6 @@
-import cardsReducer, { singleCardSelector, cardsSelector, CardsState, Card } from '../../reducers/cardsReducer';
-import { addCards, updateCards, deleteCards } from '../../actions/cardsActions';
 import deepFreeze from 'deep-freeze';
+import { addCards, deleteCards, updateCards } from '../../actions/cardsActions';
+import cardsReducer, { Card, cardsSelector, CardsState, singleCardSelector } from '../../reducers/cardsReducer';
 
 let state: CardsState = {};
 let cards: Card[] = [
@@ -25,9 +25,9 @@ it('adds cards', () => {
     deepFreeze(action);
     state = cardsReducer(oldState, action);
     expect(state).toEqual({
-        '1': cards[0],
-        '2': cards[1]
-    })
+        1: cards[0],
+        2: cards[1]
+    });
 });
 
 it('updates cards', () => {
@@ -35,7 +35,7 @@ it('updates cards', () => {
         id: '1',
         name: 'Blacker Lotus'
     },
-    cards[1]
+             cards[1]
     ];
     const action = updateCards(cards);
     const oldState = { ...state };
@@ -43,16 +43,16 @@ it('updates cards', () => {
     deepFreeze(action);
     state = cardsReducer(oldState, action);
     expect(state).toEqual({
-        '1': cards[0],
-        '2': cards[1]
-    })
+        1: cards[0],
+        2: cards[1]
+    });
 });
 
 it('select card', () => {
     const oldState = { ...state };
     deepFreeze(oldState);
-    expect(singleCardSelector(oldState, '1')).toEqual(cards[0])
-})
+    expect(singleCardSelector(oldState, '1')).toEqual(cards[0]);
+});
 
 it('select cards', () => {
     const oldState = { ...state };
@@ -60,8 +60,8 @@ it('select cards', () => {
     expect(cardsSelector(oldState, ['1', '2'])).toEqual([
         cards[0],
         cards[1]
-    ])
-})
+    ]);
+});
 
 it('deletes cards', () => {
     const action = deleteCards(['1', '2']);
@@ -69,5 +69,5 @@ it('deletes cards', () => {
     deepFreeze(oldState);
     deepFreeze(action);
     state = cardsReducer(oldState, action);
-    expect(state).toEqual({})
+    expect(state).toEqual({});
 });

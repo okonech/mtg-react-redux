@@ -1,11 +1,10 @@
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { updatePlayers } from '../actions/playersActions';
 import { updateZones } from '../actions/zonesActions';
-import { AppState } from '../reducers'
 import Player, { PlayerProps } from '../components/Player';
-import { playerSelector, PlayerData } from '../selectors/player';
-
+import { AppState } from '../reducers';
+import { PlayerData, playerSelector } from '../selectors/player';
 
 const mapStateToProps = (state: AppState, ownProps: { id: string }) => ({
     // todo: fix type

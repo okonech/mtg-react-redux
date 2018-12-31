@@ -8,7 +8,7 @@ const MenuStyle: object = {
     margin: '0',
     padding: '0',
     overflow: 'hidden',
-    backgroundColor: '#333',
+    backgroundColor: '#333'
 };
 
 const MenuItemStyle: object = {
@@ -16,13 +16,13 @@ const MenuItemStyle: object = {
     display: 'block',
     float: 'left',
     padding: '3px 16px',
-    'textAlign': 'center',
-    'textDecoration': 'none',
+    textAlign: 'center',
+    textDecoration: 'none'
 };
 
 export default class Menu extends React.Component {
     public render() {
-        return(
+        return (
             <div style={MenuStyle}>
                 <Link to='/player' style={MenuItemStyle}>Home</Link>
                 <Link to='/test-game' style={MenuItemStyle}>Resume test</Link>

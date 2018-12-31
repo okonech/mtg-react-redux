@@ -16,11 +16,11 @@ interface GameAction {
 
 export default function gameReducer(state: GameState = initialState, action: GameAction): GameState {
 
-    return produce(state, draft => {
+    return produce(state, (draft) => {
         switch (action.type) {
             case 'NEXT_TURN':
                 draft.turn++;
                 break;
         }
-    })
+    });
 }

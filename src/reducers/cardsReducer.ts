@@ -14,14 +14,14 @@ export interface Card {
 }
 
 export default function cardsReducer(state: CardsState = {}, action: CardsAction): CardsState {
-  return produce(state, draft => {
+  return produce(state, (draft) => {
     switch (action.type) {
       case 'ADD_CARDS':
       case 'UPDATE_CARDS':
-        action.payload.items.forEach(card => draft[card.id] = card);
+        action.payload.items.forEach((card) => draft[card.id] = card);
         break;
       case 'DELETE_CARDS':
-        action.payload.ids.forEach(id => delete draft[id]);
+        action.payload.ids.forEach((id) => delete draft[id]);
         break;
     }
   });
@@ -32,5 +32,5 @@ export function singleCardSelector(state: CardsState, id: string): Card {
 }
 
 export function cardsSelector(state: CardsState, ids: string[]): Card[] {
-  return ids.map(id => singleCardSelector(state, id));
+  return ids.map((id) => singleCardSelector(state, id));
 }

@@ -1,6 +1,7 @@
-import playersReducer, { singlePlayerSelector, allPlayersSelector, PlayersState, Player } from '../../reducers/playersReducer';
-import { addPlayers, updatePlayers, deletePlayers } from '../../actions/playersActions';
 import deepFreeze from 'deep-freeze';
+import { addPlayers, deletePlayers, updatePlayers } from '../../actions/playersActions';
+import playersReducer from '../../reducers/playersReducer';
+import { allPlayersSelector, Player, PlayersState, singlePlayerSelector } from '../../reducers/playersReducer';
 
 let state: PlayersState = {
     playerIds: [],
@@ -43,15 +44,15 @@ it('adds players', () => {
     state = playersReducer(oldState, add);
     expect(state).toEqual({
         playersById: {
-            '1': players[0],
-            '2': players[1]
+            1: players[0],
+            2: players[1]
         },
         playerIds: [
             '1',
             '2'
         ]
 
-    })
+    });
 });
 
 it('updates players', () => {
@@ -66,7 +67,7 @@ it('updates players', () => {
         graveyard: 'graveyard-id',
         exile: 'exile-id'
     },
-    players[1]
+               players[1]
     ];
     const upd = updatePlayers([players[0]]);
     const oldState = { ...state };
@@ -75,22 +76,22 @@ it('updates players', () => {
     state = playersReducer(oldState, upd);
     expect(state).toEqual({
         playersById: {
-            '1': players[0],
-            '2': players[1]
+            1: players[0],
+            2: players[1]
         },
         playerIds: [
             '1',
             '2'
         ]
 
-    })
+    });
 });
 
 it('select player', () => {
     const oldState = { ...state };
     deepFreeze(oldState);
-    expect(singlePlayerSelector(oldState, '1')).toEqual(players[0])
-})
+    expect(singlePlayerSelector(oldState, '1')).toEqual(players[0]);
+});
 
 it('select players', () => {
     const oldState = { ...state };
@@ -98,8 +99,8 @@ it('select players', () => {
     expect(allPlayersSelector(oldState)).toEqual([
         players[0],
         players[1]
-    ])
-})
+    ]);
+});
 
 it('deletes players', () => {
     const del = deletePlayers(['1', '2']);
@@ -110,5 +111,5 @@ it('deletes players', () => {
     expect(state).toEqual({
         playerIds: [],
         playersById: {}
-    })
+    });
 });

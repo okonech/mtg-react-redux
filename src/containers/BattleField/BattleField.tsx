@@ -26,12 +26,11 @@ interface BattleFieldProps {
     zone: {
         id: string;
         cards: Card[];
-    }
+    };
     connectDropTarget?: ConnectDropTarget;
     isOver?: boolean;
     canDrop?: boolean;
 }
-
 
 const CardCellStyle: React.CSSProperties = {
     height: '25%',
@@ -76,20 +75,19 @@ class BattleField extends React.Component<BattleFieldProps, {}>  {
         const { card, index } = this.findCard(id);
         this.setState(
             update(this.props.zone.cards,
-                {
-                    $splice: [[index, 1], [atIndex, 0, card]],
-
-                }),
+                   {
+                    $splice: [[index, 1], [atIndex, 0, card]]
+                })
         );
     }
 
     private findCard(id: string) {
         const { cards } = this.props.zone;
-        const card = cards.filter(c => c.id === id)[0];
+        const card = cards.filter((c) => c.id === id)[0];
 
         return {
             card,
-            index: cards.indexOf(card),
+            index: cards.indexOf(card)
         };
     }
 }

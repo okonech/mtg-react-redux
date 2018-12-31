@@ -1,10 +1,10 @@
 import React from 'react';
-import CardCustomDragLayer from './Card/CardCustomDragLayer';
-import { Card } from '../reducers/cardsReducer';
 import BattleField from '../containers/BattleField/BattleField';
 import Hand from '../containers/Hand/Hand';
 import InfoArea from '../containers/InfoArea';
+import { Card } from '../reducers/cardsReducer';
 import { PlayerData } from '../selectors/player';
+import CardCustomDragLayer from './Card/CardCustomDragLayer';
 
 const InfoAreaStyle: React.CSSProperties = {
     height: '100%',
@@ -30,7 +30,7 @@ const ActiveAreaStyle: React.CSSProperties = {
 };
 
 export interface PlayerProps {
-    player: PlayerData,
+    player: PlayerData;
     id: string;
 }
 

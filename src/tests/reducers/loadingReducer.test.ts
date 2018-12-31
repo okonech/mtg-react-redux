@@ -1,7 +1,6 @@
-import loadingReducer, { loadingSelector, LoadingState } from '../../reducers/loadingReducer';
-import { loading, loaded } from '../../actions/loadingActions';
 import deepFreeze from 'deep-freeze';
-
+import { loaded, loading } from '../../actions/loadingActions';
+import loadingReducer, { loadingSelector, LoadingState } from '../../reducers/loadingReducer';
 
 it('initial state', () => {
     expect(loadingReducer(undefined, {} as any)).toEqual(false);
@@ -25,5 +24,5 @@ it('loaded', () => {
 it('select loading status', () => {
     const oldState: LoadingState = true;
     deepFreeze(oldState);
-    expect(loadingSelector(oldState)).toEqual(true)
+    expect(loadingSelector(oldState)).toEqual(true);
 });

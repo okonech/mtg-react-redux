@@ -10,14 +10,14 @@ const layerStyles: React.CSSProperties = {
     zIndex: 100,
     left: 0,
     top: 0,
-    height: 'calc((100% - 60px)/3)',
+    height: 'calc((100% - 60px)/3)'
 };
 
 function getItemStyles(props: CardCustomDragLayerProps) {
-    const {currentOffset } = props;
+    const { currentOffset } = props;
     if (!currentOffset) {
         return {
-            display: 'none',
+            display: 'none'
         };
     }
 
@@ -29,7 +29,7 @@ function getItemStyles(props: CardCustomDragLayerProps) {
     const transform = `translate(${x}px, ${y}px)`;
     return {
         transform,
-        WebkitTransform: transform,
+        WebkitTransform: transform
     };
 }
 
@@ -50,7 +50,7 @@ class CardCustomDragLayer extends React.Component<CardCustomDragLayerProps> {
             return null;
         }
         return (
-            <div style={{...getItemStyles(this.props), ...layerStyles}}>
+            <div style={{ ...getItemStyles(this.props), ...layerStyles }}>
                 <Card
                     name={item.name}
                     opacity={.9}
@@ -60,9 +60,9 @@ class CardCustomDragLayer extends React.Component<CardCustomDragLayerProps> {
     }
 }
 
-export default DragLayer(monitor => ({
+export default DragLayer((monitor) => ({
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
     currentOffset: monitor.getSourceClientOffset(),
     isDragging: monitor.isDragging()
-  }))(CardCustomDragLayer);
+}))(CardCustomDragLayer);

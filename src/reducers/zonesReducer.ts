@@ -14,14 +14,14 @@ export interface Zone {
 }
 
 export default function zonesReducer(state: ZonesState = {}, action: ZonesAction) {
-    return produce(state, draft => {
+    return produce(state, (draft) => {
         switch (action.type) {
             case 'ADD_ZONES':
             case 'UPDATE_ZONES':
-                action.payload.items.forEach(zone => draft[zone.id] = zone);
+                action.payload.items.forEach((zone) => draft[zone.id] = zone);
                 break;
             case 'DELETE_ZONES':
-                action.payload.ids.forEach(id => delete draft[id]);
+                action.payload.ids.forEach((id) => delete draft[id]);
                 break;
         }
     });

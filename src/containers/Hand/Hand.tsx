@@ -10,7 +10,7 @@ const HandStyle: React.CSSProperties = {
   width: '96%',
   display: 'flex',
   overflowX: 'scroll',
-  marginLeft: '2%',
+  marginLeft: '2%'
 };
 
 const handTarget: DropTargetSpec<HandProps> = {
@@ -27,7 +27,7 @@ interface HandProps {
   zone: {
     id: string;
     cards: CardProp[];
-  }
+  };
   connectDropTarget?: ConnectDropTarget;
   isOver?: boolean;
   canDrop?: boolean;
@@ -56,19 +56,19 @@ class Hand extends React.Component<HandProps, HandState> {
     this.setState(
       update(this.state, {
         cards: {
-          $splice: [[index, 1], [atIndex, 0, card]],
-        },
-      }),
+          $splice: [[index, 1], [atIndex, 0, card]]
+        }
+      })
     );
   }
 
   private findCard(id: string) {
     const { cards } = this.state;
-    const card = cards.filter(c => c.id === id)[0];
+    const card = cards.filter((c) => c.id === id)[0];
 
     return {
       card,
-      index: cards.indexOf(card),
+      index: cards.indexOf(card)
     };
   }
 

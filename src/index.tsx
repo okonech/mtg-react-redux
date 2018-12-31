@@ -7,7 +7,7 @@ import reducers from './reducers';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
-    <Provider store= {reducers} >
+    <Provider store={reducers} >
         <App />
     </Provider>,
     document.getElementById('root'));

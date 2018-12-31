@@ -6,7 +6,7 @@ import { AppState } from '../reducers/index';
 
 const PlayerStyle: React.CSSProperties = {
     height: 'calc(100% - 30px)',
-    width: '100%',
+    width: '100%'
 };
 
 interface TwoPlayerGameProps {
@@ -16,7 +16,7 @@ interface TwoPlayerGameProps {
 function mapStateToProps(state: AppState) {
     console.log(state);
     return {
-        player: state.players.playerIds[0],
+        player: state.players.playerIds[0]
     };
 }
 

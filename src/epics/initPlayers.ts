@@ -1,13 +1,12 @@
-import { Epic } from "redux-observable";
+import { Epic } from 'redux-observable';
 import { from } from 'rxjs';
-import { switchMap, concatMap } from 'rxjs/operators';
-import { AppState } from '../reducers';
-import { initPlayers as initPlayersAction } from '../fake-backend/player';
+import { concatMap, switchMap } from 'rxjs/operators';
+import { addCards } from '../actions/cardsActions';
+import { loaded, loading } from '../actions/loadingActions';
 import { addPlayers } from '../actions/playersActions';
 import { addZones } from '../actions/zonesActions';
-import { addCards } from '../actions/cardsActions';
-import { loading, loaded } from '../actions/loadingActions';
-
+import { initPlayers as initPlayersAction } from '../fake-backend/player';
+import { AppState } from '../reducers';
 
 const initPlayers: Epic<any, any, AppState> = (action$) =>
     action$

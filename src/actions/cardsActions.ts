@@ -5,7 +5,7 @@ export interface CardsAction {
     payload: {
         ids?: string[];
         items?: Card[];
-    }
+    };
 }
 
 export function addCards(cards: Card[]): CardsAction {

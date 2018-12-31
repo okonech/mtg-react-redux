@@ -1,4 +1,4 @@
 export const Types = {
-    'CARD': 'card',
-    'CREATURE': 'creature'
+    CARD: 'card',
+    CREATURE: 'creature'
 };
