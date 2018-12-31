@@ -42,14 +42,7 @@ export interface CardCustomDragLayerProps {
     snapToGrid: boolean;
 }
 
-
-@DragLayer(monitor => ({
-    item: monitor.getItem(),
-    itemType: monitor.getItemType(),
-    currentOffset: monitor.getSourceClientOffset(),
-    isDragging: monitor.isDragging()
-  }))
-export default class CardCustomDragLayer extends React.Component<CardCustomDragLayerProps> {
+class CardCustomDragLayer extends React.Component<CardCustomDragLayerProps> {
 
     public render() {
         const { item, itemType, isDragging } = this.props;
@@ -66,3 +59,10 @@ export default class CardCustomDragLayer extends React.Component<CardCustomDragL
         );
     }
 }
+
+export default DragLayer(monitor => ({
+    item: monitor.getItem(),
+    itemType: monitor.getItemType(),
+    currentOffset: monitor.getSourceClientOffset(),
+    isDragging: monitor.isDragging()
+  }))(CardCustomDragLayer);

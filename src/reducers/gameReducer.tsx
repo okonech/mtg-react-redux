@@ -1,6 +1,8 @@
+import produce from 'immer';
+
 export interface GameState {
     turn: number;
-    currentPlayer: string|undefined;
+    currentPlayer: string | undefined;
 }
 
 const initialState: GameState = {
@@ -12,13 +14,13 @@ interface GameAction {
     type: string;
 }
 
-export default function gameReducer( state: GameState = initialState, action: GameAction) {
+export default function gameReducer(state: GameState = initialState, action: GameAction): GameState {
 
-    switch (action.type) {
-        case 'NEXT_TURN':
-            console.log(action);
-            return {...state, turn: state.turn++};
-        default:
-            return state;
-    }
+    return produce(state, draft => {
+        switch (action.type) {
+            case 'NEXT_TURN':
+                draft.turn++;
+                break;
+        }
+    })
 }

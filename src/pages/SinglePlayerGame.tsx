@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {playersAddPlayer} from '../actions/playersActions';
 import Menu from '../components/Menu/Menu';
-import Player from '../containers/Player/Player';
-import {Game, Player as PlayerInterface, State} from '../reduxDefs/stateInterface';
+import Player from '../containers/Player';
+import { AppState } from '../reducers/index';
 
 const PlayerStyle: React.CSSProperties = {
     height: 'calc(100% - 30px)',
@@ -12,62 +11,51 @@ const PlayerStyle: React.CSSProperties = {
 };
 
 interface SinglePlayerGameProps {
-    player: PlayerInterface;
-    game: Game;
-    addPlayer: (name: string, deckUrl: string) => void;
+    player: string;
+    loading: boolean;
 }
 
-interface StateFromProps {
-    player: PlayerInterface;
-    game: Game;
-}
-
-interface DispatchFromProps {
-    addPlayer: (name: string, deckUrl: string) => void;
-  }
-
-function mapStateToProps (state: State) {
+function mapStateToProps(state: AppState) {
     console.log(state);
     return {
-        player: state.players[0],
-        game: state.game
+        player: state.players.playerIds[0],
+        loading: state.isLoading
     };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<any>): DispatchFromProps => ({
-    addPlayer: (name: string, deckUrl: string) => dispatch(playersAddPlayer(name, deckUrl))
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    initPlayers: (game: string) => dispatch(({ type: 'INIT_PLAYERS', payload: game })),
 });
 
 class SinglePlayerGame extends React.Component<SinglePlayerGameProps, {}> {
-    constructor (props: SinglePlayerGameProps) {
+
+    constructor(props: any) {
         super(props);
-        if (!props.player) {
-            this.props.addPlayer('Player 1', 'deckUrl');
-        }
+        props.initPlayers('test');
     }
 
     public render() {
         const props = this.props;
-        if (props.player) {
-        return(
-            <div className='fullSize'>
-                <Menu />
-                <div style={PlayerStyle}>
-                    <Player {...props.player} />
+        if (!props.loading) {
+            return (
+                <div className='fullSize'>
+                    <Menu />
+                    <div style={PlayerStyle}>
+                        <Player id={props.player} />
+                    </div>
                 </div>
-            </div>
-        );
+            );
         } else {
             return (
                 <div className='fullSize'>
-                <Menu />
-                <div style={PlayerStyle}>
-                    Loading...
+                    <Menu />
+                    <div style={PlayerStyle}>
+                        Loading...
                 </div>
-            </div>
+                </div>
             );
         }
     }
 }
 // TODO: fix this to proper typing
-export default connect <StateFromProps, any> (mapStateToProps, mapDispatchToProps)(SinglePlayerGame);
+export default connect(mapStateToProps, mapDispatchToProps)(SinglePlayerGame);

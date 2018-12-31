@@ -1,16 +1,16 @@
 import update from 'immutability-helper';
 import React from 'react';
-import {ConnectDropTarget, DropTarget, DropTargetSpec} from 'react-dnd';
+import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import DraggableCard from '../../components/DraggableCard';
-import {Types} from '../../Constants';
-import {Card as CardProp} from '../../reduxDefs/stateInterface';
+import { Types } from '../../Constants';
+import { Card } from '../../reducers/cardsReducer';
 
 const BattleFieldStyle: React.CSSProperties = {
     height: '100%',
     width: '100%',
     backgroundColor: 'green',
     position: 'relative'
-  };
+};
 
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
     canDrop(props) {
@@ -23,27 +23,22 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
 };
 
 interface BattleFieldProps {
-    cards: CardProp[];
+    zone: {
+        id: string;
+        cards: Card[];
+    }
     connectDropTarget?: ConnectDropTarget;
     isOver?: boolean;
     canDrop?: boolean;
 }
 
-interface BattleFieldState {
-    cards: CardProp[];
-}
 
 const CardCellStyle: React.CSSProperties = {
     height: '25%',
     position: 'absolute'
 };
 
-@DropTarget(Types.CARD, battlefieldTarget, (connect, monitor) => ({
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
-  }))
-export default class BattleField extends React.Component<BattleFieldProps, BattleFieldState>  {
+class BattleField extends React.Component<BattleFieldProps, {}>  {
 
     constructor(props: BattleFieldProps) {
         super(props);
@@ -52,26 +47,26 @@ export default class BattleField extends React.Component<BattleFieldProps, Battl
         this.findCard = this.findCard.bind(this);
 
         this.state = {
-          cards: props.cards
+            cards: props.zone.cards
         };
 
-      }
+    }
 
     public render() {
-        const cards = this.state.cards.map((card: CardProp) => (
-            <div style = {CardCellStyle}>
+        const cards = this.props.zone.cards.map((card: Card) => (
+            <div style={CardCellStyle}>
                 <DraggableCard
                     name={card.name}
                     id={card.id}
-                    key={card.key}
+                    key={card.id}
                     moveCard={this.moveCard}
                     findCard={this.findCard}
                 />
             </div>
-          ));
+        ));
 
         return (
-            <section style = {BattleFieldStyle}>
+            <section style={BattleFieldStyle}>
                 {cards}
             </section>
         );
@@ -80,21 +75,27 @@ export default class BattleField extends React.Component<BattleFieldProps, Battl
     private moveCard(id: string, atIndex: number) {
         const { card, index } = this.findCard(id);
         this.setState(
-            update(this.props, {
-                cards: {
+            update(this.props.zone.cards,
+                {
                     $splice: [[index, 1], [atIndex, 0, card]],
-                },
-            }),
+
+                }),
         );
-      }
+    }
 
     private findCard(id: string) {
-      const { cards } = this.props;
-      const card = cards.filter(c => c.id === id)[0];
+        const { cards } = this.props.zone;
+        const card = cards.filter(c => c.id === id)[0];
 
-      return {
-          card,
-          index: cards.indexOf(card),
-      };
+        return {
+            card,
+            index: cards.indexOf(card),
+        };
     }
 }
+
+export default DropTarget(Types.CARD, battlefieldTarget, (connect, monitor) => ({
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop()
+}))(BattleField);

@@ -1,9 +1,9 @@
 import update from 'immutability-helper';
 import React from 'react';
-import {ConnectDropTarget, DropTarget, DropTargetSpec} from 'react-dnd';
+import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import DraggableCard from '../../components/DraggableCard';
-import {Types} from '../../Constants';
-import {Card as CardProp} from '../../reduxDefs/stateInterface';
+import { Types } from '../../Constants';
+import { Card as CardProp } from '../../reducers/cardsReducer';
 
 const HandStyle: React.CSSProperties = {
   height: '100%',
@@ -14,32 +14,30 @@ const HandStyle: React.CSSProperties = {
 };
 
 const handTarget: DropTargetSpec<HandProps> = {
-    canDrop(props) {
-      // console.log('Can drop hand' + props.cards.length);
-        return true;
-    },
-    drop(props) {
-        return true;
-      }
+  canDrop(props) {
+    // console.log('Can drop hand' + props.cards.length);
+    return true;
+  },
+  drop(props) {
+    return true;
+  }
 };
 
 interface HandProps {
+  zone: {
+    id: string;
     cards: CardProp[];
-    connectDropTarget?: ConnectDropTarget;
-    isOver?: boolean;
-    canDrop?: boolean;
+  }
+  connectDropTarget?: ConnectDropTarget;
+  isOver?: boolean;
+  canDrop?: boolean;
 }
 
 interface HandState {
-    cards: CardProp[];
+  cards: CardProp[];
 }
 
-@DropTarget(Types.CARD, handTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop()
-}))
-export default class Hand extends React.Component<HandProps, HandState> {
+class Hand extends React.Component<HandProps, HandState> {
 
   constructor(props: HandProps) {
     super(props);
@@ -48,47 +46,53 @@ export default class Hand extends React.Component<HandProps, HandState> {
     this.findCard = this.findCard.bind(this);
 
     this.state = {
-      cards: props.cards
+      cards: props.zone.cards
     };
 
   }
 
   private moveCard(id: string, atIndex: number) {
-      const { card, index } = this.findCard(id);
-      this.setState(
-          update(this.state, {
-              cards: {
-                  $splice: [[index, 1], [atIndex, 0, card]],
-              },
-          }),
-      );
-    }
+    const { card, index } = this.findCard(id);
+    this.setState(
+      update(this.state, {
+        cards: {
+          $splice: [[index, 1], [atIndex, 0, card]],
+        },
+      }),
+    );
+  }
 
   private findCard(id: string) {
     const { cards } = this.state;
     const card = cards.filter(c => c.id === id)[0];
 
     return {
-        card,
-        index: cards.indexOf(card),
+      card,
+      index: cards.indexOf(card),
     };
   }
 
   public render() {
     const cards = this.state.cards.map((card: CardProp) => (
-        <DraggableCard
-          name={card.name}
-          id={card.id}
-          key={card.key}
-          moveCard={this.moveCard}
-          findCard={this.findCard}
-        />
-      ));
+      <DraggableCard
+        name={card.name}
+        id={card.id}
+        key={card.id}
+        moveCard={this.moveCard}
+        findCard={this.findCard}
+      />
+    ));
 
     return (
-        <section style = {HandStyle}>
-          {cards}
-        </section>
+      <section style={HandStyle}>
+        {cards}
+      </section>
     );
   }
 }
+
+export default DropTarget(Types.CARD, handTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
+}))(Hand);

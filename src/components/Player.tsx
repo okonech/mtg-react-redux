@@ -1,11 +1,12 @@
 import React from 'react';
-import CardCustomDragLayer from '../../components/Card/CardCustomDragLayer';
-import {Player as PlayerProps} from '../../reduxDefs/stateInterface';
-import BattleField from '../BattleField/BattleField';
-import Hand from '../Hand/Hand';
-import InfoArea from '../InfoArea';
+import CardCustomDragLayer from './Card/CardCustomDragLayer';
+import { Card } from '../reducers/cardsReducer';
+import BattleField from '../containers/BattleField/BattleField';
+import Hand from '../containers/Hand/Hand';
+import InfoArea from '../containers/InfoArea';
+import { PlayerData } from '../selectors/player';
 
-const InfoAreaStyle: React.CSSProperties  = {
+const InfoAreaStyle: React.CSSProperties = {
     height: '100%',
     width: '15%',
     float: 'left',
@@ -28,12 +29,17 @@ const ActiveAreaStyle: React.CSSProperties = {
     width: '85%'
 };
 
+export interface PlayerProps {
+    player: PlayerData,
+    id: string;
+}
+
 export default class Player extends React.Component<PlayerProps, {}> {
-    public cards: string[];
+    public cards: Card[];
 
     constructor(props: any) {
         super(props);
-      }
+    }
 
     public render() {
         return (
@@ -43,16 +49,14 @@ export default class Player extends React.Component<PlayerProps, {}> {
                 </div>
                 <div style={ActiveAreaStyle}>
                     <div style={BattleFieldStyle}>
-                        <BattleField cards={this.props.battlefield} />
+                        <BattleField zone={this.props.player.battlefield} />
                     </div>
                     <div style={HandStyle}>
-                            <Hand cards = {this.props.hand}/>
+                        <Hand zone={this.props.player.hand} />
                     </div>
                 </div>
-                <CardCustomDragLayer
-                    snapToGrid={true}
-                />
+                <CardCustomDragLayer />
             </div>
         );
-      }
+    }
 }

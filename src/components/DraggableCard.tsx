@@ -56,17 +56,7 @@ interface DraggableCardProps {
     id: string;
 }
 
-@DropTarget(Types.CARD, cardTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop()
-}))
-@DragSource(Types.CARD, cardSource, (connect, monitor) => ({
-    connectDragSource: connect.dragSource(),
-    connectDragPreview: connect.dragPreview(),
-    isDragging: monitor.isDragging(),
-}))
-export default class DraggableCard extends React.Component<DraggableCardProps, any> {
+class DraggableCard extends React.Component<DraggableCardProps, any> {
 
   // remove this code to return drag prevew  
   public componentDidMount() {
@@ -112,3 +102,13 @@ export default class DraggableCard extends React.Component<DraggableCardProps, a
   }
 }
 
+export default DropTarget(Types.CARD, cardTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
+}))
+(DragSource(Types.CARD, cardSource, (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
+    isDragging: monitor.isDragging(),
+}))(DraggableCard));
