@@ -17,9 +17,6 @@ const handTarget: DropTargetSpec<HandProps> = {
   canDrop(props) {
     // console.log('Can drop hand' + props.cards.length);
     return true;
-  },
-  drop(props) {
-    return true;
   }
 };
 
@@ -31,6 +28,7 @@ interface HandProps {
   connectDropTarget?: ConnectDropTarget;
   isOver?: boolean;
   canDrop?: boolean;
+  moveCard: () => void;
 }
 
 interface HandState {

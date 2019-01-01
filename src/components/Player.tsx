@@ -32,6 +32,7 @@ const ActiveAreaStyle: React.CSSProperties = {
 export interface PlayerProps {
     player: PlayerData;
     id: string;
+    moveCard?: () => void;
 }
 
 export default class Player extends React.Component<PlayerProps, {}> {
@@ -52,7 +53,10 @@ export default class Player extends React.Component<PlayerProps, {}> {
                         <BattleField zone={this.props.player.battlefield} />
                     </div>
                     <div style={HandStyle}>
-                        <Hand zone={this.props.player.hand} />
+                        <Hand
+                            zone={this.props.player.hand}
+                            moveCard={this.props.moveCard}
+                        />
                     </div>
                 </div>
                 <CardCustomDragLayer />

@@ -1,5 +1,5 @@
 import deepFreeze from 'deep-freeze';
-import { addZones, deleteZones, updateZones } from '../../actions/zonesActions';
+import { addZones, deleteZones, moveCard, updateZones } from '../../actions/zonesActions';
 import zonesReducer, { singleZoneSelector, Zone, zonesSelector, ZonesState } from '../../reducers/zonesReducer';
 
 let state: ZonesState = {};
@@ -50,6 +50,36 @@ it('updates zones', () => {
              zones[1]
     ];
     const action = updateZones(zones);
+    const oldState = { ...state };
+    deepFreeze(oldState);
+    deepFreeze(action);
+    state = zonesReducer(oldState, action);
+    expect(state).toEqual({
+        1: zones[0],
+        2: zones[1]
+    });
+});
+
+it('moves card', () => {
+    zones = [
+        {
+            id: '1',
+            cards: [
+                '30',
+                '32'
+            ]
+        },
+        {
+            id: '2',
+            cards: [
+                '20',
+                '31',
+                '21',
+                '22'
+            ]
+        }
+    ];
+    const action = moveCard('1', 1, '2', 1);
     const oldState = { ...state };
     deepFreeze(oldState);
     deepFreeze(action);

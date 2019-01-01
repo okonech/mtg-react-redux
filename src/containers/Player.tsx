@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { updatePlayers } from '../actions/playersActions';
-import { updateZones } from '../actions/zonesActions';
+import { moveCard, updateZones } from '../actions/zonesActions';
 import Player, { PlayerProps } from '../components/Player';
 import { AppState } from '../reducers';
 import { PlayerData, playerSelector } from '../selectors/player';
@@ -14,7 +14,8 @@ const mapStateToProps = (state: AppState, ownProps: { id: string }) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerProps) => ({
     updatePlayers,
-    updateZones
+    updateZones,
+    moveCard
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Player);
