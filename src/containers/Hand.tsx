@@ -3,7 +3,7 @@ import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import DraggableCard from '../components/DraggableCard';
 import { Types } from '../Constants';
-import { Card as CardProp } from '../reducers/cardsReducer';
+import { Card } from '../reducers/cardsReducer';
 
 const HandStyle: React.CSSProperties = {
   height: '100%',
@@ -23,16 +23,16 @@ const handTarget: DropTargetSpec<HandProps> = {
 interface HandProps {
   zone: {
     id: string;
-    cards: CardProp[];
+    cards: Card[];
   };
   connectDropTarget?: ConnectDropTarget;
   isOver?: boolean;
   canDrop?: boolean;
-  moveCard: () => void;
+  moveCard: (fromZone: string, fromIdx: number, toZone: string, toIdx: number) => void;
 }
 
 interface HandState {
-  cards: CardProp[];
+  cards: Card[];
 }
 
 class Hand extends React.Component<HandProps, HandState> {
@@ -40,8 +40,8 @@ class Hand extends React.Component<HandProps, HandState> {
   constructor(props: HandProps) {
     super(props);
 
-    this.moveCard = this.moveCard.bind(this);
-    this.findCard = this.findCard.bind(this);
+    this.hoverMoveCard = this.hoverMoveCard.bind(this);
+    this.hoverFindCard = this.hoverFindCard.bind(this);
 
     this.state = {
       cards: props.zone.cards
@@ -49,8 +49,8 @@ class Hand extends React.Component<HandProps, HandState> {
 
   }
 
-  private moveCard(id: string, atIndex: number) {
-    const { card, index } = this.findCard(id);
+  private hoverMoveCard(id: string, atIndex: number) {
+    const { card, index } = this.hoverFindCard(id);
     this.setState(
       update(this.state, {
         cards: {
@@ -60,7 +60,7 @@ class Hand extends React.Component<HandProps, HandState> {
     );
   }
 
-  private findCard(id: string) {
+  private hoverFindCard(id: string) {
     const { cards } = this.state;
     const card = cards.filter((c) => c.id === id)[0];
 
@@ -71,15 +71,21 @@ class Hand extends React.Component<HandProps, HandState> {
   }
 
   public render() {
-    const cards = this.state.cards.map((card: CardProp) => (
-      <DraggableCard
-        name={card.name}
-        id={card.id}
-        key={card.id}
-        moveCard={this.moveCard}
-        findCard={this.findCard}
-      />
-    ));
+    const { moveCard, zone } = this.props;
+    const cards = this.state.cards.map((card: Card, indexOf: number) => {
+      const curriedMoveCard = (toId: string, toIdx: number) => moveCard(zone.id, indexOf, toId, toIdx);
+      return (
+        <DraggableCard
+          zoneId={zone.id}
+          name={card.name}
+          id={card.id}
+          key={card.id}
+          hoverMoveCard={this.hoverMoveCard}
+          hoverFindCard={this.hoverFindCard}
+          moveCard={curriedMoveCard}
+        />
+      );
+    });
 
     return (
       <section style={HandStyle}>

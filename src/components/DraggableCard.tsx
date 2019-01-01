@@ -13,7 +13,7 @@ const cardSource: DragSourceSpec<DraggableCardProps, any> = {
     return {
       id: props.id,
       name: props.name,
-      originalIndex: props.findCard(props.id).index
+      originalIndex: props.hoverFindCard(props.id).index
     };
   },
 
@@ -21,8 +21,14 @@ const cardSource: DragSourceSpec<DraggableCardProps, any> = {
     const { id: droppedId, originalIndex } = monitor.getItem();
     const didDrop = monitor.didDrop();
     console.log('End drag ' + props.name + ' ' + props.id);
+    // todo: move drop call logic into droptarget drop method
+    // also add droptarget drop on hand and battlefield, putting cards at end of list
+
+    // trello board handles preview drag by passing isover as a prop, and adding a moved 
+    // placeholder in the render method
+    // do this with cards for sort
     if (!didDrop) {
-      props.moveCard(droppedId, originalIndex);
+      props.hoverMoveCard(droppedId, originalIndex);
       console.log('End drag returned ' + props.name + ' to original index ' + originalIndex);
     }
   }
@@ -34,8 +40,8 @@ const cardTarget: DropTargetSpec<DraggableCardProps> = {
     const { id: overId } = props;
 
     if (draggedId !== overId) {
-      const { index: overIndex } = props.findCard(overId);
-      props.moveCard(draggedId, overIndex);
+      const { index: overIndex } = props.hoverFindCard(overId);
+      props.hoverMoveCard(draggedId, overIndex);
     }
   },
 
@@ -49,11 +55,13 @@ interface DraggableCardProps {
   connectDragSource?: ConnectDragSource;
   isDragging?: boolean;
   connectDropTarget?: ConnectDropTarget;
-  moveCard: (id: string, to: number) => void;
-  findCard: (id: string) => { index: number };
+  hoverMoveCard: (id: string, to: number) => void;
+  hoverFindCard: (id: string) => { index: number };
   name: string;
   key: string;
   id: string;
+  zoneId: string;
+  moveCard: (toId: string, toIdx: number) => void;
 }
 
 class DraggableCard extends React.Component<DraggableCardProps, any> {

@@ -30,20 +30,16 @@ interface BattleFieldProps {
     connectDropTarget?: ConnectDropTarget;
     isOver?: boolean;
     canDrop?: boolean;
+    moveCard: (fromZone: string, fromIdx: number, toZone: string, toIdx: number) => void;
 }
-
-const CardCellStyle: React.CSSProperties = {
-    height: '25%',
-    position: 'absolute'
-};
 
 class BattleField extends React.Component<BattleFieldProps, {}>  {
 
     constructor(props: BattleFieldProps) {
         super(props);
 
-        this.moveCard = this.moveCard.bind(this);
-        this.findCard = this.findCard.bind(this);
+        this.hoverMoveCard = this.hoverMoveCard.bind(this);
+        this.hoverFindCard = this.hoverFindCard.bind(this);
 
         this.state = {
             cards: props.zone.cards
@@ -52,17 +48,21 @@ class BattleField extends React.Component<BattleFieldProps, {}>  {
     }
 
     public render() {
-        const cards = this.props.zone.cards.map((card: Card) => (
-            <div style={CardCellStyle}>
+        const { moveCard, zone } = this.props;
+        const cards = this.props.zone.cards.map((card: Card, indexOf: number) => {
+            const curriedMoveCard = (toId: string, toIdx: number) => moveCard(zone.id, indexOf, toId, toIdx);
+            return (
                 <DraggableCard
+                    zoneId={zone.id}
                     name={card.name}
                     id={card.id}
                     key={card.id}
-                    moveCard={this.moveCard}
-                    findCard={this.findCard}
+                    hoverMoveCard={this.hoverMoveCard}
+                    hoverFindCard={this.hoverFindCard}
+                    moveCard={curriedMoveCard}
                 />
-            </div>
-        ));
+            );
+        });
 
         return (
             <section style={BattleFieldStyle}>
@@ -71,8 +71,8 @@ class BattleField extends React.Component<BattleFieldProps, {}>  {
         );
     }
 
-    private moveCard(id: string, atIndex: number) {
-        const { card, index } = this.findCard(id);
+    private hoverMoveCard(id: string, atIndex: number) {
+        const { card, index } = this.hoverFindCard(id);
         this.setState(
             update(this.props.zone.cards,
                    {
@@ -81,7 +81,7 @@ class BattleField extends React.Component<BattleFieldProps, {}>  {
         );
     }
 
-    private findCard(id: string) {
+    private hoverFindCard(id: string) {
         const { cards } = this.props.zone;
         const card = cards.filter((c) => c.id === id)[0];
 
