@@ -106,24 +106,18 @@ class DraggableCard extends React.Component<DraggableCardProps & DraggableCardSo
     // set currently dragged card to invisible while dragging it
     // gives appearance of the dragged card being the actual dragged card and not the copy
     const opacity = isDragging ? 0 : 1;
-    if (connectDragSource && connectDropTarget) {
-      return (
-        connectDragSource &&
-        connectDropTarget &&
-        connectDragSource(
-          connectDropTarget(
-            <div style={{ height: '100%' }}>
-              <Card
-                name={name}
-                opacity={opacity}
-              />
-            </div>
-          )
+    return (
+      connectDragSource(
+        connectDropTarget(
+          <div style={{ height: '100%' }}>
+            <Card
+              name={name}
+              opacity={opacity}
+            />
+          </div>
         )
-      );
-    } else {
-      throw console.error();
-    }
+      )
+    );
   }
 }
 
