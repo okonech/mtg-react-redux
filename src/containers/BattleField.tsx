@@ -54,6 +54,7 @@ class BattleField extends React.Component<BattleFieldProps, {}>  {
             return (
                 <DraggableCard
                     zoneId={zone.id}
+                    originalIndex={indexOf}
                     name={card.name}
                     id={card.id}
                     key={card.id}

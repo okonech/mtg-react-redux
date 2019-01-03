@@ -19,7 +19,8 @@ const mapStateToProps = (state: AppState, ownProps: { id: string }) => ({
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerProps) => ({
     updatePlayers,
     updateZones,
-    moveCard
+    moveCard: (fromZone: string, fromIdx: number, toZone: string, toIdx: number) => (
+        dispatch(moveCard(fromZone, fromIdx, toZone, toIdx)))
 });
 
 // cool performance improvement

@@ -25,19 +25,22 @@ interface HandProps {
     id: string;
     cards: Card[];
   };
-  connectDropTarget?: ConnectDropTarget;
-  isOver?: boolean;
-  canDrop?: boolean;
   moveCard: (fromZone: string, fromIdx: number, toZone: string, toIdx: number) => void;
+}
+
+interface HandTargetCollectedProps {
+  connectDropTarget: ConnectDropTarget;
+  isOver: boolean;
+  canDrop: boolean;
 }
 
 interface HandState {
   cards: Card[];
 }
 
-class Hand extends React.Component<HandProps, HandState> {
+class Hand extends React.Component<HandProps & HandTargetCollectedProps, HandState> {
 
-  constructor(props: HandProps) {
+  constructor(props: HandProps & HandTargetCollectedProps) {
     super(props);
 
     this.hoverMoveCard = this.hoverMoveCard.bind(this);
@@ -73,10 +76,13 @@ class Hand extends React.Component<HandProps, HandState> {
   public render() {
     const { moveCard, zone } = this.props;
     const cards = this.state.cards.map((card: Card, indexOf: number) => {
-      const curriedMoveCard = (toId: string, toIdx: number) => moveCard(zone.id, indexOf, toId, toIdx);
+      const curriedMoveCard = (fromId: string, fromIdx: number) => {
+        return moveCard(fromId, fromIdx, zone.id, indexOf);
+      };
       return (
         <DraggableCard
           zoneId={zone.id}
+          originalIndex={indexOf}
           name={card.name}
           id={card.id}
           key={card.id}
@@ -95,7 +101,7 @@ class Hand extends React.Component<HandProps, HandState> {
   }
 }
 
-export default DropTarget(Types.CARD, handTarget, (connect, monitor) => ({
+export default DropTarget<HandProps, HandTargetCollectedProps>(Types.CARD, handTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop()

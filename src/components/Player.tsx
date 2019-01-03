@@ -43,6 +43,8 @@ export default class Player extends React.Component<PlayerProps, {}> {
     }
 
     public render() {
+        const { player, moveCard } = this.props;
+        const { hand, battlefield } = player;
         return (
             <div className='fullSize'>
                 <div style={InfoAreaStyle}>
@@ -51,14 +53,14 @@ export default class Player extends React.Component<PlayerProps, {}> {
                 <div style={ActiveAreaStyle}>
                     <div style={BattleFieldStyle}>
                         <BattleField
-                            zone={this.props.player.battlefield}
-                            moveCard={this.props.moveCard}
+                            zone={battlefield}
+                            moveCard={moveCard}
                         />
                     </div>
                     <div style={HandStyle}>
                         <Hand
-                            zone={this.props.player.hand}
-                            moveCard={this.props.moveCard}
+                            zone={hand}
+                            moveCard={moveCard}
                         />
                     </div>
                 </div>
