@@ -1,8 +1,5 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import logger from 'redux-logger';
-import { createEpicMiddleware } from 'redux-observable';
-import epics from '../epics';
+
+import { combineReducers } from 'redux';
 import cardsReducer, { CardsState } from './cardsReducer';
 import gameReducer, { GameState } from './gameReducer';
 import loadingReducer, { LoadingState } from './loadingReducer';
@@ -17,20 +14,10 @@ export interface AppState {
     zones: ZonesState;
 }
 
-const reducer = combineReducers({
+export default combineReducers<AppState>({
     cards: cardsReducer,
     game: gameReducer,
     isLoading: loadingReducer,
     players: playersReducer,
     zones: zonesReducer
 });
-
-const epicMiddleware = createEpicMiddleware<any, any, AppState>();
-
-const middleware = process.env.NODE_ENV === 'production' ?
-    applyMiddleware(epicMiddleware) :
-    composeWithDevTools(applyMiddleware(logger, epicMiddleware));
-
-export default createStore(reducer, middleware);
-
-epicMiddleware.run(epics);
