@@ -10,13 +10,17 @@ const PlayerStyle: React.CSSProperties = {
     width: '100%'
 };
 
-interface SinglePlayerGameProps {
-    player: string;
+interface SinglePlayerProps {
+    players: string[];
     loading: boolean;
 }
 
+interface SinglePlayerDispatch {
+    initPlayers: (game: string) => void;
+}
+
 const mapStateToProps = (state: AppState) => ({
-    player: state.players.playerIds[0],
+    players: state.players.playerIds,
     loading: state.isLoading
 });
 
@@ -24,7 +28,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     initPlayers: (game: string) => dispatch(({ type: 'INIT_PLAYERS', payload: game }))
 });
 
-class SinglePlayerGame extends React.Component<SinglePlayerGameProps, {}> {
+class SinglePlayerGame extends React.Component<SinglePlayerProps & SinglePlayerDispatch, {}> {
 
     constructor(props: any) {
         super(props);
@@ -32,13 +36,13 @@ class SinglePlayerGame extends React.Component<SinglePlayerGameProps, {}> {
     }
 
     public render() {
-        const props = this.props;
-        if (!props.loading) {
+        const { players, loading } = this.props;
+        if (!loading) {
             return (
                 <div className='fullSize'>
                     <Menu />
                     <div style={PlayerStyle}>
-                        <Player id={props.player} />
+                        <Player id={players[0]} />
                     </div>
                 </div>
             );

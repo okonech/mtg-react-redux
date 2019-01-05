@@ -2,7 +2,6 @@ import React from 'react';
 import BattleField from '../containers/BattleField';
 import Hand from '../containers/Hand';
 import InfoArea from '../containers/InfoArea';
-import { Card } from '../reducers/cardsReducer';
 import { PlayerData } from '../selectors/player';
 import CardCustomDragLayer from './CardCustomDragLayer';
 
@@ -36,17 +35,24 @@ export interface PlayerProps {
 }
 
 export default class Player extends React.Component<PlayerProps, {}> {
-    public cards: Card[];
+
+    private playerArea: any;
 
     constructor(props: any) {
         super(props);
+    }
+
+    public componentDidMount() {
+        const height = this.playerArea.clientHeight;
+        console.log(height);
+        this.setState({ height });
     }
 
     public render() {
         const { player, moveCard } = this.props;
         const { hand, battlefield } = player;
         return (
-            <div className='fullSize'>
+            <div className='fullSize' ref={(playerArea) => this.playerArea = playerArea}>
                 <div style={InfoAreaStyle}>
                     <InfoArea />
                 </div>
