@@ -1,9 +1,11 @@
-import update from 'immutability-helper';
+
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
-import DraggableCard from '../components/DraggableCard';
+import { findDOMNode } from 'react-dom';
+import Card from '../components/Card';
+import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
-import { Card } from '../reducers/cardsReducer';
+import { Card as CardProp } from '../reducers/cardsReducer';
 
 const HandStyle: React.CSSProperties = {
   height: '100%',
@@ -14,16 +16,24 @@ const HandStyle: React.CSSProperties = {
 };
 
 const handTarget: DropTargetSpec<HandProps> = {
-  canDrop(props) {
-    // console.log('Can drop hand' + props.cards.length);
-    return true;
+  hover(props, monitor, component: Hand) {
+    const node = findDOMNode(component) as Element;
+    const bounds = node.getBoundingClientRect();
+    const placeholderIndex = getPlaceholderIndex(monitor.getClientOffset().x, bounds.left, node.clientHeight / 1.45);
+    component.setState({ placeholderIndex });
+  },
+  drop(props, monitor, component: Hand) {
+    const { moveCard, zone } = props;
+    const { zoneId, originalIndex } = monitor.getItem() as CardDragObject;
+    const { placeholderIndex } = component.state;
+    moveCard(zoneId, originalIndex, zone.id, placeholderIndex);
   }
 };
 
 interface HandProps {
   zone: {
     id: string;
-    cards: Card[];
+    cards: CardProp[];
   };
   moveCard: (fromZone: string, fromIdx: number, toZone: string, toIdx: number) => void;
 }
@@ -32,10 +42,23 @@ interface HandTargetCollectedProps {
   connectDropTarget: ConnectDropTarget;
   isOver: boolean;
   canDrop: boolean;
+  item: CardDragObject;
 }
 
 interface HandState {
-  cards: Card[];
+  placeholderIndex: number;
+}
+
+function getPlaceholderIndex(mouseX: number, componentX: number, cardWidth: number) {
+  // shift placeholder if x position more than card width / 2
+  const xPos = mouseX - componentX;
+  const halfCardWidth = cardWidth / 2;
+
+  if (xPos < halfCardWidth) {
+    return 0; // place at the start
+  }
+  return Math.floor((xPos - halfCardWidth) / (cardWidth));
+
 }
 
 class Hand extends React.Component<HandProps & HandTargetCollectedProps, HandState> {
@@ -43,66 +66,55 @@ class Hand extends React.Component<HandProps & HandTargetCollectedProps, HandSta
   constructor(props: HandProps & HandTargetCollectedProps) {
     super(props);
 
-    this.hoverMoveCard = this.hoverMoveCard.bind(this);
-    this.hoverFindCard = this.hoverFindCard.bind(this);
-
     this.state = {
-      cards: props.zone.cards
+      placeholderIndex: undefined
     };
 
-  }
-
-  private hoverMoveCard(id: string, atIndex: number) {
-    const { card, index } = this.hoverFindCard(id);
-    this.setState(
-      update(this.state, {
-        cards: {
-          $splice: [[index, 1], [atIndex, 0, card]]
-        }
-      })
-    );
-  }
-
-  private hoverFindCard(id: string) {
-    const { cards } = this.state;
-    const card = cards.filter((c) => c.id === id)[0];
-
-    return {
-      card,
-      index: cards.indexOf(card)
-    };
   }
 
   public render() {
-    const { moveCard, zone } = this.props;
-    const cards = this.state.cards.map((card: Card, indexOf: number) => {
-      const curriedMoveCard = (fromId: string, fromIdx: number) => {
-        return moveCard(fromId, fromIdx, zone.id, indexOf);
-      };
-      return (
+    const { zone, connectDropTarget, isOver, canDrop, item } = this.props;
+    const { placeholderIndex } = this.state;
+    const cards = zone.cards.reduce((acc, curr, idx) => {
+      if (isOver && canDrop && curr.id === item.id) {
+        return acc;
+      }
+      acc.push(
         <DraggableCard
           zoneId={zone.id}
-          originalIndex={indexOf}
-          name={card.name}
-          id={card.id}
-          key={card.id}
-          hoverMoveCard={this.hoverMoveCard}
-          hoverFindCard={this.hoverFindCard}
-          moveCard={curriedMoveCard}
+          originalIndex={idx}
+          name={curr.name}
+          id={curr.id}
+          key={'draggable' + curr.id}
         />
       );
-    });
+      return acc;
+    },                              []);
+
+    if (isOver && canDrop) {
+      cards.splice(placeholderIndex, 0,
+                   (
+          <Card
+            key={'handplaceholder'}
+            name={'placeholder'}
+            opacity={0}
+            visible={true}
+          />
+        ));
+    }
 
     return (
-      <section style={HandStyle}>
-        {cards}
-      </section>
-    );
+      connectDropTarget(
+        <section style={HandStyle}>
+          {cards}
+        </section>
+      ));
   }
 }
 
 export default DropTarget<HandProps, HandTargetCollectedProps>(Types.CARD, handTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
-  canDrop: monitor.canDrop()
+  canDrop: monitor.canDrop(),
+  item: monitor.getItem()
 }))(Hand);

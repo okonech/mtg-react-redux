@@ -54,6 +54,7 @@ class CardCustomDragLayer extends React.Component<CardCustomDragLayerProps> {
                 <Card
                     name={item.name}
                     opacity={.9}
+                    visible={true}
                 />
             </div>
         );

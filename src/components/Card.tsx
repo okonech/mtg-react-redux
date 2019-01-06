@@ -4,6 +4,7 @@ import * as React from 'react';
 
 interface CardProps {
   opacity: number;
+  visible: boolean;
   name: string;
 }
 
@@ -23,17 +24,17 @@ const ImgStyle: React.CSSProperties = {
 const CardTextStyle: React.CSSProperties = {
   position: 'absolute',
   top: 10,
-  bottom: 0,
   left: 5,
-  right: 0
+  height: '25%',
+  width: 'calc(100% - 1em)'
 };
 
-export default class Card extends React.Component<CardProps, any> {
+export default class Card extends React.Component<CardProps, {}> {
 
   public render() {
-    const opacity = this.props.opacity;
+    const { opacity, visible } = this.props;
     return (
-      <div style={{ ...CardStyle, opacity }}>
+      <div style={{ ...CardStyle, opacity, display: visible ? 'block' : 'none' }}>
         <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
         <div style={CardTextStyle}>
           {this.props.name}

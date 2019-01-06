@@ -1,4 +1,4 @@
-import update from 'immutability-helper';
+
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import DraggableCard from '../components/DraggableCard';
@@ -38,19 +38,11 @@ class BattleField extends React.Component<BattleFieldProps, {}>  {
     constructor(props: BattleFieldProps) {
         super(props);
 
-        this.hoverMoveCard = this.hoverMoveCard.bind(this);
-        this.hoverFindCard = this.hoverFindCard.bind(this);
-
-        this.state = {
-            cards: props.zone.cards
-        };
-
     }
 
     public render() {
-        const { moveCard, zone } = this.props;
+        const { zone } = this.props;
         const cards = this.props.zone.cards.map((card: Card, indexOf: number) => {
-            const curriedMoveCard = (toId: string, toIdx: number) => moveCard(zone.id, indexOf, toId, toIdx);
             return (
                 <DraggableCard
                     zoneId={zone.id}
@@ -58,9 +50,6 @@ class BattleField extends React.Component<BattleFieldProps, {}>  {
                     name={card.name}
                     id={card.id}
                     key={card.id}
-                    hoverMoveCard={this.hoverMoveCard}
-                    hoverFindCard={this.hoverFindCard}
-                    moveCard={curriedMoveCard}
                 />
             );
         });
@@ -70,26 +59,6 @@ class BattleField extends React.Component<BattleFieldProps, {}>  {
                 {cards}
             </section>
         );
-    }
-
-    private hoverMoveCard(id: string, atIndex: number) {
-        const { card, index } = this.hoverFindCard(id);
-        this.setState(
-            update(this.props.zone.cards,
-                   {
-                    $splice: [[index, 1], [atIndex, 0, card]]
-                })
-        );
-    }
-
-    private hoverFindCard(id: string) {
-        const { cards } = this.props.zone;
-        const card = cards.filter((c) => c.id === id)[0];
-
-        return {
-            card,
-            index: cards.indexOf(card)
-        };
     }
 }
 

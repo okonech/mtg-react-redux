@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceMonitor, DragSourceSpec } from 'react-dnd';
-import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { Types } from '../Constants';
 import Card from './Card';
 
 // draggable card component with id, key, x, y position
 
-interface CardDragObject {
+export interface CardDragObject {
   id: string;
   name: string;
   originalIndex: number;
@@ -26,8 +25,6 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
   },
 
   endDrag(props: DraggableCardProps, monitor: DragSourceMonitor) {
-    const { id: droppedId, originalIndex } = monitor.getItem() as CardDragObject;
-    const didDrop = monitor.didDrop();
     console.log('End drag ' + props.name + ' ' + props.id);
     // todo: move drop call logic into droptarget drop method
     // also add droptarget drop on hand and battlefield, putting cards at end of list
@@ -35,49 +32,20 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
     // trello board handles preview drag by passing isover as a prop, and adding a moved 
     // placeholder in the render method
     // do this with cards for sort
-    if (!didDrop) {
-      props.hoverMoveCard(droppedId, originalIndex);
-      console.log('End drag returned ' + props.name + ' to original index ' + originalIndex);
-    }
-  }
-};
-
-const cardTarget: DropTargetSpec<DraggableCardProps> = {
-  hover(props: DraggableCardProps, monitor: DropTargetMonitor) {
-    const { id: draggedId } = monitor.getItem() as CardDragObject;
-    const { id: overId } = props;
-
-    if (draggedId !== overId) {
-      const { index: overIndex } = props.hoverFindCard(overId);
-      props.hoverMoveCard(draggedId, overIndex);
-    }
-  },
-  drop(props: DraggableCardProps, monitor: DropTargetMonitor) {
-    const { zoneId, originalIndex } = monitor.getItem() as CardDragObject;
-    props.moveCard(zoneId, originalIndex);
   }
 };
 
 interface DraggableCardProps {
-  connectDropTarget?: ConnectDropTarget;
-  hoverMoveCard: (id: string, to: number) => void;
-  hoverFindCard: (id: string) => { index: number };
   name: string;
   id: string;
   zoneId: string;
   originalIndex: number;
-  moveCard: (toId: string, toIdx: number) => void;
 }
 
 interface DraggableCardSourceCollectedProps {
   connectDragSource: ConnectDragSource;
   connectDragPreview: ConnectDragPreview;
   isDragging: boolean;
-}
-
-interface DraggableCardTargetCollectedProps {
-  connectDropTarget: ConnectDropTarget;
-  isOver: boolean;
 }
 
 class DraggableCard extends React.Component<DraggableCardProps & DraggableCardSourceCollectedProps> {
@@ -97,38 +65,27 @@ class DraggableCard extends React.Component<DraggableCardProps & DraggableCardSo
   }
 
   public render() {
-    const {
-      name,
-      isDragging,
-      connectDragSource,
-      connectDropTarget
-    } = this.props;
+    const { name, isDragging, connectDragSource, id } = this.props;
     // set currently dragged card to invisible while dragging it
     // gives appearance of the dragged card being the actual dragged card and not the copy
-    const opacity = isDragging ? 0 : 1;
     return (
       connectDragSource(
-        connectDropTarget(
-          <div style={{ height: '100%' }}>
-            <Card
-              name={name}
-              opacity={opacity}
-            />
-          </div>
-        )
+        <div style={{ height: '100%' }}>
+          <Card
+            key={'card' + id}
+            name={name}
+            opacity={1}
+            visible={!isDragging}
+          />
+        </div>
       )
     );
   }
 }
 
-export default DropTarget<DraggableCardProps, DraggableCardTargetCollectedProps>(
-  Types.CARD, cardTarget, (connect, monitor) => ({
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver()
-  }))
-  (DragSource<DraggableCardProps, DraggableCardSourceCollectedProps>(
-    Types.CARD, cardSource, (connect, monitor) => ({
-      connectDragSource: connect.dragSource(),
-      connectDragPreview: connect.dragPreview(),
-      isDragging: monitor.isDragging()
-    }))(DraggableCard));
+export default DragSource<DraggableCardProps, DraggableCardSourceCollectedProps>(
+  Types.CARD, cardSource, (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
+    isDragging: monitor.isDragging()
+  }))(DraggableCard);

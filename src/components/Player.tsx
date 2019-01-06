@@ -36,23 +36,11 @@ export interface PlayerProps {
 
 export default class Player extends React.Component<PlayerProps, {}> {
 
-    private playerArea: any;
-
-    constructor(props: any) {
-        super(props);
-    }
-
-    public componentDidMount() {
-        const height = this.playerArea.clientHeight;
-        console.log(height);
-        this.setState({ height });
-    }
-
     public render() {
         const { player, moveCard } = this.props;
         const { hand, battlefield } = player;
         return (
-            <div className='fullSize' ref={(playerArea) => this.playerArea = playerArea}>
+            <div className='fullSize'>
                 <div style={InfoAreaStyle}>
                     <InfoArea />
                 </div>
