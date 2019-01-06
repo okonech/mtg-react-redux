@@ -13,12 +13,12 @@ const InfoAreaStyle: React.CSSProperties = {
 };
 
 const HandStyle: React.CSSProperties = {
-    height: '33.3%',
+    height: '25%',
     width: '100%'
 };
 
 const BattleFieldStyle: React.CSSProperties = {
-    height: '66.6%',
+    height: '75%',
     width: '100%'
 };
 

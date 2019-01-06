@@ -10,7 +10,7 @@ const layerStyles: React.CSSProperties = {
     zIndex: 100,
     left: 0,
     top: 0,
-    height: 'calc((100% - 60px)/3)'
+    height: 'calc((100% - 60px)/4)'
 };
 
 function getItemStyles(props: CardCustomDragLayerProps) {

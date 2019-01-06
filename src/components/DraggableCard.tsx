@@ -68,13 +68,14 @@ class DraggableCard extends React.Component<DraggableCardProps & DraggableCardSo
     const { name, isDragging, connectDragSource, id } = this.props;
     // set currently dragged card to invisible while dragging it
     // gives appearance of the dragged card being the actual dragged card and not the copy
+    const opacity = isDragging ? 0 : 1;
     return (
       connectDragSource(
         <div style={{ height: '100%' }}>
           <Card
             key={'card' + id}
             name={name}
-            opacity={1}
+            opacity={opacity}
             visible={!isDragging}
           />
         </div>
