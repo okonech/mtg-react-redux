@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
-import DraggableCard from '../components/DraggableCard';
+import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { Card } from '../reducers/cardsReducer';
 
@@ -13,35 +13,32 @@ const BattleFieldStyle: React.CSSProperties = {
 };
 
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
-    canDrop(props) {
-        // console.log('Can drop battlefield' + props.cards.length);
-        return true;
-    },
-    drop(props) {
-        return true;
+    drop(props, monitor, component: BattleField) {
+        const { moveCard, zone } = props;
+        const { zoneId, originalIndex } = monitor.getItem() as CardDragObject;
+        moveCard(zoneId, originalIndex, zone.id, zone.cards.length);
     }
 };
+
+interface BattleFieldTargetCollectedProps {
+    connectDropTarget: ConnectDropTarget;
+    isOver: boolean;
+    canDrop: boolean;
+    item: CardDragObject;
+}
 
 interface BattleFieldProps {
     zone: {
         id: string;
         cards: Card[];
     };
-    connectDropTarget?: ConnectDropTarget;
-    isOver?: boolean;
-    canDrop?: boolean;
     moveCard: (fromZone: string, fromIdx: number, toZone: string, toIdx: number) => void;
 }
 
-class BattleField extends React.Component<BattleFieldProps, {}>  {
-
-    constructor(props: BattleFieldProps) {
-        super(props);
-
-    }
+class BattleField extends React.Component<BattleFieldProps & BattleFieldTargetCollectedProps, {}>  {
 
     public render() {
-        const { zone } = this.props;
+        const { zone, connectDropTarget } = this.props;
         const cards = this.props.zone.cards.map((card: Card, indexOf: number) => {
             return (
                 <DraggableCard
@@ -50,14 +47,17 @@ class BattleField extends React.Component<BattleFieldProps, {}>  {
                     name={card.name}
                     id={card.id}
                     key={card.id}
+                    percentHeight={30}
                 />
             );
         });
 
         return (
-            <section style={BattleFieldStyle}>
-                {cards}
-            </section>
+            connectDropTarget(
+                <section style={BattleFieldStyle}>
+                    {cards}
+                </section>
+            )
         );
     }
 }

@@ -86,6 +86,7 @@ class Hand extends React.Component<HandProps & HandTargetCollectedProps, HandSta
           name={curr.name}
           id={curr.id}
           key={'draggable' + curr.id}
+          percentHeight={100}
         />
       );
       return acc;
