@@ -3,11 +3,8 @@ html, body {
   font-family: sans-serif;
   width: 100%;
   height: 100%;
-}
-
-head {
-  margin: 0;
-  height: 0px;
+  min-width: 700px;
+  min-height: 700px;
 }
 
 .fullSize {

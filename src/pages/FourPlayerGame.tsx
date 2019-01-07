@@ -10,13 +10,9 @@ const PlayerStyle: React.CSSProperties = {
     width: '100%'
 };
 
-interface TwoPlayerGameProps {
+interface FourPlayerGameProps {
     players: string[];
     loading: boolean;
-}
-
-interface TwoPlayerDispatch {
-    initPlayers: (game: string) => void;
 }
 
 const mapStateToProps = (state: AppState) => ({
@@ -28,7 +24,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     initPlayers: (game: string) => dispatch(({ type: 'INIT_PLAYERS', payload: game }))
 });
 
-class TwoPlayerGame extends React.Component<TwoPlayerGameProps & TwoPlayerDispatch, {}> {
+class FourPlayerGame extends React.Component<FourPlayerGameProps, {}> {
 
     constructor(props: any) {
         super(props);
@@ -42,10 +38,16 @@ class TwoPlayerGame extends React.Component<TwoPlayerGameProps & TwoPlayerDispat
                 <div className='fullSize'>
                     <Menu />
                     <div style={PlayerStyle}>
-                        <div style={{ height: '50%' }}>
+                        <div style={{ height: '25%' }}>
                             <Player id={players[0]} />
                         </div>
-                        <div style={{ height: '50%' }}>
+                        <div style={{ height: '25%' }}>
+                            <Player id={players[0]} />
+                        </div>
+                        <div style={{ height: '25%' }}>
+                            <Player id={players[0]} />
+                        </div>
+                        <div style={{ height: '25%' }}>
                             <Player id={players[0]} />
                         </div>
                     </div>
@@ -64,4 +66,4 @@ class TwoPlayerGame extends React.Component<TwoPlayerGameProps & TwoPlayerDispat
     }
 }
 // TODO: fix this to proper typing
-export default connect(mapStateToProps, mapDispatchToProps)(TwoPlayerGame);
+export default connect(mapStateToProps, mapDispatchToProps)(FourPlayerGame);
