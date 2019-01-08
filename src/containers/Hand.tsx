@@ -11,8 +11,7 @@ const HandStyle: React.CSSProperties = {
   height: '100%',
   width: '96%',
   display: 'flex',
-  overflowX: 'scroll',
-  marginLeft: '2%'
+  overflowX: 'scroll'
 };
 
 const handTarget: DropTargetSpec<HandProps> = {
@@ -107,6 +106,7 @@ class Hand extends React.Component<HandProps & HandTargetCollectedProps, HandSta
     return (
       connectDropTarget(
         <section style={HandStyle}>
+          <div style={{ width: '2%' }} />
           {cards}
         </section>
       ));
