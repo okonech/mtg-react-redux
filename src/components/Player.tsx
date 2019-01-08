@@ -49,12 +49,14 @@ export default class Player extends React.Component<PlayerProps, {}> {
                         <BattleField
                             zone={battlefield}
                             moveCard={moveCard}
+                            key={battlefield.id}
                         />
                     </div>
                     <div style={HandStyle}>
                         <Hand
                             zone={hand}
                             moveCard={moveCard}
+                            key={hand.id}
                         />
                     </div>
                 </div>
