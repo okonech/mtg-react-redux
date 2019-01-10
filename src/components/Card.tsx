@@ -8,6 +8,12 @@ interface CardProps {
   name: string;
 }
 
+interface SelectableInjectedProps {
+  selectableRef?: string;
+  selected?: boolean;
+  selecting?: boolean;
+}
+
 const CardStyle: React.CSSProperties = {
   height: '100%',
   position: 'relative',
@@ -29,15 +35,23 @@ const CardTextStyle: React.CSSProperties = {
   width: 'calc(100% - 1em)'
 };
 
-export default class Card extends React.Component<CardProps, {}> {
+export default class Card extends React.Component<CardProps & SelectableInjectedProps> {
 
   public render() {
-    const { opacity, visible } = this.props;
+    const { name, opacity, visible, selectableRef, selected, selecting } = this.props;
+    console.log(this.props);
+    const cardStyle = {
+      ...CardStyle,
+      opacity,
+      display: visible ? 'block' : 'none',
+      backgroundColor: selected ? 'blue' : 'none',
+      border: selecting ? 'blue' : 'none'
+    };
     return (
-      <div style={{ ...CardStyle, opacity, display: visible ? 'block' : 'none' }}>
+      <div ref={selectableRef} style={cardStyle}>
         <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
         <div style={CardTextStyle}>
-          {this.props.name}
+          {name}
         </div>
       </div>
     );

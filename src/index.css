@@ -12,3 +12,16 @@ html, body {
   width: 100%;
   height: 100%;
 }
+
+.selectable {
+  height: 100%;
+  width: 100%;
+}
+
+.selectable-selectbox {
+  z-index: 9000;
+  position: absolute;
+  cursor: default;
+  background-color: rgb(99, 96, 96);
+  opacity: .6;
+}

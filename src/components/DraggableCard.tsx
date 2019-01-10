@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceMonitor, DragSourceSpec } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import { createSelectable } from 'react-selectable-fast';
 import { Types } from '../Constants';
 import Card from './Card';
 
@@ -41,6 +42,8 @@ interface DraggableCardProps {
   zoneId: string;
   originalIndex: number;
   percentHeight: number;
+  onMouseEnter?: (event) => void;
+  onMouseLeave?: (event) => void;
 }
 
 interface DraggableCardSourceCollectedProps {
@@ -49,7 +52,13 @@ interface DraggableCardSourceCollectedProps {
   isDragging: boolean;
 }
 
-class DraggableCard extends React.Component<DraggableCardProps & DraggableCardSourceCollectedProps> {
+interface SelectableProps {
+  selectableRef: string;
+  selected: boolean;
+  selecting: boolean;
+}
+
+class DraggableCard extends React.Component<DraggableCardProps & DraggableCardSourceCollectedProps & SelectableProps> {
 
   // remove this code to return drag prevew  
   public componentDidMount() {
@@ -66,19 +75,27 @@ class DraggableCard extends React.Component<DraggableCardProps & DraggableCardSo
   }
 
   public render() {
-    const { name, isDragging, connectDragSource, id, percentHeight } = this.props;
+    const { name, isDragging, connectDragSource, id, percentHeight,
+            selectableRef, selected, selecting, onMouseEnter, onMouseLeave } = this.props;
     // set currently dragged card to invisible while dragging it
     // gives appearance of the dragged card being the actual dragged card and not the copy
     const opacity = isDragging ? 0 : 1;
     return (
       connectDragSource(
-        <div style={{ height: percentHeight + '%' }}>
+        <div
+          ref={selectableRef}
+          style={{ height: percentHeight + '%' }}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        >
           <Card
             key={'card' + id}
             name={name}
             opacity={opacity}
             // this can cause chrome to not drag
             visible={true}
+            selected={selected}
+            selecting={selecting}
           />
         </div>
       )
@@ -91,4 +108,4 @@ export default DragSource<DraggableCardProps, DraggableCardSourceCollectedProps>
     connectDragSource: connect.dragSource(),
     connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging()
-  }))(DraggableCard);
+  }))(createSelectable(DraggableCard));

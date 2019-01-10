@@ -2,6 +2,7 @@
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
+import { SelectableGroup } from 'react-selectable-fast';
 import Card from '../components/Card';
 import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
@@ -12,6 +13,12 @@ const HandStyle: React.CSSProperties = {
   width: '96%',
   display: 'flex',
   overflowX: 'scroll'
+};
+
+const SelectableStyle: React.CSSProperties = {
+  height: '100%',
+  width: '100%',
+  display: 'flex'
 };
 
 const handTarget: DropTargetSpec<HandProps> = {
@@ -46,6 +53,8 @@ interface HandTargetCollectedProps {
 
 interface HandState {
   placeholderIndex: number;
+  selectEnabled: boolean;
+  selectedKeys: string[];
 }
 
 function getPlaceholderIndex(mouseX: number, componentX: number, cardWidth: number) {
@@ -66,14 +75,33 @@ class Hand extends React.Component<HandProps & HandTargetCollectedProps, HandSta
     super(props);
 
     this.state = {
-      placeholderIndex: undefined
+      placeholderIndex: undefined,
+      selectedKeys: [],
+      selectEnabled: true
     };
 
+    this.mouseEnter = this.mouseEnter.bind(this);
+    this.mouseLeave = this.mouseLeave.bind(this);
+  }
+
+  public mouseEnter(event: any) {
+    console.log('mouse enter');
+    if (!this.props.item) {
+      console.log('disable select');
+      this.setState({ selectEnabled: false });
+    }
+  }
+
+  public mouseLeave(event: any) {
+    if (!this.props.item) {
+      console.log('enable select');
+      this.setState({ selectEnabled: true });
+    }
   }
 
   public render() {
     const { zone, connectDropTarget, isOver, canDrop, item } = this.props;
-    const { placeholderIndex } = this.state;
+    const { placeholderIndex, selectEnabled } = this.state;
     const cards = zone.cards.reduce((acc, curr, idx) => {
       if (isOver && canDrop && curr.id === item.id) {
         return acc;
@@ -86,6 +114,8 @@ class Hand extends React.Component<HandProps & HandTargetCollectedProps, HandSta
           id={curr.id}
           key={'draggable' + curr.id}
           percentHeight={100}
+          onMouseEnter={this.mouseEnter}
+          onMouseLeave={this.mouseLeave}
         />
       );
       return acc;
@@ -105,11 +135,28 @@ class Hand extends React.Component<HandProps & HandTargetCollectedProps, HandSta
 
     return (
       connectDropTarget(
-        <section style={HandStyle}>
-          <div style={{ width: '2%' }} />
-          {cards}
-        </section>
+        <div style={SelectableStyle} >
+          <SelectableGroup
+            ref={(ref) => ((window as any).selectableGroup = ref)}
+            className='selectable'
+            tolerance={0}
+            deselectOnEsc={true}
+            // find a way to make this true if item clicked
+            disabled={!selectEnabled}
+            resetOnStart={true}
+            allowClickWithoutSelected={false}
+          >
+            <section style={HandStyle} >
+              <div style={{ width: '2%' }} />
+              {cards}
+            </section>
+          </SelectableGroup>
+        </div >
       ));
+  }
+
+  public handleSelection(selectedKeys: string[]) {
+    this.setState({ selectedKeys });
   }
 }
 
