@@ -79,25 +79,11 @@ class Hand extends React.Component<HandProps & HandTargetCollectedProps, HandSta
       selectedKeys: [],
       selectEnabled: true
     };
-
-    this.mouseEnter = this.mouseEnter.bind(this);
-    this.mouseLeave = this.mouseLeave.bind(this);
   }
 
-  public mouseEnter(event: any) {
-    console.log('mouse enter');
-    if (!this.props.item) {
-      console.log('disable select');
-      this.setState({ selectEnabled: false });
-    }
-  }
+  public mouseEnter = ((event: any) => (this.props.item ? null : this.setState({ selectEnabled: false })));
 
-  public mouseLeave(event: any) {
-    if (!this.props.item) {
-      console.log('enable select');
-      this.setState({ selectEnabled: true });
-    }
-  }
+  public mouseLeave = ((event: any) => (this.props.item ? null : this.setState({ selectEnabled: true })));
 
   public render() {
     const { zone, connectDropTarget, isOver, canDrop, item } = this.props;
@@ -141,7 +127,6 @@ class Hand extends React.Component<HandProps & HandTargetCollectedProps, HandSta
             className='selectable'
             tolerance={0}
             deselectOnEsc={true}
-            // find a way to make this true if item clicked
             disabled={!selectEnabled}
             resetOnStart={true}
             allowClickWithoutSelected={false}
