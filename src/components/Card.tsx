@@ -32,7 +32,9 @@ const CardTextStyle: React.CSSProperties = {
   top: 10,
   left: 5,
   height: '25%',
-  width: 'calc(100% - 1em)'
+  width: 'calc(100% - 1em)',
+  wordWrap: 'break-word',
+  textOverflow: 'clip'
 };
 
 export default class Card extends React.Component<CardProps & SelectableInjectedProps> {
