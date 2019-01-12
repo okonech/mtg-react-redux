@@ -46,7 +46,7 @@ class TwoPlayerGame extends React.Component<TwoPlayerGameProps & TwoPlayerDispat
                             <Player id={players[0]} />
                         </div>
                         <div style={{ height: '50%' }}>
-                            <Player id={players[0]} />
+                            <Player id={players[1]} />
                         </div>
                     </div>
                 </div>
