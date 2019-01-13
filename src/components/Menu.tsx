@@ -20,7 +20,7 @@ const MenuItemStyle: object = {
     textDecoration: 'none'
 };
 
-export default class Menu extends React.Component {
+export default class Menu extends React.PureComponent {
     public render() {
         return (
             <div style={MenuStyle}>

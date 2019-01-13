@@ -34,7 +34,7 @@ export interface PlayerProps {
     moveCard?: (fromZone: string, fromIdx: number, toZone: string, toIdx: number) => void;
 }
 
-export default class Player extends React.Component<PlayerProps, {}> {
+export default class Player extends React.PureComponent<PlayerProps, {}> {
 
     public render() {
         const { player, moveCard } = this.props;

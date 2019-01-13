@@ -37,7 +37,7 @@ const CardTextStyle: React.CSSProperties = {
   textOverflow: 'clip'
 };
 
-export default class Card extends React.Component<CardProps & SelectableInjectedProps> {
+export default class Card extends React.PureComponent<CardProps & SelectableInjectedProps> {
 
   public render() {
     const { name, opacity, visible, selectableRef, selected, selecting } = this.props;

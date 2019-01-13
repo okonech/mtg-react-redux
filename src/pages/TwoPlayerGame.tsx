@@ -28,7 +28,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     initPlayers: (game: string) => dispatch(({ type: 'INIT_PLAYERS', payload: game }))
 });
 
-class TwoPlayerGame extends React.Component<TwoPlayerGameProps & TwoPlayerDispatch, {}> {
+class TwoPlayerGame extends React.PureComponent<TwoPlayerGameProps & TwoPlayerDispatch, {}> {
 
     constructor(props: any) {
         super(props);

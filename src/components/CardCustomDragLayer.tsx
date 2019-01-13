@@ -42,7 +42,7 @@ export interface CardCustomDragLayerProps {
     snapToGrid: boolean;
 }
 
-class CardCustomDragLayer extends React.Component<CardCustomDragLayerProps> {
+class CardCustomDragLayer extends React.PureComponent<CardCustomDragLayerProps> {
 
     public render() {
         const { item, itemType, isDragging } = this.props;
