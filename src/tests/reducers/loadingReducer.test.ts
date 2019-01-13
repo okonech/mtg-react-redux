@@ -3,7 +3,7 @@ import { loaded, loading } from '../../actions/loadingActions';
 import loadingReducer, { loadingSelector, LoadingState } from '../../reducers/loadingReducer';
 
 it('initial state', () => {
-    expect(loadingReducer(undefined, {} as any)).toEqual(false);
+    expect(loadingReducer(undefined, {} as any)).toEqual(true);
 });
 
 it('loading', () => {
