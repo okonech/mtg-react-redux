@@ -46,7 +46,7 @@ interface BattleFieldState {
     selectedKeys: string[];
 }
 
-class BattleField extends React.Component<BattleFieldProps & BattleFieldTargetCollectedProps, BattleFieldState>  {
+class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTargetCollectedProps, BattleFieldState>  {
 
     constructor(props: BattleFieldProps & BattleFieldTargetCollectedProps) {
         super(props);

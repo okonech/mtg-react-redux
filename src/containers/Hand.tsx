@@ -69,7 +69,7 @@ function getPlaceholderIndex(mouseX: number, componentX: number, cardWidth: numb
 
 }
 
-class Hand extends React.Component<HandProps & HandTargetCollectedProps, HandState> {
+class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, HandState> {
 
   constructor(props: HandProps & HandTargetCollectedProps) {
     super(props);

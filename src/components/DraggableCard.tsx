@@ -58,7 +58,9 @@ interface SelectableProps {
   selecting: boolean;
 }
 
-class DraggableCard extends React.Component<DraggableCardProps & DraggableCardSourceCollectedProps & SelectableProps> {
+type AllProps = DraggableCardProps & DraggableCardSourceCollectedProps & SelectableProps;
+
+class DraggableCard extends React.PureComponent<AllProps> {
 
   // remove this code to return drag prevew  
   public componentDidMount() {
