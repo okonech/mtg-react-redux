@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default class SinglePlayerGame extends React.Component {
+export default class SinglePlayerGame extends React.PureComponent {
     public render() {
         return (
             <div>
