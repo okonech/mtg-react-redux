@@ -31,7 +31,7 @@ const ActiveAreaStyle: React.CSSProperties = {
 export interface PlayerProps {
     player: PlayerData;
     id: string;
-    moveCard?: (fromZone: string, fromIdx: number, toZone: string, toIdx: number) => void;
+    moveCard?: (fromZone: string, cards: string[], toZone: string, toIdx: number) => void;
 }
 
 export default class Player extends React.PureComponent<PlayerProps, {}> {

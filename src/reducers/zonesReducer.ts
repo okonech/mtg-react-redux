@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { MoveCardAction, ZonesAction } from '../actions/zonesActions';
+import { MoveCardsAction, SelectCardsAction, ZonesAction } from '../actions/zonesActions';
 
 // Normalized zone store as object of {unique zone id: array of card ids}
 // No allIds since full list of zones is never enumerated, only known list of zone ids are passed
@@ -11,9 +11,12 @@ export interface ZonesState {
 export interface Zone {
     id: string;
     cards: string[];
+    selected: string[];
 }
 
-export default function zonesReducer(state: ZonesState = {}, action: ZonesAction | MoveCardAction) {
+type ZoneActions = ZonesAction | MoveCardsAction | SelectCardsAction;
+
+export default function zonesReducer(state: ZonesState = {}, action: ZoneActions) {
     return produce(state, (draft) => {
         switch (action.type) {
             case 'ADD_ZONES':
@@ -23,10 +26,21 @@ export default function zonesReducer(state: ZonesState = {}, action: ZonesAction
             case 'DELETE_ZONES':
                 action.payload.ids.forEach((id) => delete draft[id]);
                 break;
-            case 'MOVE_CARD':
-                const move = action.payload;
-                const card = draft[move.fromZone].cards.splice(move.fromIdx, 1)[0];
-                draft[move.toZone].cards.splice(move.toIdx, 0, card);
+            case 'MOVE_CARDS':
+                const { fromZone, cards, toIdx, toZone } = action.payload;
+                const delCards = draft[fromZone].cards;
+                cards.forEach((card) => delCards.splice(delCards.indexOf(card), 1));
+                draft[toZone].cards.splice(toIdx, 0, ...cards);
+                break;
+            case 'SELECT_CARDS':
+                const { zone: selectZone, cards: selectCards } = action.payload;
+                draft[selectZone].selected.push(...selectCards);
+                break;
+            case 'CLEAR_SELECTED_CARDS':
+                const { zone: clearZone } = action.payload;
+                const toClearSelection = draft[clearZone].selected;
+                toClearSelection.splice(0, toClearSelection.length);
+                break;
         }
     });
 }

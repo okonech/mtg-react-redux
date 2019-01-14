@@ -22,8 +22,8 @@ const SelectableStyle: React.CSSProperties = {
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
     drop(props, monitor, component: BattleField) {
         const { moveCard, zone } = props;
-        const { zoneId, originalIndex } = monitor.getItem() as CardDragObject;
-        moveCard(zoneId, originalIndex, zone.id, zone.cards.length);
+        const { zoneId, id } = monitor.getItem() as CardDragObject;
+        moveCard(zoneId, [id], zone.id, zone.cards.length);
     }
 };
 interface BattleFieldProps {
@@ -31,7 +31,7 @@ interface BattleFieldProps {
         id: string;
         cards: Card[];
     };
-    moveCard: (fromZone: string, fromIdx: number, toZone: string, toIdx: number) => void;
+    moveCard: (fromZone: string, cards: string[], toZone: string, toIdx: number) => void;
 }
 
 interface BattleFieldTargetCollectedProps {

@@ -10,7 +10,7 @@ import { Card as CardProp } from '../reducers/cardsReducer';
 
 const HandStyle: React.CSSProperties = {
   height: '100%',
-  width: '96%',
+  width: '100%',
   display: 'flex',
   overflowX: 'scroll'
 };
@@ -30,9 +30,9 @@ const handTarget: DropTargetSpec<HandProps> = {
   },
   drop(props, monitor, component: Hand) {
     const { moveCard, zone } = props;
-    const { zoneId, originalIndex } = monitor.getItem() as CardDragObject;
+    const { zoneId, id } = monitor.getItem() as CardDragObject;
     const { placeholderIndex } = component.state;
-    moveCard(zoneId, originalIndex, zone.id, placeholderIndex);
+    moveCard(zoneId, [id], zone.id, placeholderIndex);
   }
 };
 
@@ -41,7 +41,7 @@ interface HandProps {
     id: string;
     cards: CardProp[];
   };
-  moveCard: (fromZone: string, fromIdx: number, toZone: string, toIdx: number) => void;
+  moveCard: (fromZone: string, cards: string[], toZone: string, toIdx: number) => void;
 }
 
 interface HandTargetCollectedProps {

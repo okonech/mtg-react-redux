@@ -7,13 +7,21 @@ export interface ZonesAction {
         ids?: string[]
     };
 }
-export interface MoveCardAction {
-    type: 'MOVE_CARD';
+export interface MoveCardsAction {
+    type: 'MOVE_CARDS';
     payload: {
         fromZone: string,
         toZone: string,
-        fromIdx: number,
+        cards: string[],
         toIdx: number
+    };
+}
+
+export interface SelectCardsAction {
+    type: 'SELECT_CARDS' | 'CLEAR_SELECTED_CARDS';
+    payload: {
+        zone: string,
+        cards?: string[]
     };
 }
 
@@ -44,14 +52,33 @@ export function deleteZones(ids: string[]): ZonesAction {
     };
 }
 
-export function moveCard(fromZone: string, fromIdx: number, toZone: string, toIdx: number): MoveCardAction {
+export function moveCards(fromZone: string, cards: string[], toZone: string, toIdx: number): MoveCardsAction {
     return {
-        type: 'MOVE_CARD',
+        type: 'MOVE_CARDS',
         payload: {
             fromZone,
             toZone,
-            fromIdx,
+            cards,
             toIdx
+        }
+    };
+}
+
+export function selectCards(zone: string, cards: string[]): SelectCardsAction {
+    return {
+        type: 'SELECT_CARDS',
+        payload: {
+            zone,
+            cards
+        }
+    };
+}
+
+export function clearSelectedCards(zone: string): SelectCardsAction {
+    return {
+        type: 'CLEAR_SELECTED_CARDS',
+        payload: {
+            zone
         }
     };
 }

@@ -1,5 +1,6 @@
 import deepFreeze from 'deep-freeze';
-import { addZones, deleteZones, moveCard, updateZones } from '../../actions/zonesActions';
+import { addZones, clearSelectedCards, deleteZones, moveCards, selectCards } from '../../actions/zonesActions';
+import { updateZones } from '../../actions/zonesActions';
 import zonesReducer, { singleZoneSelector, Zone, zonesSelector, ZonesState } from '../../reducers/zonesReducer';
 
 let state: ZonesState = {};
@@ -10,7 +11,8 @@ let zones: Zone[] = [
             '10',
             '11',
             '12'
-        ]
+        ],
+        selected: []
     },
     {
         id: '2',
@@ -18,7 +20,8 @@ let zones: Zone[] = [
             '20',
             '21',
             '22'
-        ]
+        ],
+        selected: []
     }
 ];
 
@@ -45,7 +48,8 @@ it('updates zones', () => {
             '30',
             '31',
             '32'
-        ]
+        ],
+        selected: []
     },
              zones[1]
     ];
@@ -67,7 +71,8 @@ it('moves card', () => {
             cards: [
                 '30',
                 '32'
-            ]
+            ],
+            selected: []
         },
         {
             id: '2',
@@ -76,10 +81,11 @@ it('moves card', () => {
                 '31',
                 '21',
                 '22'
-            ]
+            ],
+            selected: []
         }
     ];
-    const action = moveCard('1', 1, '2', 1);
+    const action = moveCards('1', ['31'], '2', 1);
     const oldState = { ...state };
     deepFreeze(oldState);
     deepFreeze(action);
@@ -103,6 +109,73 @@ it('select zones', () => {
         zones[0],
         zones[1]
     ]);
+});
+
+it('selects cards', () => {
+    zones = [
+        {
+            id: '1',
+            cards: [
+                '30',
+                '32'
+            ],
+            selected: [
+                '30',
+                '32'
+            ]
+        },
+        {
+            id: '2',
+            cards: [
+                '20',
+                '31',
+                '21',
+                '22'
+            ],
+            selected: []
+        }
+    ];
+    const action = selectCards('1', ['30', '32']);
+    const oldState = { ...state };
+    deepFreeze(oldState);
+    deepFreeze(action);
+    state = zonesReducer(oldState, action);
+    expect(state).toEqual({
+        1: zones[0],
+        2: zones[1]
+    });
+});
+
+it('deselects cards', () => {
+    zones = [
+        {
+            id: '1',
+            cards: [
+                '30',
+                '32'
+            ],
+            selected: []
+        },
+        {
+            id: '2',
+            cards: [
+                '20',
+                '31',
+                '21',
+                '22'
+            ],
+            selected: []
+        }
+    ];
+    const action = clearSelectedCards('1');
+    const oldState = { ...state };
+    deepFreeze(oldState);
+    deepFreeze(action);
+    state = zonesReducer(oldState, action);
+    expect(state).toEqual({
+        1: zones[0],
+        2: zones[1]
+    });
 });
 
 it('deletes zones', () => {

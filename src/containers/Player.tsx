@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { updatePlayers } from '../actions/playersActions';
-import { moveCard, updateZones } from '../actions/zonesActions';
+import { moveCards, updateZones } from '../actions/zonesActions';
 import Player, { PlayerProps } from '../components/Player';
 import { AppState } from '../reducers';
 import { PlayerData, playerSelector } from '../selectors/player';
@@ -19,8 +19,8 @@ const mapStateToProps = (state: AppState, ownProps: { id: string }) => ({
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerProps) => ({
     updatePlayers,
     updateZones,
-    moveCard: (fromZone: string, fromIdx: number, toZone: string, toIdx: number) => (
-        dispatch(moveCard(fromZone, fromIdx, toZone, toIdx)))
+    moveCard: (fromZone: string, cards: string[], toZone: string, toIdx: number) => (
+        dispatch(moveCards(fromZone, cards, toZone, toIdx)))
 });
 
 // cool performance improvement

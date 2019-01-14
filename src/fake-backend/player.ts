@@ -60,7 +60,8 @@ function mapRawToCards(cards: string[]): Card[] {
 function mapDataToZones(player: Player, cards: Card[]): Zone[] {
     const idToZone = (id: string, cardIds: string[] = []) => ({
         id,
-        cards: cardIds
+        cards: cardIds,
+        selected: []
     });
 
     return [
