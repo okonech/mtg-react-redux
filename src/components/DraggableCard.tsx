@@ -42,8 +42,8 @@ interface DraggableCardProps {
   zoneId: string;
   originalIndex: number;
   percentHeight: number;
-  onMouseEnter?: (event) => void;
-  onMouseLeave?: (event) => void;
+  onMouseEnter: (event) => void;
+  onMouseLeave: (event) => void;
 }
 
 interface DraggableCardSourceCollectedProps {
@@ -53,7 +53,7 @@ interface DraggableCardSourceCollectedProps {
 }
 
 interface SelectableProps {
-  selectableRef: string;
+  selectableRef?: string;
   selected: boolean;
   selecting: boolean;
 }
@@ -105,7 +105,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 }
 
-export default DragSource<DraggableCardProps, DraggableCardSourceCollectedProps>(
+export default DragSource<DraggableCardProps & SelectableProps, DraggableCardSourceCollectedProps>(
   Types.CARD, cardSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     connectDragPreview: connect.dragPreview(),

@@ -81,13 +81,25 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
     };
   }
 
+  public componentDidMount() {
+    document.addEventListener('click', this.clearSelected);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener('click', this.clearSelected);
+  }
+
+  public setSelected = ((items: string[]) => this.setState({ selectedKeys: items }));
+
+  public clearSelected = () => this.setState({ selectedKeys: [] });
+
   public mouseEnter = ((event: any) => (this.props.item ? null : this.setState({ selectEnabled: false })));
 
   public mouseLeave = ((event: any) => (this.props.item ? null : this.setState({ selectEnabled: true })));
 
   public render() {
     const { zone, connectDropTarget, isOver, canDrop, item } = this.props;
-    const { placeholderIndex, selectEnabled } = this.state;
+    const { placeholderIndex, selectEnabled, selectedKeys } = this.state;
     const cards = zone.cards.reduce((acc, curr, idx) => {
       if (isOver && canDrop && curr.id === item.id) {
         return acc;
@@ -102,6 +114,8 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
           percentHeight={100}
           onMouseEnter={this.mouseEnter}
           onMouseLeave={this.mouseLeave}
+          selected={selectedKeys.includes(curr.id)}
+          selecting={false}
         />
       );
       return acc;
@@ -130,6 +144,8 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
             disabled={!selectEnabled}
             resetOnStart={true}
             allowClickWithoutSelected={false}
+            onSelection={this.setSelected}
+            onSelectionClear={this.clearSelected}
           >
             <section style={HandStyle} >
               <div style={{ width: '2%' }} />

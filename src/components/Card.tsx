@@ -46,7 +46,8 @@ export default class Card extends React.PureComponent<CardProps & SelectableInje
       ...CardStyle,
       opacity,
       display: visible ? 'block' : 'none',
-      backgroundColor: selected ? 'blue' : 'none',
+      // find a way to get this to none, or just use border
+      backgroundColor: selected ? 'blue' : 'white',
       border: selecting ? 'blue' : 'none'
     };
     return (

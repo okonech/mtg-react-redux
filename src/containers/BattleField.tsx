@@ -63,7 +63,7 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
 
     public render() {
         const { zone, connectDropTarget } = this.props;
-        const { selectEnabled } = this.state;
+        const { selectEnabled, selectedKeys } = this.state;
         const cards = this.props.zone.cards.map((card: Card, indexOf: number) => {
             return (
                 <DraggableCard
@@ -75,6 +75,8 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
                     percentHeight={30}
                     onMouseEnter={this.mouseEnter}
                     onMouseLeave={this.mouseLeave}
+                    selected={selectedKeys.includes(card.id)}
+                    selecting={false}
                 />
             );
         });
