@@ -1,5 +1,5 @@
 import deepFreeze from 'deep-freeze';
-import { addZones, clearSelectedCards, deleteZones, moveCards, selectCards } from '../../actions/zonesActions';
+import { addZones, deleteZones, moveCards, selectCards } from '../../actions/zonesActions';
 import { updateZones } from '../../actions/zonesActions';
 import zonesReducer, { singleZoneSelector, Zone, zonesSelector, ZonesState } from '../../reducers/zonesReducer';
 
@@ -167,7 +167,7 @@ it('deselects cards', () => {
             selected: []
         }
     ];
-    const action = clearSelectedCards('1');
+    const action = selectCards('1', []);
     const oldState = { ...state };
     deepFreeze(oldState);
     deepFreeze(action);

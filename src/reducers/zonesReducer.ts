@@ -34,12 +34,8 @@ export default function zonesReducer(state: ZonesState = {}, action: ZoneActions
                 break;
             case 'SELECT_CARDS':
                 const { zone: selectZone, cards: selectCards } = action.payload;
-                draft[selectZone].selected.push(...selectCards);
-                break;
-            case 'CLEAR_SELECTED_CARDS':
-                const { zone: clearZone } = action.payload;
-                const toClearSelection = draft[clearZone].selected;
-                toClearSelection.splice(0, toClearSelection.length);
+                const currSelected = draft[selectZone].selected;
+                currSelected.splice(0, currSelected.length, ...selectCards);
                 break;
         }
     });

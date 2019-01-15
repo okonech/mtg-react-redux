@@ -3,6 +3,7 @@ import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
 import { SelectableGroup } from 'react-selectable-fast';
+import { moveCards as moveCardsType, selectCards as selectCardsType } from '../actions/zonesActions';
 import Card from '../components/Card';
 import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
@@ -29,10 +30,10 @@ const handTarget: DropTargetSpec<HandProps> = {
     component.setState({ placeholderIndex });
   },
   drop(props, monitor, component: Hand) {
-    const { moveCard, zone } = props;
+    const { moveCards, zone } = props;
     const { zoneId, id } = monitor.getItem() as CardDragObject;
     const { placeholderIndex } = component.state;
-    moveCard(zoneId, [id], zone.id, placeholderIndex);
+    moveCards(zoneId, [id], zone.id, placeholderIndex);
   }
 };
 
@@ -40,8 +41,10 @@ interface HandProps {
   zone: {
     id: string;
     cards: CardProp[];
+    selected: string[];
   };
-  moveCard: (fromZone: string, cards: string[], toZone: string, toIdx: number) => void;
+  moveCards: moveCardsType;
+  selectCards: selectCardsType;
 }
 
 interface HandTargetCollectedProps {
@@ -54,7 +57,6 @@ interface HandTargetCollectedProps {
 interface HandState {
   placeholderIndex: number;
   selectEnabled: boolean;
-  selectedKeys: string[];
 }
 
 function getPlaceholderIndex(mouseX: number, componentX: number, cardWidth: number) {
@@ -76,7 +78,6 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
 
     this.state = {
       placeholderIndex: undefined,
-      selectedKeys: [],
       selectEnabled: true
     };
   }
@@ -89,17 +90,17 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
     document.removeEventListener('click', this.clearSelected);
   }
 
-  public setSelected = ((items: string[]) => this.setState({ selectedKeys: items }));
+  public setSelected = (items: string[]) => this.props.selectCards(this.props.zone.id, items);
 
-  public clearSelected = () => this.setState({ selectedKeys: [] });
+  public clearSelected = () => this.props.selectCards(this.props.zone.id, []);
 
-  public mouseEnter = ((event: any) => (this.props.item ? null : this.setState({ selectEnabled: false })));
+  public mouseEnter = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: false }));
 
-  public mouseLeave = ((event: any) => (this.props.item ? null : this.setState({ selectEnabled: true })));
+  public mouseLeave = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: true }));
 
   public render() {
     const { zone, connectDropTarget, isOver, canDrop, item } = this.props;
-    const { placeholderIndex, selectEnabled, selectedKeys } = this.state;
+    const { placeholderIndex, selectEnabled } = this.state;
     const cards = zone.cards.reduce((acc, curr, idx) => {
       if (isOver && canDrop && curr.id === item.id) {
         return acc;
@@ -114,7 +115,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
           percentHeight={100}
           onMouseEnter={this.mouseEnter}
           onMouseLeave={this.mouseLeave}
-          selected={selectedKeys.includes(curr.id)}
+          selected={zone.selected.includes(curr.id)}
           selecting={false}
         />
       );
@@ -154,10 +155,6 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
           </SelectableGroup>
         </div >
       ));
-  }
-
-  public handleSelection(selectedKeys: string[]) {
-    this.setState({ selectedKeys });
   }
 }
 

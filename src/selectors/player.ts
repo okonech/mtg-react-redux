@@ -6,6 +6,7 @@ import { Zone } from '../reducers/zonesReducer';
 interface CardZone {
     id: string;
     cards: Card[];
+    selected: string[];
 }
 
 export interface PlayerData {
@@ -50,5 +51,6 @@ export const playerSelector = createSelector(
 
 const mapZoneToCards = (zone: Zone, cardState: CardsState) => ({
     id: zone.id,
-    cards: zone.cards.map((cardId) => cardState[cardId])
+    cards: zone.cards.map((cardId) => cardState[cardId]),
+    selected: []
 });

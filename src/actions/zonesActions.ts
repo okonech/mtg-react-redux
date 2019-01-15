@@ -52,6 +52,8 @@ export function deleteZones(ids: string[]): ZonesAction {
     };
 }
 
+export type moveCards = (fromZone: string, cards: string[], toZone: string, toIdx: number) => MoveCardsAction;
+
 export function moveCards(fromZone: string, cards: string[], toZone: string, toIdx: number): MoveCardsAction {
     return {
         type: 'MOVE_CARDS',
@@ -64,21 +66,14 @@ export function moveCards(fromZone: string, cards: string[], toZone: string, toI
     };
 }
 
+export type selectCards = (zone: string, cards: string[]) => SelectCardsAction;
+
 export function selectCards(zone: string, cards: string[]): SelectCardsAction {
     return {
         type: 'SELECT_CARDS',
         payload: {
             zone,
             cards
-        }
-    };
-}
-
-export function clearSelectedCards(zone: string): SelectCardsAction {
-    return {
-        type: 'CLEAR_SELECTED_CARDS',
-        payload: {
-            zone
         }
     };
 }

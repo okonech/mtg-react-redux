@@ -2,6 +2,7 @@ import React from 'react';
 import BattleField from '../containers/BattleField';
 import Hand from '../containers/Hand';
 import InfoArea from '../containers/InfoArea';
+import { PlayerMappedDispatch, PlayerMappedProps } from '../containers/Player';
 import { PlayerData } from '../selectors/player';
 import CardCustomDragLayer from './CardCustomDragLayer';
 
@@ -31,13 +32,12 @@ const ActiveAreaStyle: React.CSSProperties = {
 export interface PlayerProps {
     player: PlayerData;
     id: string;
-    moveCard?: (fromZone: string, cards: string[], toZone: string, toIdx: number) => void;
 }
 
-export default class Player extends React.PureComponent<PlayerProps, {}> {
+export default class Player extends React.PureComponent<PlayerProps & PlayerMappedDispatch & PlayerMappedProps, {}> {
 
     public render() {
-        const { player, moveCard } = this.props;
+        const { player, moveCards, selectCards } = this.props;
         const { hand, battlefield } = player;
         return (
             <div className='fullSize'>
@@ -48,14 +48,16 @@ export default class Player extends React.PureComponent<PlayerProps, {}> {
                     <div style={BattleFieldStyle}>
                         <BattleField
                             zone={battlefield}
-                            moveCard={moveCard}
+                            moveCards={moveCards}
+                            selectCards={selectCards}
                             key={battlefield.id}
                         />
                     </div>
                     <div style={HandStyle}>
                         <Hand
                             zone={hand}
-                            moveCard={moveCard}
+                            moveCards={moveCards}
+                            selectCards={selectCards}
                             key={hand.id}
                         />
                     </div>
