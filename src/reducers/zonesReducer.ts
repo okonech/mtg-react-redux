@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { MoveCardsAction, SelectCardsAction, ZonesAction } from '../actions/zonesActions';
+import { MoveCardsAction, ZonesAction } from '../actions/zonesActions';
 
 // Normalized zone store as object of {unique zone id: array of card ids}
 // No allIds since full list of zones is never enumerated, only known list of zone ids are passed
@@ -11,10 +11,9 @@ export interface ZonesState {
 export interface Zone {
     id: string;
     cards: string[];
-    selected: string[];
 }
 
-type ZoneActions = ZonesAction | MoveCardsAction | SelectCardsAction;
+type ZoneActions = ZonesAction | MoveCardsAction;
 
 export default function zonesReducer(state: ZonesState = {}, action: ZoneActions) {
     return produce(state, (draft) => {
@@ -31,11 +30,6 @@ export default function zonesReducer(state: ZonesState = {}, action: ZoneActions
                 const delCards = draft[fromZone].cards;
                 cards.forEach((card) => delCards.splice(delCards.indexOf(card), 1));
                 draft[toZone].cards.splice(toIdx, 0, ...cards);
-                break;
-            case 'SELECT_CARDS':
-                const { zone: selectZone, cards: selectCards } = action.payload;
-                const currSelected = draft[selectZone].selected;
-                currSelected.splice(0, currSelected.length, ...selectCards);
                 break;
         }
     });

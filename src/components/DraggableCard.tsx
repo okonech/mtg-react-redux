@@ -44,6 +44,8 @@ interface DraggableCardProps {
   percentHeight: number;
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
+  stateSelected: boolean;
+  stateSelecting: boolean;
 }
 
 interface DraggableCardSourceCollectedProps {
@@ -53,9 +55,10 @@ interface DraggableCardSourceCollectedProps {
 }
 
 interface SelectableProps {
+  // passed through selectable state, do not use
   selectableRef?: string;
-  selected: boolean;
-  selecting: boolean;
+  selected?: boolean;
+  selecting?: boolean;
 }
 
 type AllProps = DraggableCardProps & DraggableCardSourceCollectedProps & SelectableProps;
@@ -77,8 +80,8 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 
   public render() {
-    const { name, isDragging, connectDragSource, id, percentHeight,
-            selectableRef, selected, selecting, onMouseEnter, onMouseLeave } = this.props;
+    const { name, isDragging, connectDragSource, id, percentHeight, stateSelected, stateSelecting,
+            onMouseEnter, onMouseLeave, selectableRef } = this.props;
     // set currently dragged card to invisible while dragging it
     // gives appearance of the dragged card being the actual dragged card and not the copy
     const opacity = isDragging ? 0 : 1;
@@ -96,8 +99,8 @@ class DraggableCard extends React.PureComponent<AllProps> {
             opacity={opacity}
             // this can cause chrome to not drag
             visible={true}
-            selected={selected}
-            selecting={selecting}
+            selected={stateSelected}
+            selecting={stateSelecting}
           />
         </div>
       )

@@ -3,10 +3,9 @@ import { AppState } from '../reducers';
 import { Card, CardsState } from '../reducers/cardsReducer';
 import { Zone } from '../reducers/zonesReducer';
 
-interface CardZone {
+export interface CardZone {
     id: string;
     cards: Card[];
-    selected: string[];
 }
 
 export interface PlayerData {

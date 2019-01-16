@@ -2,12 +2,13 @@
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
-import { SelectableGroup } from 'react-selectable-fast';
-import { moveCards as moveCardsType, selectCards as selectCardsType } from '../actions/zonesActions';
+import { SelectableGroup, SelectableItem } from 'react-selectable-fast';
+import { selectCards as selectCardsType } from '../actions/selectActions';
+import { moveCards as moveCardsType } from '../actions/zonesActions';
 import Card from '../components/Card';
 import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
-import { Card as CardProp } from '../reducers/cardsReducer';
+import { CardZone } from '../selectors/player';
 
 const HandStyle: React.CSSProperties = {
   height: '100%',
@@ -38,13 +39,10 @@ const handTarget: DropTargetSpec<HandProps> = {
 };
 
 interface HandProps {
-  zone: {
-    id: string;
-    cards: CardProp[];
-    selected: string[];
-  };
+  zone: CardZone;
   moveCards: moveCardsType;
   selectCards: selectCardsType;
+  selected: string[];
 }
 
 interface HandTargetCollectedProps {
@@ -82,24 +80,17 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
     };
   }
 
-  public componentDidMount() {
-    document.addEventListener('click', this.clearSelected);
-  }
+  public setSelected = (items: SelectableItem[]) => this.props.selectCards(items.map((item) => item.props.id));
 
-  public componentWillUnmount() {
-    document.removeEventListener('click', this.clearSelected);
-  }
-
-  public setSelected = (items: string[]) => this.props.selectCards(this.props.zone.id, items);
-
-  public clearSelected = () => this.props.selectCards(this.props.zone.id, []);
+  public clearSelected = () => this.props.selectCards([]);
 
   public mouseEnter = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: false }));
 
   public mouseLeave = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: true }));
 
   public render() {
-    const { zone, connectDropTarget, isOver, canDrop, item } = this.props;
+    const { zone, connectDropTarget, isOver, canDrop, item, selected } = this.props;
+    console.log(selected);
     const { placeholderIndex, selectEnabled } = this.state;
     const cards = zone.cards.reduce((acc, curr, idx) => {
       if (isOver && canDrop && curr.id === item.id) {
@@ -115,8 +106,8 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
           percentHeight={100}
           onMouseEnter={this.mouseEnter}
           onMouseLeave={this.mouseLeave}
-          selected={zone.selected.includes(curr.id)}
-          selecting={false}
+          stateSelected={selected.includes(curr.id)}
+          stateSelecting={false}
         />
       );
       return acc;
@@ -144,8 +135,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
             deselectOnEsc={true}
             disabled={!selectEnabled}
             resetOnStart={true}
-            allowClickWithoutSelected={false}
-            onSelection={this.setSelected}
+            onSelectionFinish={this.setSelected}
             onSelectionClear={this.clearSelected}
           >
             <section style={HandStyle} >

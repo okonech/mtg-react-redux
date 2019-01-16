@@ -4,6 +4,7 @@ import cardsReducer, { CardsState } from './cardsReducer';
 import gameReducer, { GameState } from './gameReducer';
 import loadingReducer, { LoadingState } from './loadingReducer';
 import playersReducer, { PlayersState } from './playersReducer';
+import selectReducer, { SelectState } from './selectReducer';
 import zonesReducer, { ZonesState } from './zonesReducer';
 
 export interface AppState {
@@ -12,6 +13,7 @@ export interface AppState {
     isLoading: LoadingState;
     players: PlayersState;
     zones: ZonesState;
+    select: SelectState;
 }
 
 export default combineReducers<AppState>({
@@ -19,5 +21,6 @@ export default combineReducers<AppState>({
     game: gameReducer,
     isLoading: loadingReducer,
     players: playersReducer,
-    zones: zonesReducer
+    zones: zonesReducer,
+    select: selectReducer
 });

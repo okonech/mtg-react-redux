@@ -17,14 +17,6 @@ export interface MoveCardsAction {
     };
 }
 
-export interface SelectCardsAction {
-    type: 'SELECT_CARDS' | 'CLEAR_SELECTED_CARDS';
-    payload: {
-        zone: string,
-        cards?: string[]
-    };
-}
-
 export function addZones(zones: Zone[]): ZonesAction {
     return {
         type: 'ADD_ZONES',
@@ -62,18 +54,6 @@ export function moveCards(fromZone: string, cards: string[], toZone: string, toI
             toZone,
             cards,
             toIdx
-        }
-    };
-}
-
-export type selectCards = (zone: string, cards: string[]) => SelectCardsAction;
-
-export function selectCards(zone: string, cards: string[]): SelectCardsAction {
-    return {
-        type: 'SELECT_CARDS',
-        payload: {
-            zone,
-            cards
         }
     };
 }

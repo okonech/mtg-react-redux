@@ -3,7 +3,6 @@ import BattleField from '../containers/BattleField';
 import Hand from '../containers/Hand';
 import InfoArea from '../containers/InfoArea';
 import { PlayerMappedDispatch, PlayerMappedProps } from '../containers/Player';
-import { PlayerData } from '../selectors/player';
 import CardCustomDragLayer from './CardCustomDragLayer';
 
 const InfoAreaStyle: React.CSSProperties = {
@@ -29,15 +28,10 @@ const ActiveAreaStyle: React.CSSProperties = {
     width: '85%'
 };
 
-export interface PlayerProps {
-    player: PlayerData;
-    id: string;
-}
-
-export default class Player extends React.PureComponent<PlayerProps & PlayerMappedDispatch & PlayerMappedProps, {}> {
+export default class Player extends React.PureComponent<PlayerMappedDispatch & PlayerMappedProps, {}> {
 
     public render() {
-        const { player, moveCards, selectCards } = this.props;
+        const { player, moveCards, selectCards, selected } = this.props;
         const { hand, battlefield } = player;
         return (
             <div className='fullSize'>
@@ -51,6 +45,7 @@ export default class Player extends React.PureComponent<PlayerProps & PlayerMapp
                             moveCards={moveCards}
                             selectCards={selectCards}
                             key={battlefield.id}
+                            selected={selected}
                         />
                     </div>
                     <div style={HandStyle}>
@@ -59,6 +54,7 @@ export default class Player extends React.PureComponent<PlayerProps & PlayerMapp
                             moveCards={moveCards}
                             selectCards={selectCards}
                             key={hand.id}
+                            selected={selected}
                         />
                     </div>
                 </div>

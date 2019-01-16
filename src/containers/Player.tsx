@@ -1,14 +1,17 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { updatePlayers } from '../actions/playersActions';
-import { moveCards, selectCards, updateZones } from '../actions/zonesActions';
-import Player, { PlayerProps } from '../components/Player';
+import { selectCards } from '../actions/selectActions';
+import { moveCards, updateZones } from '../actions/zonesActions';
+import Player from '../components/Player';
 import { AppState } from '../reducers';
 import { PlayerData, playerSelector } from '../selectors/player';
+import { selectedSelector } from '../selectors/selected';
 
 export interface PlayerMappedProps {
     player: PlayerData;
     id: string;
+    selected: string[];
 }
 
 export interface PlayerMappedDispatch {
@@ -18,26 +21,17 @@ export interface PlayerMappedDispatch {
 
 const mapStateToProps = (state: AppState, ownProps: { id: string }) => ({
     player: playerSelector(state, ownProps.id),
-    id: ownProps.id
+    id: ownProps.id,
+    selected: selectedSelector(state)
 }) as PlayerMappedProps;
 
-const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerProps) => ({
+const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerMappedProps) => ({
     updatePlayers,
     updateZones,
     moveCards: (fromZone: string, cards: string[], toZone: string, toIdx: number) => (
         dispatch(moveCards(fromZone, cards, toZone, toIdx))),
-    selectCards: (zone: string, cards: string[]) => (
-        dispatch(selectCards(zone, cards)))
+    selectCards: (cards: string[]) => (
+        dispatch(selectCards(cards)))
 });
 
-// cool performance improvement
-const options = {
-    areStatePropsEqual: (next: PlayerMappedProps, prev: PlayerMappedProps) => {
-        return (
-            prev.player === next.player &&
-            prev.id === next.id
-        );
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps, null, options)(Player);
+export default connect(mapStateToProps, mapDispatchToProps)(Player);

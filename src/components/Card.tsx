@@ -41,7 +41,6 @@ export default class Card extends React.PureComponent<CardProps & SelectableInje
 
   public render() {
     const { name, opacity, visible, selectableRef, selected, selecting } = this.props;
-    console.log(this.props);
     const cardStyle = {
       ...CardStyle,
       opacity,
