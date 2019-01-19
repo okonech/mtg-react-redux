@@ -17,6 +17,8 @@ export function addPlayers(players: Player[]): PlayersAction {
   };
 }
 
+export type updatePlayers = (players: Player[]) => PlayersAction;
+
 export function updatePlayers(players: Player[]): PlayersAction {
   return {
     type: 'UPDATE_PLAYERS',

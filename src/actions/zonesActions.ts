@@ -26,6 +26,8 @@ export function addZones(zones: Zone[]): ZonesAction {
     };
 }
 
+export type updateZones = (zones: Zone[]) => ZonesAction;
+
 export function updateZones(zones: Zone[]): ZonesAction {
     return {
         type: 'UPDATE_ZONES',

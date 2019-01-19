@@ -58,5 +58,6 @@ class SinglePlayerGame extends React.PureComponent<SinglePlayerProps & SinglePla
         }
     }
 }
-// TODO: fix this to proper typing
-export default connect(mapStateToProps, mapDispatchToProps)(SinglePlayerGame);
+
+export default connect<SinglePlayerProps, SinglePlayerDispatch, {}, AppState>
+    (mapStateToProps, mapDispatchToProps)(SinglePlayerGame);

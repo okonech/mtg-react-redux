@@ -50,6 +50,5 @@ export const playerSelector = createSelector(
 
 const mapZoneToCards = (zone: Zone, cardState: CardsState) => ({
     id: zone.id,
-    cards: zone.cards.map((cardId) => cardState[cardId]),
-    selected: []
+    cards: zone.cards.map((cardId) => cardState[cardId])
 });
