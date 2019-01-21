@@ -36,7 +36,11 @@ export default class Player extends React.PureComponent<PlayerMappedDispatch & P
         return (
             <div className='fullSize'>
                 <div style={InfoAreaStyle}>
-                    <InfoArea />
+                    <InfoArea
+                        player={player}
+                        moveCards={moveCards}
+                        key={player.id + 'info'}
+                    />
                 </div>
                 <div style={ActiveAreaStyle}>
                     <div style={BattleFieldStyle}>
