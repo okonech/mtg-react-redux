@@ -12,11 +12,12 @@ import { CardZone } from '../selectors/player';
 
 const HandStyle: React.CSSProperties = {
   height: '100%',
-  width: '100%',
+  width: '81vw',
   display: 'flex',
   overflowX: 'scroll',
   scrollbarWidth: 'thin',
-  backgroundColor: 'gray'
+  backgroundColor: 'gray',
+  padding: '0px 2vw 0px 2vw'
 };
 
 const SelectableStyle: React.CSSProperties = {
@@ -141,7 +142,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
             onSelectionClear={this.clearSelected}
           >
             <section style={HandStyle} >
-              <div style={{ width: '2%' }} />
+              <div className='aaaa' style={{ width: '2vw' }} />
               {cards}
             </section>
           </SelectableGroup>
