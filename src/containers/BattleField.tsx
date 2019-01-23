@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
+import { findDOMNode } from 'react-dom';
 import { SelectableGroup, SelectableItem } from 'react-selectable-fast';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
@@ -12,21 +13,23 @@ import { CardZone } from '../selectors/player';
 const BattleFieldStyle: React.CSSProperties = {
     height: '100%',
     width: '100%',
-    backgroundColor: 'green',
-    position: 'relative'
+    backgroundColor: 'green'
 };
 
 const SelectableStyle: React.CSSProperties = {
     height: '100%',
-    width: '100%',
-    display: 'flex'
+    width: '100%'
 };
 
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
     drop(props, monitor, component: BattleField) {
         const { moveCards, zone } = props;
         const { zoneId, id } = monitor.getItem() as CardDragObject;
-        moveCards(zoneId, [id], zone.id, zone.cards.length);
+        const node = findDOMNode(component) as Element;
+        const bounds = node.getBoundingClientRect();
+        const xCoord = monitor.getClientOffset().x - bounds.left;
+        const yCoord = monitor.getClientOffset().y - bounds.top;
+        moveCards(zoneId, [id], zone.id, zone.cards.length, xCoord, yCoord);
     }
 };
 interface BattleFieldProps {

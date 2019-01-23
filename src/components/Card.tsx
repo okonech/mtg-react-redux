@@ -52,7 +52,9 @@ export default class Card extends React.PureComponent<CardProps & SelectableInje
       display: visible ? 'block' : 'none',
       // purble selecting, red selected, black default
       border: selected ? '1px solid red' : selecting ? '1px solid rebeccapurple' : '1px solid black',
-      height: `${cardHeight}vh`
+      // todo: convert to memoized function that takes props and returns style obj
+      height: `${cardHeight}vh`,
+      width: `${cardHeight * 0.716}vh`
     };
     return (
       <div ref={selectableRef} style={cardStyle}>

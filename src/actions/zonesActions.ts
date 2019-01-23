@@ -14,6 +14,8 @@ export interface MoveCardsAction {
         toZone: string,
         cards: string[],
         toIdx: number
+        xCoord: number;
+        yCoord: number;
     };
 }
 
@@ -46,16 +48,20 @@ export function deleteZones(ids: string[]): ZonesAction {
     };
 }
 
-export type moveCards = (fromZone: string, cards: string[], toZone: string, toIdx: number) => MoveCardsAction;
+export type moveCards = (fromZone: string, cards: string[], toZone: string, toIdx: number,
+                         xCoord: number, yCoord: number) => MoveCardsAction;
 
-export function moveCards(fromZone: string, cards: string[], toZone: string, toIdx: number): MoveCardsAction {
+export function moveCards(fromZone: string, cards: string[], toZone: string,
+                          toIdx: number, xCoord: number, yCoord: number): MoveCardsAction {
     return {
         type: 'MOVE_CARDS',
         payload: {
             fromZone,
             toZone,
             cards,
-            toIdx
+            toIdx,
+            xCoord,
+            yCoord
         }
     };
 }

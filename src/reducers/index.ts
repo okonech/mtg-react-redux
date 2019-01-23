@@ -1,6 +1,7 @@
 
 import { combineReducers } from 'redux';
 import cardsReducer, { CardsState } from './cardsReducer';
+import cardsSettingsStateReducer, { CardsSettingsState } from './cardsSettingsStateReducer';
 import gameReducer, { GameState } from './gameReducer';
 import loadingReducer, { LoadingState } from './loadingReducer';
 import playersReducer, { PlayersState } from './playersReducer';
@@ -14,6 +15,7 @@ export interface AppState {
     players: PlayersState;
     zones: ZonesState;
     select: SelectState;
+    cardsSettingsState: CardsSettingsState;
 }
 
 export default combineReducers<AppState>({
@@ -22,5 +24,6 @@ export default combineReducers<AppState>({
     isLoading: loadingReducer,
     players: playersReducer,
     zones: zonesReducer,
-    select: selectReducer
+    select: selectReducer,
+    cardsSettingsState: cardsSettingsStateReducer
 });

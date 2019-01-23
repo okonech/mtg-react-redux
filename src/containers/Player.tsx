@@ -40,8 +40,8 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerMappedProps) =
         dispatch(updatePlayers(players))),
     updateZones: (zones: Zone[]) => (
         dispatch(updateZones(zones))),
-    moveCards: (fromZone: string, cards: string[], toZone: string, toIdx: number) => (
-        dispatch(moveCards(fromZone, cards, toZone, toIdx))),
+    moveCards: (fromZone: string, cards: string[], toZone: string, toIdx: number, xCoord: number, yCoord: number) => (
+        dispatch(moveCards(fromZone, cards, toZone, toIdx, xCoord, yCoord))),
     selectCards: (cards: string[]) => (
         dispatch(selectCards(cards)))
 });
