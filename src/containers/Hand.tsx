@@ -15,7 +15,8 @@ const HandStyle: React.CSSProperties = {
   width: '100%',
   display: 'flex',
   overflowX: 'scroll',
-  scrollbarWidth: 'thin'
+  scrollbarWidth: 'thin',
+  backgroundColor: 'gray'
 };
 
 const SelectableStyle: React.CSSProperties = {
