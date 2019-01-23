@@ -39,16 +39,28 @@ class FourPlayerGame extends React.PureComponent<FourPlayerGameProps, {}> {
                     <Menu />
                     <div style={PlayerStyle}>
                         <div style={{ height: '25%' }}>
-                            <Player id={players[0]} />
+                            <Player
+                                id={players[0]}
+                                pageDivision={{ row: 1, col: 4 }}
+                            />
                         </div>
                         <div style={{ height: '25%' }}>
-                            <Player id={players[0]} />
+                            <Player
+                                id={players[1]}
+                                pageDivision={{ row: 1, col: 4 }}
+                            />
                         </div>
                         <div style={{ height: '25%' }}>
-                            <Player id={players[0]} />
+                            <Player
+                                id={players[0]}
+                                pageDivision={{ row: 1, col: 4 }}
+                            />
                         </div>
                         <div style={{ height: '25%' }}>
-                            <Player id={players[0]} />
+                            <Player
+                                id={players[1]}
+                                pageDivision={{ row: 1, col: 4 }}
+                            />
                         </div>
                     </div>
                 </div>

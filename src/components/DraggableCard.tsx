@@ -41,11 +41,11 @@ interface DraggableCardProps {
   id: string;
   zoneId: string;
   originalIndex: number;
-  percentHeight: number;
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
   stateSelected: boolean;
   stateSelecting: boolean;
+  cardHeight: number;
 }
 
 interface DraggableCardSourceCollectedProps {
@@ -80,8 +80,8 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 
   public render() {
-    const { name, isDragging, connectDragSource, id, percentHeight, stateSelected, stateSelecting,
-            onMouseEnter, onMouseLeave, selectableRef } = this.props;
+    const { name, isDragging, connectDragSource, id, stateSelected, stateSelecting,
+            onMouseEnter, onMouseLeave, selectableRef, cardHeight } = this.props;
     // set currently dragged card to invisible while dragging it
     // gives appearance of the dragged card being the actual dragged card and not the copy
     const opacity = isDragging ? 0 : 1;
@@ -89,7 +89,6 @@ class DraggableCard extends React.PureComponent<AllProps> {
       connectDragSource(
         <div
           ref={selectableRef}
-          style={{ height: percentHeight + '%' }}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
@@ -101,6 +100,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
             visible={true}
             selected={stateSelected}
             selecting={stateSelecting}
+            cardHeight={cardHeight}
           />
         </div>
       )

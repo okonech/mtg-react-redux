@@ -43,10 +43,16 @@ class TwoPlayerGame extends React.PureComponent<TwoPlayerGameProps & TwoPlayerDi
                     <Menu />
                     <div style={PlayerStyle}>
                         <div style={{ height: '50%' }}>
-                            <Player id={players[0]} />
+                            <Player
+                                id={players[0]}
+                                pageDivision={{ row: 1, col: 2 }}
+                            />
                         </div>
                         <div style={{ height: '50%' }}>
-                            <Player id={players[1]} />
+                            <Player
+                                id={players[1]}
+                                pageDivision={{ row: 1, col: 2 }}
+                            />
                         </div>
                     </div>
                 </div>

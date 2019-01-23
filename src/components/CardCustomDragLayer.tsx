@@ -1,3 +1,4 @@
+import { Identifier } from 'dnd-core';
 import * as React from 'react';
 import { DragLayer, XYCoord } from 'react-dnd';
 import { Types } from '../Constants';
@@ -9,11 +10,10 @@ const layerStyles: React.CSSProperties = {
     pointerEvents: 'none',
     zIndex: 100,
     left: 0,
-    top: 0,
-    height: 'calc((100% - 60px)/4)'
+    top: 0
 };
 
-function getItemStyles(props: CardCustomDragLayerProps) {
+function getItemStyles(props: DragLayerProps & CardCustomDragLayerProps) {
     const { currentOffset } = props;
     if (!currentOffset) {
         return {
@@ -33,19 +33,23 @@ function getItemStyles(props: CardCustomDragLayerProps) {
     };
 }
 
-export interface CardCustomDragLayerProps {
+interface CardCustomDragLayerProps {
+    cardHeight: number;
+    snapToGrid?: boolean;
+}
+
+export interface DragLayerProps {
     item?: any;
-    itemType?: string;
+    itemType?: Identifier;
     initialOffset?: XYCoord;
     currentOffset?: XYCoord;
     isDragging?: boolean;
-    snapToGrid: boolean;
 }
 
-class CardCustomDragLayer extends React.PureComponent<CardCustomDragLayerProps> {
+class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCustomDragLayerProps> {
 
     public render() {
-        const { item, itemType, isDragging } = this.props;
+        const { item, itemType, isDragging, cardHeight } = this.props;
         if (!isDragging || (itemType !== Types.CARD)) {
             return null;
         }
@@ -55,13 +59,14 @@ class CardCustomDragLayer extends React.PureComponent<CardCustomDragLayerProps> 
                     name={item.name}
                     opacity={.9}
                     visible={true}
+                    cardHeight={cardHeight}
                 />
             </div>
         );
     }
 }
 
-export default DragLayer((monitor) => ({
+export default DragLayer<CardCustomDragLayerProps, DragLayerProps>((monitor) => ({
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
     currentOffset: monitor.getSourceClientOffset(),

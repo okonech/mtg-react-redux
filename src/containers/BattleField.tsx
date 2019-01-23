@@ -34,6 +34,7 @@ interface BattleFieldProps {
     moveCards: moveCardsType;
     selectCards: selectCardsType;
     selected: string[];
+    cardHeight: number;
 }
 
 interface BattleFieldTargetCollectedProps {
@@ -66,7 +67,7 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
     public clearSelected = () => this.props.selectCards([]);
 
     public render() {
-        const { zone, connectDropTarget, selected } = this.props;
+        const { zone, connectDropTarget, selected, cardHeight } = this.props;
         const { selectEnabled } = this.state;
         const cards = this.props.zone.cards.map((card: Card, indexOf: number) => {
             return (
@@ -76,11 +77,11 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
                     name={card.name}
                     id={card.id}
                     key={'draggable' + card.id}
-                    percentHeight={30}
                     onMouseEnter={this.mouseEnter}
                     onMouseLeave={this.mouseLeave}
                     stateSelected={selected.includes(card.id)}
                     stateSelecting={false}
+                    cardHeight={cardHeight}
                 />
             );
         });

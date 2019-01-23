@@ -41,9 +41,10 @@ class SinglePlayerGame extends React.PureComponent<SinglePlayerProps & SinglePla
             return (
                 <div className='fullSize'>
                     <Menu />
-                    <div style={PlayerStyle}>
-                        <Player id={players[0]} />
-                    </div>
+                    <Player
+                        id={players[0]}
+                        pageDivision={{ row: 1, col: 1 }}
+                    />
                 </div>
             );
         } else {

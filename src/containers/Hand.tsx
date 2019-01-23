@@ -14,7 +14,8 @@ const HandStyle: React.CSSProperties = {
   height: '100%',
   width: '100%',
   display: 'flex',
-  overflowX: 'scroll'
+  overflowX: 'scroll',
+  scrollbarWidth: 'thin'
 };
 
 const SelectableStyle: React.CSSProperties = {
@@ -43,6 +44,7 @@ interface HandProps {
   moveCards: moveCardsType;
   selectCards: selectCardsType;
   selected: string[];
+  cardHeight: number;
 }
 
 interface HandTargetCollectedProps {
@@ -89,8 +91,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
   public mouseLeave = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: true }));
 
   public render() {
-    const { zone, connectDropTarget, isOver, canDrop, item, selected } = this.props;
-    console.log(selected);
+    const { zone, connectDropTarget, isOver, canDrop, item, selected, cardHeight } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
     const cards = zone.cards.reduce((acc, curr, idx) => {
       if (isOver && canDrop && curr.id === item.id) {
@@ -103,11 +104,11 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
           name={curr.name}
           id={curr.id}
           key={'draggable' + curr.id}
-          percentHeight={100}
           onMouseEnter={this.mouseEnter}
           onMouseLeave={this.mouseLeave}
           stateSelected={selected.includes(curr.id)}
           stateSelecting={false}
+          cardHeight={cardHeight}
         />
       );
       return acc;
@@ -121,6 +122,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
             name={'placeholder'}
             opacity={0}
             visible={true}
+            cardHeight={cardHeight}
           />
         ));
     }

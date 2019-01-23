@@ -6,6 +6,7 @@ interface CardProps {
   opacity: number;
   visible: boolean;
   name: string;
+  cardHeight: number;
 }
 
 interface SelectableInjectedProps {
@@ -15,9 +16,9 @@ interface SelectableInjectedProps {
 }
 
 const CardStyle: React.CSSProperties = {
-  height: '100%',
   position: 'relative',
-  margin: '0px 1px 0px 1px'
+  margin: '1px',
+  border: '1px'
 };
 
 const ImgStyle: React.CSSProperties = {
@@ -29,30 +30,36 @@ const ImgStyle: React.CSSProperties = {
 
 const CardTextStyle: React.CSSProperties = {
   position: 'absolute',
-  top: 10,
+  top: 5,
   left: 5,
-  height: '25%',
+  height: 'calc(100% - 10px)',
   width: 'calc(100% - 1em)',
   wordWrap: 'break-word',
-  textOverflow: 'clip'
+  overflowWrap: 'break-word',
+  textOverflow: 'clip',
+  overflow: 'hidden'
 };
 
 export default class Card extends React.PureComponent<CardProps & SelectableInjectedProps> {
 
   public render() {
-    const { name, opacity, visible, selectableRef, selected, selecting } = this.props;
+    const { name, opacity, visible, selectableRef, selected, selecting, cardHeight } = this.props;
     const cardStyle = {
       ...CardStyle,
       opacity,
       display: visible ? 'block' : 'none',
       // find a way to get this to none, or just use border
+      border: selecting ? '1px solid rebeccapurple' : 'none',
       backgroundColor: selected ? 'blue' : 'white',
-      border: selecting ? 'blue' : 'none'
+      height: `${cardHeight}vh`
+    };
+    const cardTextStyle = {
+      ...CardTextStyle
     };
     return (
       <div ref={selectableRef} style={cardStyle}>
         <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
-        <div style={CardTextStyle}>
+        <div style={cardTextStyle}>
           {name}
         </div>
       </div>

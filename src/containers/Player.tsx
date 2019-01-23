@@ -10,10 +10,15 @@ import { Zone } from '../reducers/zonesReducer';
 import { PlayerData, playerSelector } from '../selectors/player';
 import { selectedSelector } from '../selectors/selected';
 
+interface PageDivision {
+    row: number;
+    col: number;
+}
 export interface PlayerMappedProps {
     player: PlayerData;
-    id: string;
     selected: string[];
+    id: string;
+    pageDivision: PageDivision;
 }
 
 export interface PlayerMappedDispatch {
@@ -23,10 +28,11 @@ export interface PlayerMappedDispatch {
     selectCards?: selectCards;
 }
 
-const mapStateToProps = (state: AppState, ownProps: { id: string }) => ({
+const mapStateToProps = (state: AppState, ownProps: { id: string, pageDivision: PageDivision }) => ({
     player: playerSelector(state, ownProps.id),
+    selected: selectedSelector(state),
     id: ownProps.id,
-    selected: selectedSelector(state)
+    pageDivision: ownProps.pageDivision
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerMappedProps) => ({
@@ -41,5 +47,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerMappedProps) =
 });
 
 // todo: fix types
-export default connect<PlayerMappedProps, any, any, AppState>
-    (mapStateToProps, mapDispatchToProps)(Player);
+export default connect(mapStateToProps, mapDispatchToProps)(Player);
