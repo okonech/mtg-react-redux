@@ -17,8 +17,9 @@ interface SelectableInjectedProps {
 
 const CardStyle: React.CSSProperties = {
   position: 'relative',
-  margin: '1px',
-  border: '1px'
+  border: '2px',
+  borderRadius: '6%',
+  margin: '1px'
 };
 
 const ImgStyle: React.CSSProperties = {
@@ -48,18 +49,14 @@ export default class Card extends React.PureComponent<CardProps & SelectableInje
       ...CardStyle,
       opacity,
       display: visible ? 'block' : 'none',
-      // find a way to get this to none, or just use border
-      border: selecting ? '1px solid rebeccapurple' : 'none',
-      backgroundColor: selected ? 'blue' : 'white',
+      // purble selecting, red selected, black default
+      border: selected ? '1px solid red' : selecting ? '1px solid rebeccapurple' : '1px solid black',
       height: `${cardHeight}vh`
-    };
-    const cardTextStyle = {
-      ...CardTextStyle
     };
     return (
       <div ref={selectableRef} style={cardStyle}>
         <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
-        <div style={cardTextStyle}>
+        <div style={CardTextStyle}>
           {name}
         </div>
       </div>
