@@ -80,7 +80,6 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
                     onMouseEnter={this.mouseEnter}
                     onMouseLeave={this.mouseLeave}
                     stateSelected={selected.includes(card.id)}
-                    stateSelecting={false}
                     cardHeight={cardHeight}
                 />
             );

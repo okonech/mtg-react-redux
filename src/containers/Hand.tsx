@@ -107,7 +107,6 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
           onMouseEnter={this.mouseEnter}
           onMouseLeave={this.mouseLeave}
           stateSelected={selected.includes(curr.id)}
-          stateSelecting={false}
           cardHeight={cardHeight}
         />
       );
