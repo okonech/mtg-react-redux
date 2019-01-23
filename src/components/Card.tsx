@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { noSelect } from '../util/styling';
 
 // pure card render component
 
@@ -15,12 +16,12 @@ interface SelectableInjectedProps {
   selecting?: boolean;
 }
 
-const CardStyle: React.CSSProperties = {
+const CardStyle = noSelect({
   position: 'relative',
   border: '2px',
   borderRadius: '6%',
   margin: '1px'
-};
+});
 
 const ImgStyle: React.CSSProperties = {
   height: '100%',
