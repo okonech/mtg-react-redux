@@ -1,11 +1,17 @@
 import { createSelector } from 'reselect';
 import { AppState } from '../reducers';
 import { Card, CardsState } from '../reducers/cardsReducer';
+import { CardsSettings, CardsSettingsState } from '../reducers/cardsSettingsStateReducer';
 import { Zone } from '../reducers/zonesReducer';
 
 export interface CardZone {
     id: string;
     cards: Card[];
+}
+
+export interface CardCoordZone {
+    id: string;
+    cards: Array<Card & CardsSettings>;
 }
 
 export interface PlayerData {
@@ -15,7 +21,7 @@ export interface PlayerData {
     poison: number;
     library: CardZone;
     hand: CardZone;
-    battlefield: CardZone;
+    battlefield: CardCoordZone;
     graveyard: CardZone;
     exile: CardZone;
 }
@@ -23,6 +29,7 @@ export interface PlayerData {
 const getZones = (state: AppState) => state.zones;
 const getCards = (state: AppState) => state.cards;
 const getPlayer = (state: AppState, playerId: string) => state.players.playersById[playerId];
+const getCardsSettings = (state: AppState) => state.cardsSettingsState;
 
 const getPlayerZones = createSelector(
     [getPlayer, getZones],
@@ -37,18 +44,24 @@ const getPlayerZones = createSelector(
 );
 
 export const playerSelector = createSelector(
-    [getPlayerZones, getCards],
-    (player, cards) => ({
+    [getPlayerZones, getCards, getCardsSettings],
+    (player, cards, cardsSettings): PlayerData => ({
         ...player,
         library: mapZoneToCards(player.library, cards),
         hand: mapZoneToCards(player.hand, cards),
-        battlefield: mapZoneToCards(player.battlefield, cards),
+        battlefield: mapZoneToCoordCards(player.battlefield, cards, cardsSettings),
         graveyard: mapZoneToCards(player.graveyard, cards),
         exile: mapZoneToCards(player.exile, cards)
     })
 );
 
-const mapZoneToCards = (zone: Zone, cardState: CardsState) => ({
+const mapZoneToCards = (zone: Zone, cardState: CardsState): CardZone => ({
     id: zone.id,
     cards: zone.cards.map((cardId) => cardState[cardId])
 });
+
+const mapZoneToCoordCards = (zone: Zone, cardState: CardsState,
+                             cardsSettingsState: CardsSettingsState): CardCoordZone => ({
+        id: zone.id,
+        cards: zone.cards.map((cardId) => ({ ...cardState[cardId], ...cardsSettingsState[cardId] }))
+    });

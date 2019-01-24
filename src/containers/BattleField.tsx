@@ -7,8 +7,7 @@ import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
 import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
-import { Card } from '../reducers/cardsReducer';
-import { CardZone } from '../selectors/player';
+import { CardCoordZone } from '../selectors/player';
 
 const BattleFieldStyle: React.CSSProperties = {
     height: '100%',
@@ -33,7 +32,7 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
     }
 };
 interface BattleFieldProps {
-    zone: CardZone;
+    zone: CardCoordZone;
     moveCards: moveCardsType;
     selectCards: selectCardsType;
     selected: string[];
@@ -72,7 +71,7 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
     public render() {
         const { zone, connectDropTarget, selected, cardHeight } = this.props;
         const { selectEnabled } = this.state;
-        const cards = this.props.zone.cards.map((card: Card, indexOf: number) => {
+        const cards = this.props.zone.cards.map((card, indexOf: number) => {
             return (
                 <DraggableCard
                     zoneId={zone.id}
@@ -84,6 +83,8 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
                     onMouseLeave={this.mouseLeave}
                     stateSelected={selected.includes(card.id)}
                     cardHeight={cardHeight}
+                    xCoord={card.xCoord}
+                    yCoord={card.yCoord}
                 />
             );
         });
