@@ -23,11 +23,13 @@ const SelectableStyle: React.CSSProperties = {
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
     drop(props, monitor, component: BattleField) {
         const { moveCards, zone } = props;
-        const { zoneId, id } = monitor.getItem() as CardDragObject;
+        const { zoneId, id, initialX, initialY } = monitor.getItem() as CardDragObject;
         const node = findDOMNode(component) as Element;
         const bounds = node.getBoundingClientRect();
-        const xCoord = monitor.getClientOffset().x - bounds.left;
-        const yCoord = monitor.getClientOffset().y - bounds.top;
+
+        const xCoord = monitor.getClientOffset().x - bounds.left - initialX;
+        const yCoord = monitor.getClientOffset().y - bounds.top - initialY;
+
         moveCards(zoneId, [id], zone.id, zone.cards.length, xCoord, yCoord);
     }
 };

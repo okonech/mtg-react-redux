@@ -70,5 +70,6 @@ export default DragLayer<CardCustomDragLayerProps, DragLayerProps>((monitor) => 
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
     currentOffset: monitor.getSourceClientOffset(),
+    initialOffset: monitor.getInitialSourceClientOffset(),
     isDragging: monitor.isDragging()
 }))(CardCustomDragLayer);

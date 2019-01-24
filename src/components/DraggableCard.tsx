@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceMonitor, DragSourceSpec } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import { findDOMNode } from 'react-dom';
 import { createSelectable } from 'react-selectable-fast';
 import { Types } from '../Constants';
 import Card from './Card';
@@ -12,16 +13,24 @@ export interface CardDragObject {
   name: string;
   originalIndex: number;
   zoneId: string;
+  initialX: number;
+  initialY: number;
 }
 
 const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
-  beginDrag(props: DraggableCardProps) {
+  beginDrag(props: DraggableCardProps, monitor: DragSourceMonitor, component: DraggableCard) {
     console.log('Start drag ' + props.name + ' ' + props.id);
+
+    const node = findDOMNode(component) as Element;
+    const bounds = node.getBoundingClientRect();
+    const offset = monitor.getInitialClientOffset();
     return {
       id: props.id,
       name: props.name,
       originalIndex: props.originalIndex,
-      zoneId: props.zoneId
+      zoneId: props.zoneId,
+      initialX: offset.x - bounds.left,
+      initialY: offset.y - bounds.top
     };
   },
 
@@ -86,7 +95,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
     // set currently dragged card to invisible while dragging it
     // gives appearance of the dragged card being the actual dragged card and not the copy
     const opacity = isDragging ? 0 : 1;
-    const transform = `translate3d(${xCoord}px, ${yCoord}px, 0)`;
+    const transform = `translate3d(${Math.max(0, xCoord)}px, ${Math.max(0, yCoord)}px, 0)`;
     const style: React.CSSProperties = (!!xCoord && !!yCoord) ? {
       position: 'absolute',
       transform,
