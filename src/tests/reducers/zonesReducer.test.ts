@@ -80,7 +80,7 @@ it('moves card', () => {
             ]
         }
     ];
-    const action = moveCards('1', ['31'], '2', 1);
+    const action = moveCards('1', ['31'], '2', 1, 0, 0);
     const oldState = { ...state };
     deepFreeze(oldState);
     deepFreeze(action);

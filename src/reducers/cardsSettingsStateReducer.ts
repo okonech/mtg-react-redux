@@ -14,7 +14,8 @@ export interface CardsSettings {
     yCoord: number;
 }
 
-export default function cardsReducer(state: CardsSettingsState = {}, action: MoveCardsAction): CardsSettingsState {
+export default function cardsSettingsStateReducer(state: CardsSettingsState = {},
+                                                  action: MoveCardsAction): CardsSettingsState {
     return produce(state, (draft) => {
         switch (action.type) {
             case 'MOVE_CARDS':
