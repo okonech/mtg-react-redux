@@ -16,6 +16,7 @@ const HandStyle: React.CSSProperties = {
   display: 'flex',
   overflowX: 'scroll',
   scrollbarWidth: 'thin',
+  scrollbarColor: 'rebeccapurple gray',
   backgroundColor: 'gray',
   padding: '0px 2vw 0px 2vw'
 };

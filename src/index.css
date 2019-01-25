@@ -25,3 +25,13 @@ html, body {
   background-color: rgb(99, 96, 96);
   opacity: .6;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: gray;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rebeccapurple;
+}
