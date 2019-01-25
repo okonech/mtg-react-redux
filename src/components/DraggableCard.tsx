@@ -4,14 +4,15 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 import { findDOMNode } from 'react-dom';
 import { createSelectable } from 'react-selectable-fast';
 import { defaultMemoize } from 'reselect';
+import { selectCards as selectCardsType } from '../actions/selectActions';
 import { Types } from '../Constants';
 import Card from './Card';
 
 // draggable card component with id, key, x, y position
 
 export interface CardDragObject {
-  id: string;
-  name: string;
+  cards: string[];
+  firstName: string;
   zoneId: string;
   initialX: number;
   initialY: number;
@@ -28,22 +29,28 @@ const dragCardStyle = defaultMemoize((xCoord: number, yCoord: number): React.CSS
 
 const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
   beginDrag(props: DraggableCardProps, monitor: DragSourceMonitor, component: DraggableCard) {
-    console.log('Start drag ' + props.name + ' ' + props.id);
 
+    const { selectCards, selectedCards, zoneId, id, name } = props;
+    console.log('Start drag ' + selectedCards + ' ' + props.id);
     const node = findDOMNode(component) as Element;
     const bounds = node.getBoundingClientRect();
     const offset = monitor.getInitialClientOffset();
+    const cards = [...selectedCards];
+    if (!cards.includes(id)) {
+      cards.push(id);
+    }
+    selectCards(cards);
     return {
-      id: props.id,
-      name: props.name,
-      zoneId: props.zoneId,
+      cards,
+      firstName: name,
+      zoneId,
       initialX: offset.x - bounds.left,
       initialY: offset.y - bounds.top
     };
   },
 
   endDrag(props: DraggableCardProps, monitor: DragSourceMonitor) {
-    console.log('End drag ' + props.name + ' ' + props.id);
+    console.log('End drag ' + props.selectedCards);
     // todo: move drop call logic into droptarget drop method
     // also add droptarget drop on hand and battlefield, putting cards at end of list
 
@@ -59,7 +66,8 @@ interface DraggableCardProps {
   zoneId: string;
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
-  stateSelected: boolean;
+  selectedCards: string[];
+  selectCards: selectCardsType;
   cardHeight: number;
   xCoord?: number;
   yCoord?: number;
@@ -97,7 +105,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 
   public render() {
-    const { name, isDragging, connectDragSource, id, stateSelected, selecting,
+    const { name, isDragging, connectDragSource, id, selectedCards, selecting,
             onMouseEnter, onMouseLeave, selectableRef, cardHeight, xCoord, yCoord } = this.props;
 
     return (
@@ -116,7 +124,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
             opacity={isDragging ? 0 : 1}
             // this can cause chrome to not drag
             visible={true}
-            selected={stateSelected}
+            selected={selectedCards.includes(id)}
             selecting={selecting}
             cardHeight={cardHeight}
           />

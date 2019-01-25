@@ -23,14 +23,14 @@ const SelectableStyle: React.CSSProperties = {
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
     drop(props, monitor, component: BattleField) {
         const { moveCards, zone } = props;
-        const { zoneId, id, initialX, initialY } = monitor.getItem() as CardDragObject;
+        const { zoneId, cards, initialX, initialY } = monitor.getItem() as CardDragObject;
         const node = findDOMNode(component) as Element;
         const bounds = node.getBoundingClientRect();
 
         const xCoord = monitor.getClientOffset().x - bounds.left - initialX;
         const yCoord = monitor.getClientOffset().y - bounds.top - initialY;
 
-        moveCards(zoneId, [id], zone.id, zone.cards.length, xCoord, yCoord);
+        moveCards(zoneId, cards, zone.id, zone.cards.length, xCoord, yCoord);
     }
 };
 interface BattleFieldProps {
@@ -71,7 +71,7 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
     public clearSelected = () => this.props.selectCards([]);
 
     public render() {
-        const { zone, connectDropTarget, selected, cardHeight } = this.props;
+        const { zone, connectDropTarget, selected, cardHeight, selectCards } = this.props;
         const { selectEnabled } = this.state;
         const cards = this.props.zone.cards.map((card, indexOf: number) => {
             return (
@@ -82,7 +82,8 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
                     key={'draggable' + card.id}
                     onMouseEnter={this.mouseEnter}
                     onMouseLeave={this.mouseLeave}
-                    stateSelected={selected.includes(card.id)}
+                    selectedCards={selected}
+                    selectCards={selectCards}
                     cardHeight={cardHeight}
                     xCoord={card.xCoord}
                     yCoord={card.yCoord}
