@@ -71,6 +71,7 @@ interface DraggableCardProps {
   cardHeight: number;
   xCoord?: number;
   yCoord?: number;
+  hidden?: boolean;
 }
 
 interface DraggableCardSourceCollectedProps {
@@ -105,9 +106,22 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 
   public render() {
-    const { name, isDragging, connectDragSource, id, selectedCards, selecting,
+    const { name, isDragging, connectDragSource, id, selectedCards, selecting, hidden,
             onMouseEnter, onMouseLeave, selectableRef, cardHeight, xCoord, yCoord } = this.props;
 
+    if (hidden) {
+      const style: React.CSSProperties = {
+        position: 'absolute',
+        top: 0,
+        left: 0
+      };
+      return (connectDragSource(
+        <div
+          ref={selectableRef}
+          style={style}
+        />)
+      );
+    }
     return (
       connectDragSource(
         <div

@@ -58,10 +58,12 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
 
     public renderCards = defaultMemoize((cards: string[], cardHeight: number, name: string): JSX.Element[] => (
         cards.map((card, index) => (
-            <div style={cardStyle(cardHeight, index)} >
+            <div
+                style={cardStyle(cardHeight, index)}
+                key={'draglayer' + card}
+            >
                 <Card
                     name={index === 0 ? name : ''}
-                    key={'draglayer' + card}
                     opacity={.9}
                     cardHeight={cardHeight}
                 />
