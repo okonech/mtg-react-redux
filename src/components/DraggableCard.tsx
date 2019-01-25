@@ -12,7 +12,6 @@ import Card from './Card';
 export interface CardDragObject {
   id: string;
   name: string;
-  originalIndex: number;
   zoneId: string;
   initialX: number;
   initialY: number;
@@ -37,7 +36,6 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
     return {
       id: props.id,
       name: props.name,
-      originalIndex: props.originalIndex,
       zoneId: props.zoneId,
       initialX: offset.x - bounds.left,
       initialY: offset.y - bounds.top
@@ -59,7 +57,6 @@ interface DraggableCardProps {
   name: string;
   id: string;
   zoneId: string;
-  originalIndex: number;
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
   stateSelected: boolean;

@@ -77,7 +77,6 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
             return (
                 <DraggableCard
                     zoneId={zone.id}
-                    originalIndex={indexOf}
                     name={card.name}
                     id={card.id}
                     key={'draggable' + card.id}

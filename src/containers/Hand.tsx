@@ -102,7 +102,6 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
       acc.push(
         <DraggableCard
           zoneId={zone.id}
-          originalIndex={idx}
           name={curr.name}
           id={curr.id}
           key={'draggable' + curr.id}
