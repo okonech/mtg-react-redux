@@ -74,27 +74,8 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
         const { zone, connectDropTarget, selected, cardHeight, selectCards, canDrop, item } = this.props;
         const { selectEnabled } = this.state;
         // horrible hack to keep child mounted, so it can remain dragging but also look hidden
-        const hiddenCards = [];
-        let cards = zone.cards.reduce((acc, curr, idx) => {
-            if (canDrop && item.cards.includes(curr.id)) {
-                hiddenCards.push(
-                    <DraggableCard
-                        zoneId={zone.id}
-                        name={curr.name}
-                        id={curr.id}
-                        key={'draggable' + curr.id}
-                        onMouseEnter={this.mouseEnter}
-                        onMouseLeave={this.mouseLeave}
-                        selectedCards={selected}
-                        selectCards={selectCards}
-                        cardHeight={cardHeight}
-                        xCoord={curr.xCoord}
-                        yCoord={curr.yCoord}
-                        hidden={true}
-                    />
-                );
-                return acc;
-            }
+        const cards = zone.cards.reduce((acc, curr, idx) => {
+
             acc.push(
                 <DraggableCard
                     zoneId={zone.id}
@@ -108,12 +89,11 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
                     cardHeight={cardHeight}
                     xCoord={curr.xCoord}
                     yCoord={curr.yCoord}
+                    hidden={canDrop && item.cards.includes(curr.id)}
                 />
             );
             return acc;
-        },                            []);
-
-        cards = [...cards, ...hiddenCards];
+        },                              []);
 
         return (
             connectDropTarget(
