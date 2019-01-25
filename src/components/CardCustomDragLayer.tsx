@@ -63,7 +63,6 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
                     name={index === 0 ? name : ''}
                     key={'draglayer' + card}
                     opacity={.9}
-                    visible={true}
                     cardHeight={cardHeight}
                 />
             </div >

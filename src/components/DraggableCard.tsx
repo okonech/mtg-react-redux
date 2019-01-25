@@ -123,7 +123,6 @@ class DraggableCard extends React.PureComponent<AllProps> {
             // gives appearance of the dragged card being the actual dragged card and not the copy
             opacity={isDragging ? 0 : 1}
             // this can cause chrome to not drag
-            visible={true}
             selected={selectedCards.includes(id)}
             selecting={selecting}
             cardHeight={cardHeight}

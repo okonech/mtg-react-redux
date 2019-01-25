@@ -122,7 +122,6 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
             key={'handplaceholder'}
             name={'placeholder'}
             opacity={0}
-            visible={true}
             cardHeight={cardHeight}
           />
         ));

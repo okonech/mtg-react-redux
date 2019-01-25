@@ -6,7 +6,6 @@ import { noSelect } from '../util/styling';
 
 interface CardProps {
   opacity: number;
-  visible: boolean;
   name: string;
   cardHeight: number;
 }
@@ -37,13 +36,13 @@ const CardTextStyle: React.CSSProperties = {
 };
 
 const cardStyle = defaultMemoize((props: CardProps & SelectableInjectedProps): React.CSSProperties => {
-  const { opacity, visible, selected, selecting, cardHeight } = props;
+  const { opacity, selected, selecting, cardHeight } = props;
   return noSelect({
     position: 'relative',
     borderRadius: '6%',
     margin: '1px',
     opacity,
-    display: visible ? 'block' : 'none',
+    display: 'block',
     // purble selecting, red selected, black default
     border: selected ? '1px solid red' : selecting ? '1px solid rebeccapurple' : '1px solid black',
     // todo: convert to memoized function that takes props and returns style obj
