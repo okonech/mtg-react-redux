@@ -35,9 +35,9 @@ const handTarget: DropTargetSpec<HandProps> = {
   },
   drop(props, monitor, component: Hand) {
     const { moveCards, zone } = props;
-    const { zoneId, id } = monitor.getItem() as CardDragObject;
+    const { zoneId, cards } = monitor.getItem() as CardDragObject;
     const { placeholderIndex } = component.state;
-    moveCards(zoneId, [id], zone.id, placeholderIndex, 0, 0);
+    moveCards(zoneId, cards, zone.id, placeholderIndex, 0, 0);
   }
 };
 
@@ -93,22 +93,22 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
   public mouseLeave = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: true }));
 
   public render() {
-    const { zone, connectDropTarget, isOver, canDrop, item, selected, cardHeight } = this.props;
+    const { zone, connectDropTarget, isOver, canDrop, item, selected, cardHeight, selectCards } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
     const cards = zone.cards.reduce((acc, curr, idx) => {
-      if (isOver && canDrop && curr.id === item.id) {
+      if (isOver && canDrop && item.cards.includes(curr.id)) {
         return acc;
       }
       acc.push(
         <DraggableCard
           zoneId={zone.id}
-          originalIndex={idx}
           name={curr.name}
           id={curr.id}
           key={'draggable' + curr.id}
           onMouseEnter={this.mouseEnter}
           onMouseLeave={this.mouseLeave}
-          stateSelected={selected.includes(curr.id)}
+          selectedCards={selected}
+          selectCards={selectCards}
           cardHeight={cardHeight}
         />
       );

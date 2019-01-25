@@ -23,14 +23,14 @@ const SelectableStyle: React.CSSProperties = {
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
     drop(props, monitor, component: BattleField) {
         const { moveCards, zone } = props;
-        const { zoneId, id, initialX, initialY } = monitor.getItem() as CardDragObject;
+        const { zoneId, cards, initialX, initialY } = monitor.getItem() as CardDragObject;
         const node = findDOMNode(component) as Element;
         const bounds = node.getBoundingClientRect();
 
         const xCoord = monitor.getClientOffset().x - bounds.left - initialX;
         const yCoord = monitor.getClientOffset().y - bounds.top - initialY;
 
-        moveCards(zoneId, [id], zone.id, zone.cards.length, xCoord, yCoord);
+        moveCards(zoneId, cards, zone.id, zone.cards.length, xCoord, yCoord);
     }
 };
 interface BattleFieldProps {
@@ -71,25 +71,30 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
     public clearSelected = () => this.props.selectCards([]);
 
     public render() {
-        const { zone, connectDropTarget, selected, cardHeight } = this.props;
+        const { zone, connectDropTarget, selected, cardHeight, selectCards, isOver, canDrop, item } = this.props;
         const { selectEnabled } = this.state;
-        const cards = this.props.zone.cards.map((card, indexOf: number) => {
-            return (
+
+        const cards = zone.cards.reduce((acc, curr, idx) => {
+            if (isOver && canDrop && item.cards.includes(curr.id)) {
+                return acc;
+            }
+            acc.push(
                 <DraggableCard
                     zoneId={zone.id}
-                    originalIndex={indexOf}
-                    name={card.name}
-                    id={card.id}
-                    key={'draggable' + card.id}
+                    name={curr.name}
+                    id={curr.id}
+                    key={'draggable' + curr.id}
                     onMouseEnter={this.mouseEnter}
                     onMouseLeave={this.mouseLeave}
-                    stateSelected={selected.includes(card.id)}
+                    selectedCards={selected}
+                    selectCards={selectCards}
                     cardHeight={cardHeight}
-                    xCoord={card.xCoord}
-                    yCoord={card.yCoord}
+                    xCoord={curr.xCoord}
+                    yCoord={curr.yCoord}
                 />
             );
-        });
+            return acc;
+        },                              []);
 
         return (
             connectDropTarget(
@@ -117,5 +122,6 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
 export default DropTarget(Types.CARD, battlefieldTarget, (connect, monitor) => ({
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
+    canDrop: monitor.canDrop(),
+    item: monitor.getItem()
 }))(BattleField);
