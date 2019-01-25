@@ -71,25 +71,30 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
     public clearSelected = () => this.props.selectCards([]);
 
     public render() {
-        const { zone, connectDropTarget, selected, cardHeight, selectCards } = this.props;
+        const { zone, connectDropTarget, selected, cardHeight, selectCards, isOver, canDrop, item } = this.props;
         const { selectEnabled } = this.state;
-        const cards = this.props.zone.cards.map((card, indexOf: number) => {
-            return (
+
+        const cards = zone.cards.reduce((acc, curr, idx) => {
+            if (isOver && canDrop && item.cards.includes(curr.id)) {
+                return acc;
+            }
+            acc.push(
                 <DraggableCard
                     zoneId={zone.id}
-                    name={card.name}
-                    id={card.id}
-                    key={'draggable' + card.id}
+                    name={curr.name}
+                    id={curr.id}
+                    key={'draggable' + curr.id}
                     onMouseEnter={this.mouseEnter}
                     onMouseLeave={this.mouseLeave}
                     selectedCards={selected}
                     selectCards={selectCards}
                     cardHeight={cardHeight}
-                    xCoord={card.xCoord}
-                    yCoord={card.yCoord}
+                    xCoord={curr.xCoord}
+                    yCoord={curr.yCoord}
                 />
             );
-        });
+            return acc;
+        },                              []);
 
         return (
             connectDropTarget(
@@ -117,5 +122,6 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
 export default DropTarget(Types.CARD, battlefieldTarget, (connect, monitor) => ({
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
+    canDrop: monitor.canDrop(),
+    item: monitor.getItem()
 }))(BattleField);
