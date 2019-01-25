@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { defaultMemoize } from 'reselect';
 import { noSelect } from '../util/styling';
 
 // pure card render component
@@ -15,13 +16,6 @@ interface SelectableInjectedProps {
   selected?: boolean;
   selecting?: boolean;
 }
-
-const CardStyle = noSelect({
-  position: 'relative',
-  border: '2px',
-  borderRadius: '6%',
-  margin: '1px'
-});
 
 const ImgStyle: React.CSSProperties = {
   height: '100%',
@@ -42,22 +36,29 @@ const CardTextStyle: React.CSSProperties = {
   overflow: 'hidden'
 };
 
+const cardStyle = defaultMemoize((props: CardProps & SelectableInjectedProps): React.CSSProperties => {
+  const { opacity, visible, selected, selecting, cardHeight } = props;
+  return noSelect({
+    position: 'relative',
+    borderRadius: '6%',
+    margin: '1px',
+    opacity,
+    display: visible ? 'block' : 'none',
+    // purble selecting, red selected, black default
+    border: selected ? '1px solid red' : selecting ? '1px solid rebeccapurple' : '1px solid black',
+    // todo: convert to memoized function that takes props and returns style obj
+    height: `${cardHeight}vh`,
+    width: `${cardHeight * 0.716}vh`
+  });
+});
+
 export default class Card extends React.PureComponent<CardProps & SelectableInjectedProps> {
 
   public render() {
-    const { name, opacity, visible, selectableRef, selected, selecting, cardHeight } = this.props;
-    const cardStyle = {
-      ...CardStyle,
-      opacity,
-      display: visible ? 'block' : 'none',
-      // purble selecting, red selected, black default
-      border: selected ? '1px solid red' : selecting ? '1px solid rebeccapurple' : '1px solid black',
-      // todo: convert to memoized function that takes props and returns style obj
-      height: `${cardHeight}vh`,
-      width: `${cardHeight * 0.716}vh`
-    };
+    const props = this.props;
+    const { name, selectableRef } = props;
     return (
-      <div ref={selectableRef} style={cardStyle}>
+      <div ref={selectableRef} style={cardStyle(props)}>
         <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
         <div style={CardTextStyle}>
           {name}

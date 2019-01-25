@@ -1,19 +1,12 @@
 import { Identifier } from 'dnd-core';
 import * as React from 'react';
 import { DragLayer, XYCoord } from 'react-dnd';
+import { defaultMemoize } from 'reselect';
 import { Types } from '../Constants';
 import snapToGrid from '../util/snapToGrid';
 import Card from './Card';
 
-const layerStyles: React.CSSProperties = {
-    position: 'fixed',
-    pointerEvents: 'none',
-    zIndex: 100,
-    left: 0,
-    top: 0
-};
-
-function getItemStyles(props: DragLayerProps & CardCustomDragLayerProps) {
+const layerStyle = defaultMemoize((props: DragLayerProps & CardCustomDragLayerProps): React.CSSProperties => {
     const { currentOffset } = props;
     if (!currentOffset) {
         return {
@@ -29,9 +22,14 @@ function getItemStyles(props: DragLayerProps & CardCustomDragLayerProps) {
     const transform = `translate(${x}px, ${y}px)`;
     return {
         transform,
-        WebkitTransform: transform
+        WebkitTransform: transform,
+        position: 'fixed',
+        pointerEvents: 'none',
+        zIndex: 100,
+        left: 0,
+        top: 0
     };
-}
+});
 
 interface CardCustomDragLayerProps {
     cardHeight: number;
@@ -54,7 +52,7 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
             return null;
         }
         return (
-            <div style={{ ...getItemStyles(this.props), ...layerStyles }}>
+            <div style={layerStyle(this.props)}>
                 <Card
                     name={item.name}
                     opacity={.9}

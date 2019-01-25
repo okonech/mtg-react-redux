@@ -14,18 +14,6 @@ const grid = defaultMemoize((row: number, col: number): React.CSSProperties => (
     gridTemplateRows: `calc(${75 / col}vh - ${30 / col}px) ${25 / col}vh`
 }));
 
-const infoAreaStyle = defaultMemoize((row: number, col: number): React.CSSProperties => ({
-    gridRow: '1/3'
-}));
-
-const battleFieldStyle = defaultMemoize((row: number, col: number): React.CSSProperties => ({
-    gridColumn: '2/4'
-}));
-
-const handStyle = defaultMemoize((row: number, col: number): React.CSSProperties => ({
-    gridColumn: '2/4'
-}));
-
 export default class Player extends React.PureComponent<PlayerMappedDispatch & PlayerMappedProps, {}> {
 
     public render() {
@@ -35,14 +23,14 @@ export default class Player extends React.PureComponent<PlayerMappedDispatch & P
         const cardHeight = (25 / col) - ((10 / 4) / col);
         return (
             <div style={grid(row, col)}>
-                <div style={infoAreaStyle(row, col)}>
+                <div style={{ gridRow: '1/3' }}>
                     <InfoArea
                         player={player}
                         moveCards={moveCards}
                         key={library.id}
                     />
                 </div>
-                <div style={battleFieldStyle(row, col)}>
+                <div style={{ gridColumn: '2/4' }}>
                     <BattleField
                         zone={battlefield}
                         moveCards={moveCards}
@@ -52,7 +40,7 @@ export default class Player extends React.PureComponent<PlayerMappedDispatch & P
                         cardHeight={cardHeight}
                     />
                 </div>
-                <div style={handStyle(row, col)}>
+                <div style={{ gridColumn: '2/4' }}>
                     <Hand
                         zone={hand}
                         moveCards={moveCards}

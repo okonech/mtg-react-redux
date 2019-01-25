@@ -3,6 +3,7 @@ import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceMonitor, D
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { findDOMNode } from 'react-dom';
 import { createSelectable } from 'react-selectable-fast';
+import { defaultMemoize } from 'reselect';
 import { Types } from '../Constants';
 import Card from './Card';
 
@@ -16,6 +17,15 @@ export interface CardDragObject {
   initialX: number;
   initialY: number;
 }
+
+const dragCardStyle = defaultMemoize((xCoord: number, yCoord: number): React.CSSProperties => {
+  const transform = `translate3d(${Math.max(0, xCoord)}px, ${Math.max(0, yCoord)}px, 0)`;
+  return (!!xCoord && !!yCoord) ? {
+    position: 'absolute',
+    transform,
+    WebkitTransform: transform
+  } : {};
+});
 
 const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
   beginDrag(props: DraggableCardProps, monitor: DragSourceMonitor, component: DraggableCard) {
@@ -92,27 +102,21 @@ class DraggableCard extends React.PureComponent<AllProps> {
   public render() {
     const { name, isDragging, connectDragSource, id, stateSelected, selecting,
             onMouseEnter, onMouseLeave, selectableRef, cardHeight, xCoord, yCoord } = this.props;
-    // set currently dragged card to invisible while dragging it
-    // gives appearance of the dragged card being the actual dragged card and not the copy
-    const opacity = isDragging ? 0 : 1;
-    const transform = `translate3d(${Math.max(0, xCoord)}px, ${Math.max(0, yCoord)}px, 0)`;
-    const style: React.CSSProperties = (!!xCoord && !!yCoord) ? {
-      position: 'absolute',
-      transform,
-      WebkitTransform: transform
-    } : {};
+
     return (
       connectDragSource(
         <div
           ref={selectableRef}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-          style={style}
+          style={dragCardStyle(xCoord, yCoord)}
         >
           <Card
             key={'card' + id}
             name={name}
-            opacity={opacity}
+            // set currently dragged card to invisible while dragging it
+            // gives appearance of the dragged card being the actual dragged card and not the copy
+            opacity={isDragging ? 0 : 1}
             // this can cause chrome to not drag
             visible={true}
             selected={stateSelected}
