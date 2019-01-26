@@ -1,14 +1,21 @@
 
 import React from 'react';
-import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
-import { findDOMNode } from 'react-dom';
+import {
+  ConnectDragPreview, ConnectDragSource, ConnectDropTarget, DragSource,
+  DragSourceSpec, DropTarget, DropTargetSpec, XYCoord
+} from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 import { SelectableGroup, SelectableItem } from 'react-selectable-fast';
+import { defaultMemoize } from 'reselect';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
 import Card from '../components/Card';
 import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { CardZone } from '../selectors/player';
+import { coordInNode, vhToPx } from '../util/coordinates';
+
+// todo: maybe have hand and battlefield import the same class that contains the common pieces later
 
 const HandStyle: React.CSSProperties = {
   height: '100%',
@@ -27,21 +34,6 @@ const SelectableStyle: React.CSSProperties = {
   display: 'flex'
 };
 
-const handTarget: DropTargetSpec<HandProps> = {
-  hover(props, monitor, component: Hand) {
-    const node = findDOMNode(component) as Element;
-    const bounds = node.getBoundingClientRect();
-    const placeholderIndex = getPlaceholderIndex(monitor.getClientOffset().x, bounds.left, node.clientHeight / 1.45);
-    component.setState({ placeholderIndex });
-  },
-  drop(props, monitor, component: Hand) {
-    const { moveCards, zone } = props;
-    const { zoneId, cards } = monitor.getItem() as CardDragObject;
-    const { placeholderIndex } = component.state;
-    moveCards(zoneId, cards, zone.id, placeholderIndex, 0, 0);
-  }
-};
-
 interface HandProps {
   zone: CardZone;
   moveCards: moveCardsType;
@@ -57,32 +49,102 @@ interface HandTargetCollectedProps {
   item: CardDragObject;
 }
 
+interface HandSourceCollectedProps {
+  connectDragSource: ConnectDragSource;
+  connectDragPreview: ConnectDragPreview;
+  isDragging: boolean;
+}
+
 interface HandState {
   placeholderIndex: number;
   selectEnabled: boolean;
 }
 
-function getPlaceholderIndex(mouseX: number, componentX: number, cardWidth: number) {
-  // shift placeholder if x position more than card width / 2
-  const xPos = mouseX - componentX;
-  const halfCardWidth = cardWidth / 2;
+const handTarget: DropTargetSpec<HandProps> = {
+  hover(props, monitor, component: Hand) {
+    const placeholderIndex = getPlaceholderIndex(coordInNode(component, monitor.getClientOffset()), props.cardHeight);
+    component.setState({ placeholderIndex });
+  },
+  drop(props, monitor, component: Hand) {
+    const { moveCards, zone } = props;
+    const { zoneId, cards } = monitor.getItem() as CardDragObject;
+    const { placeholderIndex } = component.state;
+    moveCards(zoneId, cards, zone.id, placeholderIndex, 0, 0);
+  }
+};
 
-  if (xPos < halfCardWidth) {
+const cardSource: DragSourceSpec<HandProps, CardDragObject> = {
+  beginDrag(props, monitor, component: Hand) {
+
+    const { selected, zone, selectCards } = props;
+    console.log('Start drag ' + selected);
+
+    const coord = coordInNode(component, monitor.getInitialClientOffset());
+
+    const idx = getPlaceholderIndex(coord, props.cardHeight);
+    const { name, id } = zone.cards[idx];
+
+    const cards = [...selected];
+    if (!cards.includes(id)) {
+      cards.push(id);
+    }
+    selectCards(cards);
+    return {
+      cards,
+      firstName: name,
+      zoneId: zone.id,
+      initialX: coord.x,
+      initialY: coord.y
+    };
+  },
+
+  endDrag(props, monitor) {
+    console.log('End drag ' + props.selected);
+    // todo: move drop call logic into droptarget drop method
+    // also add droptarget drop on hand and battlefield, putting cards at end of list
+
+    // trello board handles preview drag by passing isover as a prop, and adding a moved 
+    // placeholder in the render method
+    // do this with cards for sort
+  }
+};
+
+// coord in node and cardheight
+const getPlaceholderIndex = defaultMemoize((coord: XYCoord, cardHeight: number): number => {
+
+  const cardWidthPx = vhToPx(cardHeight) / 1.45;
+  const halfCardWidthPx = cardWidthPx / 2;
+  const { x } = coord;
+
+  if (x < halfCardWidthPx) {
     return 0; // place at the start
   }
-  return Math.floor((xPos - halfCardWidth) / (cardWidth));
+  return Math.floor((x - halfCardWidthPx) / (cardWidthPx));
+});
 
-}
+type AllProps = HandProps & HandSourceCollectedProps & HandTargetCollectedProps;
+class Hand extends React.PureComponent<AllProps, HandState> {
 
-class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, HandState> {
-
-  constructor(props: HandProps & HandTargetCollectedProps) {
+  constructor(props: AllProps) {
     super(props);
 
     this.state = {
       placeholderIndex: undefined,
       selectEnabled: true
     };
+  }
+
+  public componentDidMount() {
+    const { connectDragPreview } = this.props;
+    if (connectDragPreview) {
+      // Use empty image as a drag preview so browsers don't draw it
+      // and we can draw whatever we want on the custom drag layer instead.
+      connectDragPreview(getEmptyImage(), {
+        // IE fallback: specify that we'd rather screenshot the node
+        // when it already knows it's being dragged so we can hide it with CSS.
+        captureDraggingState: true
+      });
+    }
   }
 
   public setSelected = (items: SelectableItem[]) => this.props.selectCards(items.map((item) => item.props.id));
@@ -94,26 +156,12 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
   public mouseLeave = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: true }));
 
   public render() {
-    const { zone, connectDropTarget, isOver, canDrop, item, selected, cardHeight, selectCards } = this.props;
+    const {
+      zone, connectDropTarget, connectDragSource, isOver, canDrop, item, selected, cardHeight, selectCards
+    } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
-    // horrible hack to keep child mounted, so it can remain dragging but also look hidden
-    const hiddenCards = [];
-    let cards = zone.cards.reduce((acc, curr, idx) => {
+    const cards = zone.cards.reduce((acc, curr) => {
       if (canDrop && item.cards.includes(curr.id)) {
-        hiddenCards.push(
-          <DraggableCard
-            zoneId={zone.id}
-            name={curr.name}
-            id={curr.id}
-            key={'draggable' + curr.id}
-            onMouseEnter={this.mouseEnter}
-            onMouseLeave={this.mouseLeave}
-            selectedCards={selected}
-            selectCards={selectCards}
-            cardHeight={cardHeight}
-            hidden={true}
-          />
-        );
         return acc;
       }
       acc.push(
@@ -124,13 +172,15 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
           key={'draggable' + curr.id}
           onMouseEnter={this.mouseEnter}
           onMouseLeave={this.mouseLeave}
-          selectedCards={selected}
+          selected={selected.includes(curr.id)}
           selectCards={selectCards}
           cardHeight={cardHeight}
         />
       );
       return acc;
-    },                            []);
+    },
+                                    []
+    );
 
     if (isOver && canDrop) {
       cards.splice(placeholderIndex, 0,
@@ -144,34 +194,38 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
         ));
     }
 
-    cards = [...cards, ...hiddenCards];
-
     return (
-      connectDropTarget(
-        <div style={SelectableStyle} >
-          <SelectableGroup
-            ref={(ref) => ((window as any).selectableGroup = ref)}
-            className='selectable'
-            tolerance={0}
-            deselectOnEsc={true}
-            disabled={!selectEnabled}
-            resetOnStart={true}
-            onSelectionFinish={this.setSelected}
-            onSelectionClear={this.clearSelected}
-          >
-            <section style={HandStyle} >
-              <div style={{ width: '1vw' }} />
-              {cards}
-            </section>
-          </SelectableGroup>
-        </div >
-      ));
+      connectDragSource(
+        connectDropTarget(
+          <div style={SelectableStyle} >
+            <SelectableGroup
+              ref={(ref) => ((window as any).selectableGroup = ref)}
+              className='selectable'
+              tolerance={0}
+              deselectOnEsc={true}
+              disabled={!selectEnabled}
+              resetOnStart={true}
+              onSelectionFinish={this.setSelected}
+              onSelectionClear={this.clearSelected}
+            >
+              <section style={HandStyle} >
+                <div style={{ width: '1vw' }} />
+                {cards}
+              </section>
+            </SelectableGroup>
+          </div >
+        )));
   }
 }
 
-export default DropTarget<HandProps, HandTargetCollectedProps>(Types.CARD, handTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop(),
-  item: monitor.getItem()
-}))(Hand);
+export default DragSource<HandProps, HandSourceCollectedProps>(
+  Types.CARD, cardSource, (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
+    isDragging: monitor.isDragging()
+  }))(DropTarget<HandProps, HandTargetCollectedProps>(Types.CARD, handTarget, (connect, monitor) => ({
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop(),
+    item: monitor.getItem()
+  }))(Hand));

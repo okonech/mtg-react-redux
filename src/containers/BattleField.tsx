@@ -84,7 +84,7 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
                     key={'draggable' + curr.id}
                     onMouseEnter={this.mouseEnter}
                     onMouseLeave={this.mouseLeave}
-                    selectedCards={selected}
+                    selected={selected.includes(curr.id)}
                     selectCards={selectCards}
                     cardHeight={cardHeight}
                     xCoord={curr.xCoord}
