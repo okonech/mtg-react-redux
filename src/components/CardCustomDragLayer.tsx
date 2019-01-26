@@ -16,6 +16,8 @@ const layerStyle = defaultMemoize((props: DragLayerProps & CardCustomDragLayerPr
     }
 
     let { x, y } = currentOffset;
+    console.log(props.currentOffset);
+    console.log(props.initialOffset);
 
     if (props.snapToGrid) {
         [x, y] = snapToGrid(x, y);
@@ -64,7 +66,7 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
             >
                 <Card
                     name={index === 0 ? name : ''}
-                    opacity={.9}
+                    opacity={.85}
                     cardHeight={cardHeight}
                 />
             </div >
