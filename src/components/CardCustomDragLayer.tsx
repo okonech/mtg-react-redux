@@ -9,6 +9,7 @@ import Card from './Card';
 
 const layerStyle = defaultMemoize((props: DragLayerProps & CardCustomDragLayerProps): React.CSSProperties => {
     const { currentOffset } = props;
+
     if (!currentOffset) {
         return {
             display: 'none'
@@ -16,12 +17,12 @@ const layerStyle = defaultMemoize((props: DragLayerProps & CardCustomDragLayerPr
     }
 
     let { x, y } = currentOffset;
-    console.log(props.currentOffset);
-    console.log(props.initialOffset);
 
     if (props.snapToGrid) {
         [x, y] = snapToGrid(x, y);
     }
+
+    console.log(x, y);
     const transform = `translate(${x}px, ${y}px)`;
     return {
         transform,
@@ -51,7 +52,6 @@ interface CardCustomDragLayerProps {
 export interface DragLayerProps {
     item?: CardDragObject;
     itemType?: Identifier;
-    initialOffset?: XYCoord;
     currentOffset?: XYCoord;
     isDragging?: boolean;
 }
@@ -89,7 +89,6 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
 export default DragLayer<CardCustomDragLayerProps, DragLayerProps>((monitor) => ({
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
-    currentOffset: monitor.getSourceClientOffset(),
-    initialOffset: monitor.getInitialSourceClientOffset(),
+    currentOffset: monitor.getClientOffset(),
     isDragging: monitor.isDragging()
 }))(CardCustomDragLayer);

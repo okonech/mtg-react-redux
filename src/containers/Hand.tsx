@@ -29,7 +29,7 @@ const HandStyle: React.CSSProperties = {
 };
 
 const SelectableStyle: React.CSSProperties = {
-  height: '100%',
+  height: 'calc(100% - 5px)',
   width: '100%',
   display: 'flex'
 };
@@ -73,27 +73,31 @@ const handTarget: DropTargetSpec<HandProps> = {
   }
 };
 
-const cardSource: DragSourceSpec<HandProps, CardDragObject> = {
+const handSource: DragSourceSpec<HandProps, CardDragObject> = {
+
   beginDrag(props, monitor, component: Hand) {
 
-    const { selected, zone, selectCards } = props;
+    const { selected, zone, selectCards, cardHeight } = props;
     console.log('Start drag ' + selected);
 
     const coord = coordInNode(component, monitor.getInitialClientOffset());
 
-    const idx = getPlaceholderIndex(coord, props.cardHeight);
-    const { name, id } = zone.cards[idx];
+    const idx = getPlaceholderIndex(coord, cardHeight);
+    const { name, id } = zone.cards[idx] || { name: 'Fail', id: '1232132' };
 
     const cards = [...selected];
     if (!cards.includes(id)) {
       cards.push(id);
     }
     selectCards(cards);
+
+    const cardWidthPx = vhToPx(cardHeight) / 1.45;
+
     return {
       cards,
       firstName: name,
       zoneId: zone.id,
-      initialX: coord.x,
+      initialX: coord.x - (cardWidthPx * (idx)) - cardWidthPx / 2,
       initialY: coord.y
     };
   },
@@ -151,14 +155,12 @@ class Hand extends React.PureComponent<AllProps, HandState> {
 
   public clearSelected = () => this.props.selectCards([]);
 
-  public mouseEnter = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: false }));
+  public selectDisabled = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: false }));
 
-  public mouseLeave = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: true }));
+  public selectEnabled = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: true }));
 
   public render() {
-    const {
-      zone, connectDropTarget, connectDragSource, isOver, canDrop, item, selected, cardHeight, selectCards
-    } = this.props;
+    const { zone, connectDropTarget, connectDragSource, isOver, canDrop, item, selected, cardHeight } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
     const cards = zone.cards.reduce((acc, curr) => {
       if (canDrop && item.cards.includes(curr.id)) {
@@ -170,34 +172,33 @@ class Hand extends React.PureComponent<AllProps, HandState> {
           name={curr.name}
           id={curr.id}
           key={'draggable' + curr.id}
-          onMouseEnter={this.mouseEnter}
-          onMouseLeave={this.mouseLeave}
+          onMouseEnter={this.selectDisabled}
+          onMouseLeave={this.selectEnabled}
           selected={selected.includes(curr.id)}
-          selectCards={selectCards}
           cardHeight={cardHeight}
         />
       );
       return acc;
-    },
-                                    []
-    );
+    },                              []);
 
     if (isOver && canDrop) {
-      cards.splice(placeholderIndex, 0,
-                   (
-          <Card
-            key={'handplaceholder'}
-            name={'placeholder'}
-            opacity={0}
-            cardHeight={cardHeight}
-          />
-        ));
+      cards.splice(placeholderIndex, 0, (
+        <Card
+          key={'handplaceholder'}
+          name={'placeholder'}
+          opacity={0}
+          cardHeight={cardHeight}
+        />
+      ));
     }
 
     return (
       connectDragSource(
         connectDropTarget(
-          <div style={SelectableStyle} >
+          <div
+            style={SelectableStyle}
+            onMouseEnter={this.selectEnabled}
+          >
             <SelectableGroup
               ref={(ref) => ((window as any).selectableGroup = ref)}
               className='selectable'
@@ -214,12 +215,14 @@ class Hand extends React.PureComponent<AllProps, HandState> {
               </section>
             </SelectableGroup>
           </div >
-        )));
+        )
+      )
+    );
   }
 }
 
 export default DragSource<HandProps, HandSourceCollectedProps>(
-  Types.CARD, cardSource, (connect, monitor) => ({
+  Types.CARD, handSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging()

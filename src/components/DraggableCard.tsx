@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { createSelectable } from 'react-selectable-fast';
 import { defaultMemoize } from 'reselect';
-import { selectCards as selectCardsType } from '../actions/selectActions';
 import Card from './Card';
 
 // draggable card component with id, key, x, y position
@@ -30,11 +29,9 @@ interface DraggableCardProps {
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
   selected: boolean;
-  selectCards: selectCardsType;
   cardHeight: number;
   xCoord?: number;
   yCoord?: number;
-  hidden?: boolean;
 }
 
 interface SelectableProps {
@@ -47,33 +44,16 @@ type AllProps = DraggableCardProps & SelectableProps;
 
 class DraggableCard extends React.PureComponent<AllProps> {
 
-  public selectCard = (event: any) => {
-    this.props.selectCards([this.props.id]);
-  }
-
   public render() {
-    const { name, id, selected, selecting, hidden,
-            onMouseEnter, onMouseLeave, selectableRef, cardHeight, xCoord, yCoord } = this.props;
+    const { name, id, selected, selecting, onMouseEnter, onMouseLeave, selectableRef,
+            cardHeight, xCoord, yCoord } = this.props;
 
-    if (hidden) {
-      const style: React.CSSProperties = {
-        position: 'absolute',
-        top: 0,
-        left: 0
-      };
-      return (
-        <div
-          ref={selectableRef}
-          style={style}
-        />
-      );
-    }
     return (
       <div
         ref={selectableRef}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        style={dragCardStyle(xCoord, yCoord)}
+        style={{ ...dragCardStyle(xCoord, yCoord), height: `${cardHeight}vh` }}
       >
         <Card
           key={'card' + id}
