@@ -21,8 +21,6 @@ const layerStyle = defaultMemoize((props: DragLayerProps & CardCustomDragLayerPr
     if (props.snapToGrid) {
         [x, y] = snapToGrid(x, y);
     }
-
-    console.log(x, y);
     const transform = `translate(${x}px, ${y}px)`;
     return {
         transform,

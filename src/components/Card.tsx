@@ -37,8 +37,17 @@ const CardTextStyle: React.CSSProperties = {
   overflow: 'hidden'
 };
 
+// enforces strict adherence to height/width, border and margin overflow
+const cardContainerStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
+  const { cardHeight } = props;
+  return {
+    height: `${cardHeight}vh`,
+    width: `${cardHeight / 1.395973}vh`
+  };
+});
+
 const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
-  const { opacity, selected, selecting, cardHeight } = props;
+  const { opacity, selected, selecting } = props;
   return noSelect({
     position: 'relative',
     borderRadius: '6%',
@@ -49,8 +58,8 @@ const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
     // purble selecting, red selected, black default
     border: selected ? '1px solid red' : selecting ? '1px solid rebeccapurple' : '1px solid black',
     // todo: convert to memoized function that takes props and returns style obj
-    height: `${cardHeight}vh`,
-    width: `${cardHeight * 0.716}vh`
+    height: `100%`,
+    width: `100%`
   });
 });
 

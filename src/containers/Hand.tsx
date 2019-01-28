@@ -210,7 +210,6 @@ class Hand extends React.PureComponent<AllProps, HandState> {
               onSelectionClear={this.clearSelected}
             >
               <section style={HandStyle} >
-                <div style={{ width: '1vw' }} />
                 {cards}
               </section>
             </SelectableGroup>

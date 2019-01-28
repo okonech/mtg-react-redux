@@ -31,7 +31,6 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
         const { zoneId, cards, initialX, initialY } = monitor.getItem() as CardDragObject;
         const node = findDOMNode(component) as Element;
         const bounds = node.getBoundingClientRect();
-        console.log(initialX, initialY);
 
         const xCoord = monitor.getClientOffset().x - bounds.left - initialX;
         const yCoord = monitor.getClientOffset().y - bounds.top - initialY;
@@ -55,7 +54,6 @@ const battleFieldSource: DragSourceSpec<BattleFieldProps, CardDragObject> = {
 
         const dragCard = zone.cards.find((card) => {
             const { xCoord, yCoord } = card;
-            console.log(x, y, xCoord, yCoord, cardWidthPx, cardHeightPx);
             return (xCoord < x) && (xCoord + cardWidthPx >= x) && (yCoord < y) && (yCoord + cardHeightPx >= y);
         });
         const { id, name } = dragCard;
