@@ -7,7 +7,10 @@ import { noSelect } from '../util/styling';
 interface CardProps {
   opacity: number;
   name: string;
-  cardHeight: number;
+  cardSizeVh: {
+    height: number,
+    width: number
+  };
 }
 
 interface SelectableProps {
@@ -39,10 +42,10 @@ const CardTextStyle: React.CSSProperties = {
 
 // enforces strict adherence to height/width, border and margin overflow
 const cardContainerStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
-  const { cardHeight } = props;
+  const { height, width } = props.cardSizeVh;
   return {
-    height: `${cardHeight}vh`,
-    width: `${cardHeight / 1.395973}vh`
+    height: `${height}vh`,
+    width: `${width}vh`
   };
 });
 
@@ -67,10 +70,12 @@ const Card = (props: AllProps) => {
 
   const { name, selectableRef } = props;
   return (
-    <div ref={selectableRef} style={cardStyle(props)}>
-      <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
-      <div style={CardTextStyle}>
-        {name}
+    <div style={cardContainerStyle(props)}>
+      <div ref={selectableRef} style={cardStyle(props)}>
+        <img style={ImgStyle} src='/images/cardback.jpg' />
+        <div style={CardTextStyle}>
+          {name}
+        </div>
       </div>
     </div>
   );

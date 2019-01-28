@@ -4,6 +4,7 @@ import { DragLayer, XYCoord } from 'react-dnd';
 import { defaultMemoize } from 'reselect';
 import { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
+import { cardSizeVh, Size } from '../util/coordinates';
 import snapToGrid from '../util/snapToGrid';
 import Card from './Card';
 
@@ -33,17 +34,16 @@ const layerStyle = defaultMemoize((props: DragLayerProps & CardCustomDragLayerPr
     };
 });
 
-const cardStyle = defaultMemoize((cardHeight: number, index: number): React.CSSProperties => (
+const cardStyle = defaultMemoize((size: Size, index: number): React.CSSProperties => (
     {
         position: 'absolute',
-        top: cardHeight / 2 * index,
-        left: cardHeight / 2 * index,
+        top: size.height / 2 * index,
+        left: size.width / 2 * index,
         zIndex: 100 - index
     }
 ));
 
 interface CardCustomDragLayerProps {
-    cardHeight: number;
     snapToGrid?: boolean;
 }
 
@@ -56,29 +56,32 @@ export interface DragLayerProps {
 
 class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCustomDragLayerProps> {
 
-    public renderCards = defaultMemoize((cards: string[], cardHeight: number, name: string): JSX.Element[] => (
-        cards.map((card, index) => (
+    public renderCards = defaultMemoize((cards: string[], size: Size, name: string): JSX.Element[] => {
+
+        return cards.map((card, index) => (
             <div
-                style={cardStyle(cardHeight, index)}
+                style={cardStyle(size, index)}
                 key={'draglayer' + card}
             >
                 <Card
                     name={index === 0 ? name : ''}
                     opacity={.85}
-                    cardHeight={cardHeight}
+                    cardSizeVh={size}
                 />
-            </div >
-        ))));
+            </div>
+        ));
+    });
 
     public render() {
-        const { item, itemType, isDragging, cardHeight } = this.props;
+        const { item, itemType, isDragging } = this.props;
+        const size = cardSizeVh();
         if (!isDragging || (itemType !== Types.CARD)) {
             return null;
         }
         const { cards, firstName } = item;
         return (
             <div style={layerStyle(this.props)}>
-                {this.renderCards(cards, cardHeight, firstName)}
+                {this.renderCards(cards, size, firstName)}
             </div>
         );
     }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createSelectable } from 'react-selectable-fast';
 import { defaultMemoize } from 'reselect';
+import { cardSizeVh } from '../util/coordinates';
 import Card from './Card';
 
 // draggable card component with id, key, x, y position
@@ -29,7 +30,6 @@ interface DraggableCardProps {
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
   selected: boolean;
-  cardHeight: number;
   xCoord?: number;
   yCoord?: number;
 }
@@ -45,15 +45,15 @@ type AllProps = DraggableCardProps & SelectableProps;
 class DraggableCard extends React.PureComponent<AllProps> {
 
   public render() {
-    const { name, id, selected, selecting, onMouseEnter, onMouseLeave, selectableRef,
-            cardHeight, xCoord, yCoord } = this.props;
+    const { name, id, selected, selecting, onMouseEnter, onMouseLeave, selectableRef, xCoord, yCoord } = this.props;
+    const size = cardSizeVh();
 
     return (
       <div
         ref={selectableRef}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        style={{ ...dragCardStyle(xCoord, yCoord), height: `${cardHeight}vh` }}
+        style={{ ...dragCardStyle(xCoord, yCoord), height: `${size.height}vh` }}
       >
         <Card
           key={'card' + id}
@@ -64,7 +64,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
           // this can cause chrome to not drag
           selected={selected}
           selecting={selecting}
-          cardHeight={cardHeight}
+          cardSizeVh={size}
         />
       </div>
     );
