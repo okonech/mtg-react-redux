@@ -13,7 +13,7 @@ import Card from '../components/Card';
 import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { CardZone } from '../selectors/player';
-import { coordInNode, vhToPx } from '../util/coordinates';
+import { cardSizePx, cardSizeVh, coordInNode } from '../util/coordinates';
 
 // todo: maybe have hand and battlefield import the same class that contains the common pieces later
 
@@ -39,7 +39,6 @@ interface HandProps {
   moveCards: moveCardsType;
   selectCards: selectCardsType;
   selected: string[];
-  cardHeight: number;
 }
 
 interface HandTargetCollectedProps {
@@ -62,7 +61,7 @@ interface HandState {
 
 const handTarget: DropTargetSpec<HandProps> = {
   hover(props, monitor, component: Hand) {
-    const placeholderIndex = getPlaceholderIndex(coordInNode(component, monitor.getClientOffset()), props.cardHeight);
+    const placeholderIndex = getPlaceholderIndex(coordInNode(component, monitor.getClientOffset()));
     component.setState({ placeholderIndex });
   },
   drop(props, monitor, component: Hand) {
@@ -77,12 +76,12 @@ const handSource: DragSourceSpec<HandProps, CardDragObject> = {
 
   beginDrag(props, monitor, component: Hand) {
 
-    const { selected, zone, selectCards, cardHeight } = props;
+    const { selected, zone, selectCards } = props;
     console.log('Start drag ' + selected);
 
     const coord = coordInNode(component, monitor.getInitialClientOffset());
 
-    const idx = getPlaceholderIndex(coord, cardHeight);
+    const idx = getPlaceholderIndex(coord);
     const { name, id } = zone.cards[idx] || { name: 'Fail', id: '1232132' };
 
     const cards = [...selected];
@@ -91,13 +90,13 @@ const handSource: DragSourceSpec<HandProps, CardDragObject> = {
     }
     selectCards(cards);
 
-    const cardWidthPx = vhToPx(cardHeight) / 1.45;
+    const { width } = cardSizePx();
 
     return {
       cards,
       firstName: name,
       zoneId: zone.id,
-      initialX: coord.x - (cardWidthPx * (idx)) - cardWidthPx / 2,
+      initialX: coord.x - (width * (idx)) - width / 2,
       initialY: coord.y
     };
   },
@@ -113,17 +112,17 @@ const handSource: DragSourceSpec<HandProps, CardDragObject> = {
   }
 };
 
-// coord in node and cardheight
-const getPlaceholderIndex = defaultMemoize((coord: XYCoord, cardHeight: number): number => {
+// coord in node
+const getPlaceholderIndex = defaultMemoize((coord: XYCoord): number => {
 
-  const cardWidthPx = vhToPx(cardHeight) / 1.45;
-  const halfCardWidthPx = cardWidthPx / 2;
+  const { width } = cardSizePx();
+  const halfCardWidthPx = width / 2;
   const { x } = coord;
 
   if (x < halfCardWidthPx) {
     return 0; // place at the start
   }
-  return Math.floor((x - halfCardWidthPx) / (cardWidthPx));
+  return Math.floor((x - halfCardWidthPx) / (width));
 });
 
 type AllProps = HandProps & HandSourceCollectedProps & HandTargetCollectedProps;
@@ -151,16 +150,26 @@ class Hand extends React.PureComponent<AllProps, HandState> {
     }
   }
 
-  public setSelected = (items: SelectableItem[]) => this.props.selectCards(items.map((item) => item.props.id));
+  public setSelected = (items: SelectableItem[]) => {
+    const cards = items.map((item) => item.props.id);
+    if (cards.length > 0) {
+      this.props.selectCards(items.map((item) => item.props.id));
+    }
+  }
 
-  public clearSelected = () => this.props.selectCards([]);
+  public clearSelected = () => {
+    const { selected } = this.props;
+    if (selected.length > 0) {
+      this.props.selectCards([]);
+    }
+  }
 
   public selectDisabled = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: false }));
 
   public selectEnabled = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: true }));
 
   public render() {
-    const { zone, connectDropTarget, connectDragSource, isOver, canDrop, item, selected, cardHeight } = this.props;
+    const { zone, connectDropTarget, connectDragSource, isOver, canDrop, item, selected } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
     const cards = zone.cards.reduce((acc, curr) => {
       if (canDrop && item.cards.includes(curr.id)) {
@@ -175,7 +184,6 @@ class Hand extends React.PureComponent<AllProps, HandState> {
           onMouseEnter={this.selectDisabled}
           onMouseLeave={this.selectEnabled}
           selected={selected.includes(curr.id)}
-          cardHeight={cardHeight}
         />
       );
       return acc;
@@ -187,7 +195,7 @@ class Hand extends React.PureComponent<AllProps, HandState> {
           key={'handplaceholder'}
           name={'placeholder'}
           opacity={0}
-          cardHeight={cardHeight}
+          cardSizeVh={cardSizeVh()}
         />
       ));
     }

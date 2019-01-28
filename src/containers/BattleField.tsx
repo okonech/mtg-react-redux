@@ -12,7 +12,7 @@ import { moveCards as moveCardsType } from '../actions/zonesActions';
 import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { CardCoordZone } from '../selectors/player';
-import { coordInNode, vhToPx } from '../util/coordinates';
+import { cardSizePx, coordInNode } from '../util/coordinates';
 
 const BattleFieldStyle: React.CSSProperties = {
     height: '100%',
@@ -43,18 +43,17 @@ const battleFieldSource: DragSourceSpec<BattleFieldProps, CardDragObject> = {
 
     beginDrag(props, monitor, component: BattleField) {
 
-        const { selected, zone, selectCards, cardHeight } = props;
+        const { selected, zone, selectCards } = props;
         console.log('Start drag ' + selected);
 
         const { x, y } = coordInNode(component, monitor.getInitialClientOffset());
-        const cardHeightPx = vhToPx(cardHeight);
-        const cardWidthPx = cardHeightPx / 1.45;
+        const { height, width } = cardSizePx();
 
         // locate card at coord
 
         const dragCard = zone.cards.find((card) => {
             const { xCoord, yCoord } = card;
-            return (xCoord < x) && (xCoord + cardWidthPx >= x) && (yCoord < y) && (yCoord + cardHeightPx >= y);
+            return (xCoord < x) && (xCoord + width >= x) && (yCoord < y) && (yCoord + height >= y);
         });
         const { id, name } = dragCard;
 
@@ -88,7 +87,6 @@ interface BattleFieldProps {
     moveCards: moveCardsType;
     selectCards: selectCardsType;
     selected: string[];
-    cardHeight: number;
 }
 
 interface BattleFieldTargetCollectedProps {
@@ -142,7 +140,7 @@ class BattleField extends React.PureComponent<AllProps, BattleFieldState>  {
     public clearSelected = () => this.props.selectCards([]);
 
     public render() {
-        const { zone, connectDropTarget, connectDragSource, selected, cardHeight, canDrop, item } = this.props;
+        const { zone, connectDropTarget, connectDragSource, selected, canDrop, item } = this.props;
         const { selectEnabled } = this.state;
         const cards = zone.cards.reduce((acc, curr, idx) => {
             if (canDrop && item.cards.includes(curr.id)) {
@@ -157,7 +155,6 @@ class BattleField extends React.PureComponent<AllProps, BattleFieldState>  {
                     onMouseEnter={this.selectDisabled}
                     onMouseLeave={this.selectEnabled}
                     selected={selected.includes(curr.id)}
-                    cardHeight={cardHeight}
                     xCoord={curr.xCoord}
                     yCoord={curr.yCoord}
                 />
