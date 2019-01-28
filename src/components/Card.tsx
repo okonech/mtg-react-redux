@@ -35,8 +35,17 @@ const CardTextStyle: React.CSSProperties = {
   overflow: 'hidden'
 };
 
+// enforces strict adherence to height/width, border and margin overflow
+const cardContainerStyle = defaultMemoize((props: CardProps & SelectableInjectedProps): React.CSSProperties => {
+  const { cardHeight } = props;
+  return {
+    height: `${cardHeight}vh`,
+    width: `${cardHeight / 1.395973}vh`
+  };
+});
+
 const cardStyle = defaultMemoize((props: CardProps & SelectableInjectedProps): React.CSSProperties => {
-  const { opacity, selected, selecting, cardHeight } = props;
+  const { opacity, selected, selecting } = props;
   return noSelect({
     position: 'relative',
     borderRadius: '6%',
@@ -46,8 +55,8 @@ const cardStyle = defaultMemoize((props: CardProps & SelectableInjectedProps): R
     // purble selecting, red selected, black default
     border: selected ? '1px solid red' : selecting ? '1px solid rebeccapurple' : '1px solid black',
     // todo: convert to memoized function that takes props and returns style obj
-    height: `${cardHeight}vh`,
-    width: `${cardHeight * 0.716}vh`
+    height: `100%`,
+    width: `100%`
   });
 });
 
@@ -57,10 +66,12 @@ export default class Card extends React.PureComponent<CardProps & SelectableInje
     const props = this.props;
     const { name, selectableRef } = props;
     return (
-      <div ref={selectableRef} style={cardStyle(props)}>
-        <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
-        <div style={CardTextStyle}>
-          {name}
+      <div style={cardContainerStyle(props)}>
+        <div ref={selectableRef} style={cardStyle(props)}>
+          <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
+          <div style={CardTextStyle}>
+            {name}
+          </div>
         </div>
       </div>
     );

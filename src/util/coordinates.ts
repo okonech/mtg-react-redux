@@ -1,6 +1,8 @@
 import { findDOMNode } from 'react-dom';
 import { defaultMemoize } from 'reselect';
 
+export const CARD_RATIO = 1.395973;
+
 interface Coord {
     x: number;
     y: number;
