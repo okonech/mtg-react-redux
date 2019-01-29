@@ -39,3 +39,11 @@ export const cardSizePx = (): Size => {
         width: heightPx / CARD_RATIO
     };
 };
+
+export const vHToPx = (x: number): number => {
+    return document.documentElement.clientHeight * x / 100;
+};
+
+export const vWToPx = (x: number): number => {
+    return document.documentElement.clientWidth * x / 100;
+};
