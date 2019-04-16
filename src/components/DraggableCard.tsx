@@ -129,7 +129,8 @@ class DraggableCard extends React.PureComponent<AllProps> {
         <div
           ref={selectableRef}
           style={style}
-        />)
+        />
+      )
       );
     }
     return (
@@ -157,9 +158,9 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 }
 
-export default DragSource<DraggableCardProps & SelectableProps, DraggableCardSourceCollectedProps>(
+export default createSelectable(DragSource<DraggableCardProps & SelectableProps, DraggableCardSourceCollectedProps>(
   Types.CARD, cardSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging()
-  }))(createSelectable(DraggableCard));
+  }))(DraggableCard));
