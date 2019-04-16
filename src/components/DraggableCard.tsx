@@ -28,6 +28,16 @@ const dragCardStyle = defaultMemoize((xCoord: number, yCoord: number): React.CSS
 });
 
 const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
+
+  // todo: make this work like reactg trello board
+  isDragging(props, monitor) {
+    // If your component gets unmounted while dragged
+    // (like a card in Kanban board dragged between lists)
+    // you can implement something like this to keep its
+    // appearance dragged:
+    return monitor.getItem().id === props.id;
+  },
+
   beginDrag(props: DraggableCardProps, monitor: DragSourceMonitor, component: DraggableCard) {
 
     const { selectCards, selectedCards, zoneId, id, name } = props;
