@@ -43,6 +43,7 @@ const cardStyle = defaultMemoize((props: CardProps & SelectableInjectedProps): R
     margin: '1px',
     opacity,
     display: 'block',
+    boxSizing: 'border-box',
     // purble selecting, red selected, black default
     border: selected ? '1px solid red' : selecting ? '1px solid rebeccapurple' : '1px solid black',
     // todo: convert to memoized function that takes props and returns style obj
