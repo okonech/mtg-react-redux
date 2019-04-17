@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { defaultMemoize } from 'reselect';
 import { noSelect } from '../util/styling';
 
@@ -10,11 +10,13 @@ interface CardProps {
   cardHeight: number;
 }
 
-interface SelectableInjectedProps {
+interface SelectableProps {
   selectableRef?: string;
   selected?: boolean;
   selecting?: boolean;
 }
+
+type AllProps = CardProps & SelectableProps;
 
 const ImgStyle: React.CSSProperties = {
   height: '100%',
@@ -35,7 +37,7 @@ const CardTextStyle: React.CSSProperties = {
   overflow: 'hidden'
 };
 
-const cardStyle = defaultMemoize((props: CardProps & SelectableInjectedProps): React.CSSProperties => {
+const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
   const { opacity, selected, selecting, cardHeight } = props;
   return noSelect({
     position: 'relative',
@@ -52,18 +54,17 @@ const cardStyle = defaultMemoize((props: CardProps & SelectableInjectedProps): R
   });
 });
 
-export default class Card extends React.PureComponent<CardProps & SelectableInjectedProps> {
+const Card = (props: AllProps) => {
 
-  public render() {
-    const props = this.props;
-    const { name, selectableRef } = props;
-    return (
-      <div ref={selectableRef} style={cardStyle(props)}>
-        <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
-        <div style={CardTextStyle}>
-          {name}
-        </div>
+  const { name, selectableRef } = props;
+  return (
+    <div ref={selectableRef} style={cardStyle(props)}>
+      <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
+      <div style={CardTextStyle}>
+        {name}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+export default Card;
