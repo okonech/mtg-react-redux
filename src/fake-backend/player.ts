@@ -53,7 +53,8 @@ function mapRawToCards(cards: string[]): Card[] {
     return cards.map((card) => (
         {
             id: uuid(),
-            name: card
+            name: card,
+            url: '/images/cardback.jpg'
         }));
 }
 

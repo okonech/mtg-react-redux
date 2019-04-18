@@ -6,11 +6,13 @@ let state: CardsState = {};
 let cards: Card[] = [
     {
         id: '1',
-        name: 'Black Lotus'
+        name: 'Black Lotus',
+        url: 'path.png'
     },
     {
         id: '2',
-        name: 'Timetwister'
+        name: 'Timetwister',
+        url: 'path.png'
     }
 ];
 
@@ -33,7 +35,8 @@ it('adds cards', () => {
 it('updates cards', () => {
     cards = [{
         id: '1',
-        name: 'Blacker Lotus'
+        name: 'Blacker Lotus',
+        url: 'path.png'
     },
              cards[1]
     ];

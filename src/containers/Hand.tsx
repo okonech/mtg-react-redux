@@ -85,7 +85,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
     };
   }
 
-  public setSelected = (items: SelectableItem[]) => this.props.selectCards(items.map((item) => item.props.id));
+  public setSelected = (items: SelectableItem[]) => this.props.selectCards(items.map((item) => item.props.card.id));
 
   public clearSelected = () => this.props.selectCards([]);
 
@@ -94,33 +94,13 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
   public mouseLeave = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: true }));
 
   public render() {
-    const { zone, connectDropTarget, isOver, canDrop, item, selected, cardHeight, selectCards } = this.props;
+    const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
-    // horrible hack to keep child mounted, so it can remain dragging but also look hidden
-    const hiddenCards = [];
-    let cards = zone.cards.reduce((acc, curr, idx) => {
-      if (canDrop && item.cards.includes(curr.id)) {
-        hiddenCards.push(
-          <DraggableCard
-            zoneId={zone.id}
-            name={curr.name}
-            id={curr.id}
-            key={'draggable' + curr.id}
-            onMouseEnter={this.mouseEnter}
-            onMouseLeave={this.mouseLeave}
-            selectedCards={selected}
-            selectCards={selectCards}
-            cardHeight={cardHeight}
-            hidden={true}
-          />
-        );
-        return acc;
-      }
+    const cards = zone.cards.reduce((acc, curr, idx) => {
       acc.push(
         <DraggableCard
           zoneId={zone.id}
-          name={curr.name}
-          id={curr.id}
+          card={curr}
           key={'draggable' + curr.id}
           onMouseEnter={this.mouseEnter}
           onMouseLeave={this.mouseLeave}
@@ -130,21 +110,19 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
         />
       );
       return acc;
-    },                            []);
+    },                              []);
 
     if (isOver && canDrop) {
       cards.splice(placeholderIndex, 0,
                    (
           <Card
             key={'handplaceholder'}
-            name={'placeholder'}
-            opacity={0}
+            card={{ name: '', id: '', url: '/images/cardback.jpg' }}
+            opacity={0.2}
             cardHeight={cardHeight}
           />
         ));
     }
-
-    cards = [...cards, ...hiddenCards];
 
     return (
       connectDropTarget(
