@@ -94,9 +94,27 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
   public mouseLeave = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: true }));
 
   public render() {
-    const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards } = this.props;
+    const { zone, connectDropTarget, item, isOver, canDrop, selected, cardHeight, selectCards } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
-    const cards = zone.cards.reduce((acc, curr, idx) => {
+
+    // horrible hack to keep child mounted, so it can remain dragging but also look hidden
+    const hiddenCards = [];
+    let cards = zone.cards.reduce((acc, curr) => {
+      if (canDrop && item.cards.includes(curr.id)) {
+        hiddenCards.push(
+          <DraggableCard
+            zoneId={zone.id}
+            card={curr}
+            key={'draggable' + curr.id}
+            onMouseEnter={this.mouseEnter}
+            onMouseLeave={this.mouseLeave}
+            selectedCards={selected}
+            selectCards={selectCards}
+            cardHeight={cardHeight}
+          />
+        );
+        return acc;
+      }
       acc.push(
         <DraggableCard
           zoneId={zone.id}
@@ -110,7 +128,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
         />
       );
       return acc;
-    },                              []);
+    },                            []);
 
     if (isOver && canDrop) {
       cards.splice(placeholderIndex, 0,
@@ -123,6 +141,8 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
           />
         ));
     }
+
+    cards = [...cards, ...hiddenCards];
 
     return (
       connectDropTarget(
