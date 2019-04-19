@@ -61,7 +61,7 @@ interface HandTargetCollectedProps {
   connectDropTarget: ConnectDropTarget;
   isOver: boolean;
   canDrop: boolean;
-  item: CardDragObject;
+  dragItem: CardDragObject;
 }
 
 interface HandState {
@@ -96,61 +96,44 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
 
   public clearSelected = () => this.props.selectCards([]);
 
-  public mouseEnter = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: false }));
+  public mouseEnter = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: false }));
 
-  public mouseLeave = (event: any) => (this.props.item ? null : this.setState({ selectEnabled: true }));
+  public mouseLeave = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: true }));
 
   public render() {
     const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
 
-    let isPlaceHold = false;
-    const cardList = [];
-
-    const placeholder = (
-      <Card
-        key={'handplaceholder'}
-        card={{ name: '', id: 'handplaceholder', url: '/images/cardback.jpg' }}
-        opacity={0.2}
-        cardHeight={cardHeight}
-      />
-    );
-    zone.cards.forEach((item, i) => {
-      if (isOver && canDrop) {
-        isPlaceHold = false;
-        if (i === 0 && placeholderIndex === -1) {
-          cardList.push(placeholder);
-        } else if (placeholderIndex > i) {
-          isPlaceHold = true;
-        }
+    let index = placeholderIndex;
+    const cards = zone.cards.reduce((acc, curr, idx) => {
+      acc.push(
+        <DraggableCard
+          zoneId={zone.id}
+          card={curr}
+          key={'draggable' + curr.id}
+          onMouseEnter={this.mouseEnter}
+          onMouseLeave={this.mouseLeave}
+          selectedCards={selected}
+          selectCards={selectCards}
+          cardHeight={cardHeight}
+        />
+      );
+      // increment placeholder index for every hidden element up to desired index
+      if (selected.includes(curr.id) && placeholderIndex >= idx) {
+        index++;
       }
-      if (item !== undefined) {
-        cardList.push(
-          <DraggableCard
-            zoneId={zone.id}
-            card={item}
-            key={'draggable' + item.id}
-            onMouseEnter={this.mouseEnter}
-            onMouseLeave={this.mouseLeave}
-            selectedCards={selected}
-            selectCards={selectCards}
-            cardHeight={cardHeight}
-          />
-        );
-      }
-      if (isOver && canDrop && placeholderIndex === i) {
-        cardList.push(placeholder);
-      }
-    });
+      return acc;
+    },                              []);
 
-    // if placeholder index is greater than array.length, display placeholder as last
-    if (isPlaceHold) {
-      cardList.push(placeholder);
-    }
-
-    // if there is no items in cards currently, display a placeholder anyway
-    if (isOver && canDrop && zone.cards.length === 0) {
-      cardList.push(placeholder);
+    if (isOver && canDrop) {
+      cards.splice(index, 0, (
+        <Card
+          key={'handplaceholder'}
+          card={{ name: '', id: '', url: '/images/cardback.jpg' }}
+          opacity={0.2}
+          cardHeight={cardHeight}
+        />
+      ));
     }
 
     return (
@@ -168,7 +151,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
           >
             <section style={HandStyle} >
               <div style={{ width: '1vw' }} />
-              {cardList}
+              {cards}
             </section>
           </SelectableGroup>
         </div >
@@ -180,5 +163,5 @@ export default DropTarget<HandProps, HandTargetCollectedProps>(Types.CARD, handT
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop(),
-  item: monitor.getItem()
+  dragItem: monitor.getItem()
 }))(Hand);

@@ -52,7 +52,7 @@ interface BattleFieldTargetCollectedProps {
     connectDropTarget: ConnectDropTarget;
     isOver: boolean;
     canDrop: boolean;
-    item: CardDragObject;
+    dragItem: CardDragObject;
 }
 
 interface BattleFieldState {
@@ -69,9 +69,9 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
         };
     }
 
-    public mouseEnter = ((event: any) => (this.props.item ? null : this.setState({ selectEnabled: false })));
+    public mouseEnter = ((event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: false })));
 
-    public mouseLeave = ((event: any) => (this.props.item ? null : this.setState({ selectEnabled: true })));
+    public mouseLeave = ((event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: true })));
 
     public setSelected = (items: SelectableItem[]) => this.props.selectCards(items.map((item) => item.props.card.id));
 
@@ -126,5 +126,5 @@ export default DropTarget(Types.CARD, battlefieldTarget, (connect, monitor) => (
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
     canDrop: monitor.canDrop(),
-    item: monitor.getItem()
+    dragItem: monitor.getItem()
 }))(BattleField);
