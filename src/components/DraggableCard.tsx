@@ -13,7 +13,7 @@ import Card from './Card';
 
 export interface CardDragObject {
   cards: string[];
-  firstName: string;
+  firstCard: CardType;
   zoneId: string;
   initialX: number;
   initialY: number;
@@ -45,7 +45,7 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
   beginDrag(props: DraggableCardProps, monitor: DragSourceMonitor, component: DraggableCard) {
 
     const { selectCards, selectedCards, zoneId, card } = props;
-    const { id, name } = card;
+    const { id } = card;
     console.log('Start drag ' + selectedCards + ' ' + id);
     const node = findDOMNode(component) as Element;
     const bounds = node.getBoundingClientRect();
@@ -58,7 +58,7 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
 
     return {
       cards,
-      firstName: name,
+      firstCard: card,
       zoneId,
       initialX: offset.x - bounds.left,
       initialY: offset.y - bounds.top
@@ -66,6 +66,8 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
   },
   endDrag(props: DraggableCardProps, monitor: DragSourceMonitor) {
     console.log('End drag ' + props.selectedCards);
+    const item = monitor.getItem();
+    document.getElementById(item.firstCard.id).style.display = 'block';
     // todo: move drop call logic into droptarget drop method
     // also add droptarget drop on hand and battlefield, putting cards at end of list
 

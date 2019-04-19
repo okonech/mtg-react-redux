@@ -57,9 +57,9 @@ const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
 const Card = (props: AllProps) => {
 
   const { card, selectableRef } = props;
-  const { name, url } = card;
+  const { name, url, id } = card;
   return (
-    <div ref={selectableRef} style={cardStyle(props)}>
+    <div ref={selectableRef} style={cardStyle(props)} id={id}>
       <img style={ImgStyle} src={url} width='745' height='1080' />
       <div style={CardTextStyle}>
         {name}

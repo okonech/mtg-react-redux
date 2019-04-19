@@ -4,6 +4,7 @@ import { DragLayer, XYCoord } from 'react-dnd';
 import { defaultMemoize } from 'reselect';
 import { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
+import { Card as CardType } from '../reducers/cardsReducer';
 import snapToGrid from '../util/snapToGrid';
 import Card from './Card';
 
@@ -56,14 +57,14 @@ export interface DragLayerProps {
 
 class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCustomDragLayerProps> {
 
-    public renderCards = defaultMemoize((cards: string[], cardHeight: number, name: string): JSX.Element[] => (
-        cards.map((card, index) => (
+    public renderCards = defaultMemoize((cards: string[], cardHeight: number, firstCard: CardType): JSX.Element[] => (
+        cards.map((cardId, index) => (
             <div
                 style={cardStyle(cardHeight, index)}
-                key={'draglayer' + card}
+                key={'draglayer' + cardId}
             >
                 <Card
-                    card={{ name, id: '', url: '/images/cardback.jpg' }}
+                    card={firstCard}
                     opacity={.9}
                     cardHeight={cardHeight}
                 />
@@ -75,10 +76,10 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
         if (!isDragging || (itemType !== Types.CARD)) {
             return null;
         }
-        const { cards, firstName } = item;
+        const { cards, firstCard } = item;
         return (
             <div style={layerStyle(this.props)}>
-                {this.renderCards(cards, cardHeight, firstName)}
+                {this.renderCards(cards, cardHeight, firstCard)}
             </div>
         );
     }
