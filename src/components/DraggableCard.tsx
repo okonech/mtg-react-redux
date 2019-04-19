@@ -6,20 +6,24 @@ import { createSelectable } from 'react-selectable-fast';
 import { defaultMemoize } from 'reselect';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { Types } from '../Constants';
+import { Card as CardType } from '../reducers/cardsReducer';
 import Card from './Card';
 
 // draggable card component with id, key, x, y position
 
 export interface CardDragObject {
   cards: string[];
-  firstName: string;
+  firstCard: CardType;
   zoneId: string;
   initialX: number;
   initialY: number;
 }
 
-const dragCardStyle = defaultMemoize((xCoord: number, yCoord: number): React.CSSProperties => {
+const dragCardStyle = defaultMemoize((xCoord: number, yCoord: number, hidden: boolean): React.CSSProperties => {
   const transform = `translate3d(${Math.max(0, xCoord)}px, ${Math.max(0, yCoord)}px, 0)`;
+  if (hidden) {
+    return { display: 'none' };
+  }
   return (!!xCoord && !!yCoord) ? {
     position: 'absolute',
     transform,
@@ -35,13 +39,14 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
     // (like a card in Kanban board dragged between lists)
     // you can implement something like this to keep its
     // appearance dragged:
-    return monitor.getItem().id === props.id;
+    return monitor.getItem().id === props.card.id;
   },
 
   beginDrag(props: DraggableCardProps, monitor: DragSourceMonitor, component: DraggableCard) {
 
-    const { selectCards, selectedCards, zoneId, id, name } = props;
-    console.log('Start drag ' + selectedCards + ' ' + props.id);
+    const { selectCards, selectedCards, zoneId, card } = props;
+    const { id } = card;
+    console.log('Start drag ' + selectedCards + ' ' + id);
     const node = findDOMNode(component) as Element;
     const bounds = node.getBoundingClientRect();
     const offset = monitor.getInitialClientOffset();
@@ -50,17 +55,19 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
       cards.push(id);
     }
     selectCards(cards);
+
     return {
       cards,
-      firstName: name,
+      firstCard: card,
       zoneId,
       initialX: offset.x - bounds.left,
       initialY: offset.y - bounds.top
     };
   },
-
   endDrag(props: DraggableCardProps, monitor: DragSourceMonitor) {
     console.log('End drag ' + props.selectedCards);
+    const item = monitor.getItem();
+    document.getElementById(item.firstCard.id).style.display = 'block';
     // todo: move drop call logic into droptarget drop method
     // also add droptarget drop on hand and battlefield, putting cards at end of list
 
@@ -68,11 +75,11 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
     // placeholder in the render method
     // do this with cards for sort
   }
+
 };
 
 interface DraggableCardProps {
-  name: string;
-  id: string;
+  card: CardType;
   zoneId: string;
   onMouseEnter: (event) => void;
   onMouseLeave: (event) => void;
@@ -116,34 +123,23 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 
   public render() {
-    const { name, isDragging, connectDragSource, id, selectedCards, selecting, hidden,
+    const { card, isDragging, connectDragSource, selectedCards, selecting, hidden,
             onMouseEnter, onMouseLeave, selectableRef, cardHeight, xCoord, yCoord } = this.props;
 
-    if (hidden) {
-      const style: React.CSSProperties = {
-        position: 'absolute',
-        top: 0,
-        left: 0
-      };
-      return (connectDragSource(
-        <div
-          ref={selectableRef}
-          style={style}
-        />
-      )
-      );
-    }
+    const { id } = card;
+
     return (
       connectDragSource(
         <div
           ref={selectableRef}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-          style={dragCardStyle(xCoord, yCoord)}
+          // handles drag transform in non list areas
+          style={dragCardStyle(xCoord, yCoord, hidden)}
         >
           <Card
             key={'card' + id}
-            name={name}
+            card={card}
             // set currently dragged card to invisible while dragging it
             // gives appearance of the dragged card being the actual dragged card and not the copy
             opacity={isDragging ? 0 : 1}

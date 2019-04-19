@@ -11,6 +11,7 @@ export interface CardsState {
 export interface Card {
   id: string;
   name: string;
+  url: string;
 }
 
 export default function cardsReducer(state: CardsState = {}, action: CardsAction): CardsState {

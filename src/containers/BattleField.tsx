@@ -21,14 +21,21 @@ const SelectableStyle: React.CSSProperties = {
 };
 
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
+    hover(props, monitor, component: BattleField) {
+        // chrome hack since chrome dislikes item allowing drop over itself
+        // https://github.com/react-dnd/react-dnd/issues/766
+        const { cards } = monitor.getItem();
+        cards.forEach((id) => document.getElementById(id).style.display = 'none');
+    },
     drop(props, monitor, component: BattleField) {
         const { moveCards, zone } = props;
         const { zoneId, cards, initialX, initialY } = monitor.getItem() as CardDragObject;
         const node = findDOMNode(component) as Element;
         const bounds = node.getBoundingClientRect();
-
         const xCoord = monitor.getClientOffset().x - bounds.left - initialX;
         const yCoord = monitor.getClientOffset().y - bounds.top - initialY;
+
+        cards.forEach((id) => document.getElementById(id).style.display = 'block');
 
         moveCards(zoneId, cards, zone.id, zone.cards.length, xCoord, yCoord);
     }
@@ -45,7 +52,7 @@ interface BattleFieldTargetCollectedProps {
     connectDropTarget: ConnectDropTarget;
     isOver: boolean;
     canDrop: boolean;
-    item: CardDragObject;
+    dragItem: CardDragObject;
 }
 
 interface BattleFieldState {
@@ -62,25 +69,23 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
         };
     }
 
-    public mouseEnter = ((event: any) => (this.props.item ? null : this.setState({ selectEnabled: false })));
+    public mouseEnter = ((event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: false })));
 
-    public mouseLeave = ((event: any) => (this.props.item ? null : this.setState({ selectEnabled: true })));
+    public mouseLeave = ((event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: true })));
 
-    public setSelected = (items: SelectableItem[]) => this.props.selectCards(items.map((item) => item.props.id));
+    public setSelected = (items: SelectableItem[]) => this.props.selectCards(items.map((item) => item.props.card.id));
 
     public clearSelected = () => this.props.selectCards([]);
 
     public render() {
-        const { zone, connectDropTarget, selected, cardHeight, selectCards, canDrop, item } = this.props;
+        const { zone, connectDropTarget, selected, cardHeight, selectCards } = this.props;
         const { selectEnabled } = this.state;
-        // horrible hack to keep child mounted, so it can remain dragging but also look hidden
-        const cards = zone.cards.reduce((acc, curr, idx) => {
+        const cards = zone.cards.reduce((acc, curr) => {
 
             acc.push(
                 <DraggableCard
                     zoneId={zone.id}
-                    name={curr.name}
-                    id={curr.id}
+                    card={curr}
                     key={'draggable' + curr.id}
                     onMouseEnter={this.mouseEnter}
                     onMouseLeave={this.mouseLeave}
@@ -89,7 +94,6 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
                     cardHeight={cardHeight}
                     xCoord={curr.xCoord}
                     yCoord={curr.yCoord}
-                    hidden={canDrop && item.cards.includes(curr.id)}
                 />
             );
             return acc;
@@ -122,5 +126,5 @@ export default DropTarget(Types.CARD, battlefieldTarget, (connect, monitor) => (
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
     canDrop: monitor.canDrop(),
-    item: monitor.getItem()
+    dragItem: monitor.getItem()
 }))(BattleField);

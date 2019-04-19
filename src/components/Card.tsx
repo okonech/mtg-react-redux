@@ -1,12 +1,13 @@
 import React from 'react';
 import { defaultMemoize } from 'reselect';
+import { Card as CardType } from '../reducers/cardsReducer';
 import { noSelect } from '../util/styling';
 
 // pure card render component
 
 interface CardProps {
   opacity: number;
-  name: string;
+  card: CardType;
   cardHeight: number;
 }
 
@@ -21,7 +22,6 @@ type AllProps = CardProps & SelectableProps;
 const ImgStyle: React.CSSProperties = {
   height: '100%',
   width: 'auto',
-  display: 'block',
   borderRadius: '5%'
 };
 
@@ -56,10 +56,11 @@ const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
 
 const Card = (props: AllProps) => {
 
-  const { name, selectableRef } = props;
+  const { card, selectableRef } = props;
+  const { name, url, id } = card;
   return (
-    <div ref={selectableRef} style={cardStyle(props)}>
-      <img style={ImgStyle} src='/images/cardback.jpg' width='745' height='1080' />
+    <div ref={selectableRef} style={cardStyle(props)} id={id}>
+      <img style={ImgStyle} src={url} width='745' height='1080' />
       <div style={CardTextStyle}>
         {name}
       </div>

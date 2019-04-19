@@ -14,7 +14,7 @@ const defaultState: SelectState = {
     selected: []
 };
 
-type Actions = SelectCardsAction & MoveCardsAction;
+type Actions = SelectCardsAction | MoveCardsAction;
 
 export default function selectReducer(state: SelectState = defaultState, action: Actions): SelectState {
     return produce(state, (draft) => {
