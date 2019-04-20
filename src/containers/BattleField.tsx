@@ -28,7 +28,7 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
         cards.forEach((id) => document.getElementById(id).style.display = 'none');
     },
     drop(props, monitor, component: BattleField) {
-        const { moveCards, zone } = props;
+        const { moveCards, selectCards, zone } = props;
         const { zoneId, cards, initialX, initialY } = monitor.getItem() as CardDragObject;
         const node = findDOMNode(component) as Element;
         const bounds = node.getBoundingClientRect();
@@ -38,6 +38,7 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
         cards.forEach((id) => document.getElementById(id).style.display = 'block');
 
         moveCards(zoneId, cards, zone.id, zone.cards.length, xCoord, yCoord);
+        selectCards([]);
     }
 };
 interface BattleFieldProps {
