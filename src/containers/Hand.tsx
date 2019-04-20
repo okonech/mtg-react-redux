@@ -32,7 +32,6 @@ const handTarget: DropTargetSpec<HandProps> = {
     const node = findDOMNode(component) as Element;
     const bounds = node.getBoundingClientRect();
     const placeholderIndex = getPlaceholderIndex(monitor.getClientOffset().x, bounds.left, node.clientHeight / 1.45);
-    console.log(placeholderIndex);
     component.setState({ placeholderIndex });
 
     // chrome hack since chrome dislikes item allowing drop over itself
@@ -75,7 +74,7 @@ function getPlaceholderIndex(mouseX: number, componentX: number, cardWidth: numb
   const halfCardWidth = cardWidth / 2;
 
   if (xPos < halfCardWidth) {
-    return -1; // place at the start
+    return 0; // place at the start
   }
   return Math.floor((xPos - halfCardWidth) / (cardWidth));
 
@@ -104,7 +103,8 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
     const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
 
-    let index = placeholderIndex;
+    let indexShift = 0;
+    let shownCount = 0;
     const cards = zone.cards.reduce((acc, curr, idx) => {
       acc.push(
         <DraggableCard
@@ -118,15 +118,17 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
           cardHeight={cardHeight}
         />
       );
-      // increment placeholder index for every hidden element up to desired index
-      if (selected.includes(curr.id) && placeholderIndex >= idx) {
-        index++;
+      // add to placeholder index for every hidden element up to desired index
+      if (selected.includes(curr.id) && shownCount <= placeholderIndex) {
+        indexShift++;
+      } else {
+        shownCount++;
       }
       return acc;
     },                              []);
 
     if (isOver && canDrop) {
-      cards.splice(index, 0, (
+      cards.splice(placeholderIndex + indexShift, 0, (
         <Card
           key={'handplaceholder'}
           card={{ name: '', id: '', url: '/images/cardback.jpg' }}
