@@ -5,9 +5,10 @@ import Menu from '../components/Menu';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
 
-const PlayerStyle: React.CSSProperties = {
-    height: 'calc(100% - 30px)',
-    width: '100%'
+const gameGrid: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateRows: `30px calc(25vh - 7.5px) calc(25vh - 7.5px) calc(25vh - 7.5px) calc(25vh - 7.5px)`,
+    gridTemplateAreas: "'menu' 'player1' 'player2' 'player3' 'player4'"
 };
 
 interface FourPlayerGameProps {
@@ -35,44 +36,36 @@ class FourPlayerGame extends React.PureComponent<FourPlayerGameProps, {}> {
         const { players, loading } = this.props;
         if (!loading) {
             return (
-                <div className='fullSize'>
-                    <Menu />
-                    <div style={PlayerStyle}>
-                        <div style={{ height: '25%' }}>
-                            <Player
-                                id={players[0]}
-                                pageDivision={{ row: 1, col: 4 }}
-                            />
-                        </div>
-                        <div style={{ height: '25%' }}>
-                            <Player
-                                id={players[1]}
-                                pageDivision={{ row: 1, col: 4 }}
-                            />
-                        </div>
-                        <div style={{ height: '25%' }}>
-                            <Player
-                                id={players[0]}
-                                pageDivision={{ row: 1, col: 4 }}
-                            />
-                        </div>
-                        <div style={{ height: '25%' }}>
-                            <Player
-                                id={players[1]}
-                                pageDivision={{ row: 1, col: 4 }}
-                            />
-                        </div>
-                    </div>
-                </div>
+                <section style={gameGrid}>
+                    <Menu style={{ gridArea: 'menu' }} />
+                    <Player
+                        style={{ gridArea: 'player1' }}
+                        id={players[0]}
+                        pageDivision={{ row: 1, col: 4 }}
+                    />
+                    <Player
+                        style={{ gridArea: 'player2' }}
+                        id={players[1]}
+                        pageDivision={{ row: 1, col: 4 }}
+                    />
+                    <Player
+                        style={{ gridArea: 'player3' }}
+                        id={players[0]}
+                        pageDivision={{ row: 1, col: 4 }}
+                    />
+                    <Player
+                        style={{ gridArea: 'player4' }}
+                        id={players[1]}
+                        pageDivision={{ row: 1, col: 4 }}
+                    />
+                </section>
             );
         } else {
             return (
-                <div className='fullSize'>
+                <React.Fragment>
                     <Menu />
-                    <div style={PlayerStyle}>
-                        Loading...
-                </div>
-                </div>
+                    Loading...
+                </React.Fragment>
             );
         }
     }

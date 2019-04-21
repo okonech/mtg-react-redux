@@ -17,6 +17,8 @@ export interface CardDragObject {
   zoneId: string;
   initialX: number;
   initialY: number;
+  width: number;
+  height: number;
 }
 
 const dragCardStyle = defaultMemoize((xCoord: number, yCoord: number, hidden: boolean): React.CSSProperties => {
@@ -42,7 +44,7 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
     return monitor.getItem().id === props.card.id;
   },
 
-  beginDrag(props: DraggableCardProps, monitor: DragSourceMonitor, component: DraggableCard) {
+  beginDrag(props: DraggableCardProps, monitor: DragSourceMonitor, component: DraggableCard): CardDragObject {
 
     const { selectCards, selectedCards, zoneId, card } = props;
     const { id } = card;
@@ -61,19 +63,15 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
       firstCard: card,
       zoneId,
       initialX: offset.x - bounds.left,
-      initialY: offset.y - bounds.top
+      initialY: offset.y - bounds.top,
+      height: bounds.height,
+      width: bounds.width
     };
   },
   endDrag(props: DraggableCardProps, monitor: DragSourceMonitor) {
     console.log('End drag ' + props.selectedCards);
     const item = monitor.getItem();
     document.getElementById(item.firstCard.id).style.display = 'block';
-    // todo: move drop call logic into droptarget drop method
-    // also add droptarget drop on hand and battlefield, putting cards at end of list
-
-    // trello board handles preview drag by passing isover as a prop, and adding a moved 
-    // placeholder in the render method
-    // do this with cards for sort
   }
 
 };

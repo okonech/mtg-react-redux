@@ -5,11 +5,6 @@ import Menu from '../components/Menu';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
 
-const PlayerStyle: React.CSSProperties = {
-    height: 'calc(100% - 30px)',
-    width: '100%'
-};
-
 interface SinglePlayerProps {
     players: string[];
     loading: boolean;
@@ -18,6 +13,12 @@ interface SinglePlayerProps {
 interface SinglePlayerDispatch {
     initPlayers: (game: string) => void;
 }
+
+const gameGrid: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateRows: `30px calc(100vh - 30px)`,
+    gridTemplateAreas: "'menu' 'player'"
+};
 
 const mapStateToProps = (state: AppState) => ({
     players: state.players.playerIds,
@@ -39,22 +40,21 @@ class SinglePlayerGame extends React.PureComponent<SinglePlayerProps & SinglePla
         const { players, loading } = this.props;
         if (!loading) {
             return (
-                <div className='fullSize'>
-                    <Menu />
+                <section style={gameGrid}>
+                    <Menu style={{ gridArea: 'menu' }} />
                     <Player
+                        style={{ gridArea: 'player' }}
                         id={players[0]}
                         pageDivision={{ row: 1, col: 1 }}
                     />
-                </div>
+                </section>
             );
         } else {
             return (
-                <div className='fullSize'>
+                <React.Fragment>
                     <Menu />
-                    <div style={PlayerStyle}>
-                        Loading...
-                </div>
-                </div>
+                    Loading...
+                </React.Fragment>
             );
         }
     }

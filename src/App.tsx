@@ -13,13 +13,13 @@ class App extends Component {
   public render() {
     return (
       <HashRouter>
-        <div className='fullSize' >
+        <React.Fragment>
           <Route exact={true} path='/' component={LoginPage} />
           <Route path='/player' component={LoggedInLandingPage} />
           <Route path='/test-game' component={SinglePlayerGame} />
           <Route path='/test-two-player-game' component={TwoPlayerGame} />
           <Route path='/test-four-player-game' component={FourPlayerGame} />
-        </div>
+        </React.Fragment>
       </HashRouter>
     );
   }

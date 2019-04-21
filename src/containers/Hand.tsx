@@ -1,4 +1,5 @@
 
+import withScrolling from 'frontend-collective-react-dnd-scrollzone';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
@@ -10,42 +11,45 @@ import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { CardZone } from '../selectors/player';
 
-const HandStyle: React.CSSProperties = {
+const ScrollingComponent = withScrolling('section');
+
+const handStyle: React.CSSProperties = {
   height: '100%',
-  width: '81vw',
+  width: '96%',
   display: 'flex',
-  overflowX: 'scroll',
+  flexDirection: 'row',
+  overflowX: 'auto',
   scrollbarWidth: 'thin',
   scrollbarColor: 'rebeccapurple gray',
-  backgroundColor: 'gray',
-  padding: '0px 2vw 0px 2vw'
+  marginLeft: '2%',
+  marginRight: '2%'
 };
 
 const SelectableStyle: React.CSSProperties = {
   height: '100%',
-  width: '100%',
-  display: 'flex'
+  width: '85vw',
+  display: 'flex',
+  backgroundColor: 'gray'
 };
 
 const handTarget: DropTargetSpec<HandProps> = {
   hover(props, monitor, component: Hand) {
     const node = findDOMNode(component) as Element;
-    const bounds = node.getBoundingClientRect();
-    const placeholderIndex = getPlaceholderIndex(monitor.getClientOffset().x, bounds.left, node.clientHeight / 1.45);
-    console.log(placeholderIndex);
+    const { cards, width } = monitor.getItem();
+    const placeholderIndex = getPlaceholderIndex(monitor.getClientOffset().x, node, width);
     component.setState({ placeholderIndex });
 
     // chrome hack since chrome dislikes item allowing drop over itself
     // https://github.com/react-dnd/react-dnd/issues/766
-    const { cards } = monitor.getItem();
     cards.forEach((id) => document.getElementById(id).style.display = 'none');
   },
   drop(props, monitor, component: Hand) {
-    const { moveCards, zone } = props;
+    const { moveCards, selectCards, zone } = props;
     const { zoneId, cards } = monitor.getItem() as CardDragObject;
     const { placeholderIndex } = component.state;
     cards.forEach((id) => document.getElementById(id).style.display = 'block');
     moveCards(zoneId, cards, zone.id, placeholderIndex, 0, 0);
+    selectCards([]);
   }
 };
 
@@ -55,6 +59,7 @@ interface HandProps {
   selectCards: selectCardsType;
   selected: string[];
   cardHeight: number;
+  style?: React.CSSProperties;
 }
 
 interface HandTargetCollectedProps {
@@ -69,13 +74,16 @@ interface HandState {
   selectEnabled: boolean;
 }
 
-function getPlaceholderIndex(mouseX: number, componentX: number, cardWidth: number) {
+function getPlaceholderIndex(mouseX: number, handElement: Element, cardWidth: number) {
+
+  const bounds = handElement.getBoundingClientRect();
   // shift placeholder if x position more than card width / 2
-  const xPos = mouseX - componentX;
+  const xPos = mouseX - bounds.left + (handElement.firstChild.lastChild as Element).scrollLeft;
+
   const halfCardWidth = cardWidth / 2;
 
   if (xPos < halfCardWidth) {
-    return -1; // place at the start
+    return 0; // place at the start
   }
   return Math.floor((xPos - halfCardWidth) / (cardWidth));
 
@@ -101,10 +109,11 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
   public mouseLeave = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: true }));
 
   public render() {
-    const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards } = this.props;
+    const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards, style } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
 
-    let index = placeholderIndex;
+    let indexShift = 0;
+    let shownCount = 0;
     const cards = zone.cards.reduce((acc, curr, idx) => {
       acc.push(
         <DraggableCard
@@ -118,15 +127,17 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
           cardHeight={cardHeight}
         />
       );
-      // increment placeholder index for every hidden element up to desired index
-      if (selected.includes(curr.id) && placeholderIndex >= idx) {
-        index++;
+      // add to placeholder index for every hidden element up to desired index
+      if (selected.includes(curr.id) && shownCount <= placeholderIndex) {
+        indexShift++;
+      } else {
+        shownCount++;
       }
       return acc;
     },                              []);
 
     if (isOver && canDrop) {
-      cards.splice(index, 0, (
+      cards.splice(placeholderIndex + indexShift, 0, (
         <Card
           key={'handplaceholder'}
           card={{ name: '', id: '', url: '/images/cardback.jpg' }}
@@ -138,9 +149,9 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
 
     return (
       connectDropTarget(
-        <div style={SelectableStyle} >
+        <div style={{ ...SelectableStyle, ...style }} >
           <SelectableGroup
-            ref={(ref) => ((window as any).selectableGroup = ref)}
+            id={'selectable' + zone.id}
             className='selectable'
             tolerance={0}
             deselectOnEsc={true}
@@ -149,10 +160,11 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
             onSelectionFinish={this.setSelected}
             onSelectionClear={this.clearSelected}
           >
-            <section style={HandStyle} >
-              <div style={{ width: '1vw' }} />
+            <ScrollingComponent
+              style={handStyle}
+            >
               {cards}
-            </section>
+            </ScrollingComponent>
           </SelectableGroup>
         </div >
       ));
