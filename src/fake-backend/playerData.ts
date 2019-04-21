@@ -111,7 +111,7 @@ export const players: Player[] =
             ]
         },
         {
-            name: 'Ale2',
+            name: 'Alex 2',
             library: [
                 'Mystic Remora',
                 'Grasp of Fate',
