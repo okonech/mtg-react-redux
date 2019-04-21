@@ -47,6 +47,7 @@ interface BattleFieldProps {
     selectCards: selectCardsType;
     selected: string[];
     cardHeight: number;
+    style?: React.CSSProperties;
 }
 
 interface BattleFieldTargetCollectedProps {
@@ -79,7 +80,7 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
     public clearSelected = () => this.props.selectCards([]);
 
     public render() {
-        const { zone, connectDropTarget, selected, cardHeight, selectCards } = this.props;
+        const { zone, connectDropTarget, selected, cardHeight, selectCards, style } = this.props;
         const { selectEnabled } = this.state;
         const cards = zone.cards.reduce((acc, curr) => {
 
@@ -102,7 +103,7 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
 
         return (
             connectDropTarget(
-                <div style={SelectableStyle} >
+                <div style={{ ...SelectableStyle, ...style }} >
                     <SelectableGroup
                         ref={(ref) => ((window as any).selectableGroup = ref)}
                         className='selectable'

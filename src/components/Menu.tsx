@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+interface MenuProps {
+    style?: React.CSSProperties;
+}
+
 const MenuStyle: object = {
-    height: '30px',
-    width: '100%',
     listStyleType: 'none',
     margin: '0',
     padding: '0',
@@ -20,14 +22,16 @@ const MenuItemStyle: object = {
     textDecoration: 'none'
 };
 
-export default class Menu extends React.PureComponent {
-    public render() {
-        return (
-            <div style={MenuStyle}>
-                <Link to='/player' style={MenuItemStyle}>Home</Link>
-                <Link to='/test-game' style={MenuItemStyle}>Resume test</Link>
-                <Link to='/test-two-player-game' style={MenuItemStyle}>Resume match</Link>
-            </div >
-        );
-    }
-}
+const Menu = (props: MenuProps) => {
+
+    const { style } = props;
+    return (
+        <div style={{ ...MenuStyle, ...style }}>
+            <Link to='/player' style={MenuItemStyle}>Home</Link>
+            <Link to='/test-game' style={MenuItemStyle}>Resume test</Link>
+            <Link to='/test-two-player-game' style={MenuItemStyle}>Resume match</Link>
+        </div >
+    );
+};
+
+export default Menu;

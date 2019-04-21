@@ -10,7 +10,7 @@ import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { CardZone } from '../selectors/player';
 
-const HandStyle: React.CSSProperties = {
+const handStyle: React.CSSProperties = {
   height: '100%',
   width: '81vw',
   display: 'flex',
@@ -30,13 +30,12 @@ const SelectableStyle: React.CSSProperties = {
 const handTarget: DropTargetSpec<HandProps> = {
   hover(props, monitor, component: Hand) {
     const node = findDOMNode(component) as Element;
-    const bounds = node.getBoundingClientRect();
-    const placeholderIndex = getPlaceholderIndex(monitor.getClientOffset().x, bounds.left, node.clientHeight / 1.45);
+    const { cards, width } = monitor.getItem();
+    const placeholderIndex = getPlaceholderIndex(monitor.getClientOffset().x, node, width);
     component.setState({ placeholderIndex });
 
     // chrome hack since chrome dislikes item allowing drop over itself
     // https://github.com/react-dnd/react-dnd/issues/766
-    const { cards } = monitor.getItem();
     cards.forEach((id) => document.getElementById(id).style.display = 'none');
   },
   drop(props, monitor, component: Hand) {
@@ -55,6 +54,7 @@ interface HandProps {
   selectCards: selectCardsType;
   selected: string[];
   cardHeight: number;
+  style?: React.CSSProperties;
 }
 
 interface HandTargetCollectedProps {
@@ -69,11 +69,15 @@ interface HandState {
   selectEnabled: boolean;
 }
 
-function getPlaceholderIndex(mouseX: number, componentX: number, cardWidth: number) {
+function getPlaceholderIndex(mouseX: number, handElement: Element, cardWidth: number) {
+
+  const bounds = handElement.getBoundingClientRect();
   // shift placeholder if x position more than card width / 2
-  const xPos = mouseX - componentX;
+  const xPos = mouseX - bounds.left + handElement.scrollLeft;
+
   const halfCardWidth = cardWidth / 2;
 
+  console.log(mouseX, xPos, handElement.scrollLeft);
   if (xPos < halfCardWidth) {
     return 0; // place at the start
   }
@@ -101,7 +105,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
   public mouseLeave = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: true }));
 
   public render() {
-    const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards } = this.props;
+    const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards, style } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
 
     let indexShift = 0;
@@ -141,7 +145,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
 
     return (
       connectDropTarget(
-        <div style={SelectableStyle} >
+        <div style={{ ...SelectableStyle, ...style }} >
           <SelectableGroup
             ref={(ref) => ((window as any).selectableGroup = ref)}
             className='selectable'
@@ -152,7 +156,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
             onSelectionFinish={this.setSelected}
             onSelectionClear={this.clearSelected}
           >
-            <section style={HandStyle} >
+            <section style={handStyle} >
               <div style={{ width: '1vw' }} />
               {cards}
             </section>

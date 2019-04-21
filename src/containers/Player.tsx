@@ -14,6 +14,10 @@ interface PageDivision {
     row: number;
     col: number;
 }
+
+export interface PlayerProps {
+    style?: React.CSSProperties;
+}
 export interface PlayerMappedProps {
     player: PlayerData;
     selected: string[];
@@ -27,6 +31,8 @@ export interface PlayerMappedDispatch {
     moveCards?: moveCards;
     selectCards?: selectCards;
 }
+
+export type AllProps = PlayerProps & PlayerMappedProps & PlayerMappedDispatch;
 
 const mapStateToProps = (state: AppState, ownProps: { id: string, pageDivision: PageDivision }) => ({
     player: playerSelector(state, ownProps.id),
