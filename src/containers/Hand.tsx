@@ -1,7 +1,7 @@
 
 import withScrolling from 'frontend-collective-react-dnd-scrollzone';
 import React from 'react';
-import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
+import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
 import { SelectableGroup, SelectableItem } from 'react-selectable-fast';
 import { selectCards as selectCardsType } from '../actions/selectActions';
@@ -27,27 +27,39 @@ const handStyle: React.CSSProperties = {
 
 const SelectableStyle: React.CSSProperties = {
   height: '100%',
+  // TODO: fix this. Used to be 85vw
   width: '85vw',
   display: 'flex',
+  flexDirection: 'row',
   backgroundColor: 'gray'
 };
 
 const handTarget: DropTargetSpec<HandProps> = {
-  hover(props, monitor, component: Hand) {
+  hover(props: HandProps, monitor: DropTargetMonitor, component: Hand) {
     const node = findDOMNode(component) as Element;
-    const { cards, width } = monitor.getItem();
-    const placeholderIndex = getPlaceholderIndex(monitor.getClientOffset().x, node, width);
+    const { cards } = monitor.getItem();
+    const placeholderIndex = getPlaceholderIndex(props.zone, monitor, node);
     component.setState({ placeholderIndex });
 
     // chrome hack since chrome dislikes item allowing drop over itself
     // https://github.com/react-dnd/react-dnd/issues/766
-    cards.forEach((id) => document.getElementById(id).style.display = 'none');
+    cards.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.style.display = 'none';
+      }
+    });
   },
-  drop(props, monitor, component: Hand) {
+  drop(props: HandProps, monitor, component: Hand) {
     const { moveCards, selectCards, zone } = props;
     const { zoneId, cards } = monitor.getItem() as CardDragObject;
     const { placeholderIndex } = component.state;
-    cards.forEach((id) => document.getElementById(id).style.display = 'block');
+    cards.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.style.display = 'block';
+      }
+    });
     moveCards(zoneId, cards, zone.id, placeholderIndex, 0, 0);
     selectCards([]);
   }
@@ -74,12 +86,33 @@ interface HandState {
   selectEnabled: boolean;
 }
 
-function getPlaceholderIndex(mouseX: number, handElement: Element, cardWidth: number) {
+function getPlaceholderIndex(zone: CardZone, monitor: DropTargetMonitor, handElement: Element) {
 
+  if (zone.cards.length === 0) {
+    return 0;
+  }
+  const selectable = handElement.firstChild.lastChild as Element;
+  const mouseX = monitor.getClientOffset().x;
   const bounds = handElement.getBoundingClientRect();
   // shift placeholder if x position more than card width / 2
-  const xPos = mouseX - bounds.left + (handElement.firstChild.lastChild as Element).scrollLeft;
+  const xPos = mouseX - bounds.left + selectable.scrollLeft;
 
+  let cardWidth = 0;
+
+  // loop through cards until one with width is found, or return 0
+  const cardElements = selectable.children;
+  const len = cardElements.length;
+  for (let idx = 0; idx < len; idx++) {
+    cardWidth = cardElements[idx].clientWidth;
+    if (cardWidth > 0) {
+      break;
+    }
+  }
+
+  if (cardWidth === 0) {
+    // all elements hidden, place at 0 
+    return 0;
+  }
   const halfCardWidth = cardWidth / 2;
 
   if (xPos < halfCardWidth) {

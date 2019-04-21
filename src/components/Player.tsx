@@ -12,7 +12,7 @@ const grid = defaultMemoize((row: number, col: number, cardHeight: number,
                              style: React.CSSProperties): React.CSSProperties => ({
         ...style,
         display: 'grid',
-        gridTemplateColumns: `15% 85%`,
+        gridTemplateColumns: `minmax(min-content, 150px) 1fr`,
         gridTemplateRows: `75% 25%`,
         gridTemplateAreas: "'info battlefield' 'info hand'"
     }));
@@ -30,6 +30,7 @@ export default class Player extends React.PureComponent<AllProps, {}> {
                     style={{ gridArea: 'info' }}
                     player={player}
                     moveCards={moveCards}
+                    selectCards={selectCards}
                     key={library.id}
                 />
                 <BattleField

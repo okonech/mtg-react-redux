@@ -25,9 +25,14 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
         // chrome hack since chrome dislikes item allowing drop over itself
         // https://github.com/react-dnd/react-dnd/issues/766
         const { cards } = monitor.getItem();
-        cards.forEach((id) => document.getElementById(id).style.display = 'none');
+        cards.forEach((id) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.style.display = 'none';
+            }
+        });
     },
-    drop(props, monitor, component: BattleField) {
+    drop(props: BattleFieldProps, monitor, component: BattleField) {
         const { moveCards, selectCards, zone } = props;
         const { zoneId, cards, initialX, initialY } = monitor.getItem() as CardDragObject;
         const node = findDOMNode(component) as Element;
@@ -35,7 +40,12 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
         const xCoord = monitor.getClientOffset().x - bounds.left - initialX;
         const yCoord = monitor.getClientOffset().y - bounds.top - initialY;
 
-        cards.forEach((id) => document.getElementById(id).style.display = 'block');
+        cards.forEach((id) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.style.display = 'block';
+            }
+        });
 
         moveCards(zoneId, cards, zone.id, zone.cards.length, xCoord, yCoord);
         selectCards([]);

@@ -4,6 +4,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { Route } from 'react-router';
 import { HashRouter } from 'react-router-dom';
 import FourPlayerGame from './pages/FourPlayerGame';
+import FourPlayerGameOther from './pages/FourPlayerGameOther';
 import LoggedInLandingPage from './pages/LoggedInLandingPage';
 import LoginPage from './pages/LoginPage';
 import SinglePlayerGame from './pages/SinglePlayerGame';
@@ -19,6 +20,7 @@ class App extends Component {
           <Route path='/test-game' component={SinglePlayerGame} />
           <Route path='/test-two-player-game' component={TwoPlayerGame} />
           <Route path='/test-four-player-game' component={FourPlayerGame} />
+          <Route path='/test-four-player-game-other' component={FourPlayerGameOther} />
         </React.Fragment>
       </HashRouter>
     );

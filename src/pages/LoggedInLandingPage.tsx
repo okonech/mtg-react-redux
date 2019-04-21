@@ -9,6 +9,11 @@ export default class SinglePlayerGame extends React.PureComponent {
                 <p><Link to='/test-game'>Test a deck in a single player game!</Link></p>
                 <p><Link to='/test-two-player-game'>Test a deck in a two player game!</Link></p>
                 <p><Link to='/test-four-player-game'>Test a deck in a four player game!</Link></p>
+                <p>
+                    <Link to='/test-four-player-game-other'>
+                        Test a deck in a four player game with another layout!
+                    </Link>
+                </p>
             </div>
         );
     }
