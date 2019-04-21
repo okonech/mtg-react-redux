@@ -1,4 +1,5 @@
 
+import withScrolling from 'frontend-collective-react-dnd-scrollzone';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
@@ -10,21 +11,25 @@ import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { CardZone } from '../selectors/player';
 
+const ScrollingComponent = withScrolling('section');
+
 const handStyle: React.CSSProperties = {
   height: '100%',
-  width: '81vw',
+  width: '96%',
   display: 'flex',
-  overflowX: 'scroll',
+  flexDirection: 'row',
+  overflowX: 'auto',
   scrollbarWidth: 'thin',
   scrollbarColor: 'rebeccapurple gray',
-  backgroundColor: 'gray',
-  padding: '0px 2vw 0px 2vw'
+  marginLeft: '2%',
+  marginRight: '2%'
 };
 
 const SelectableStyle: React.CSSProperties = {
   height: '100%',
-  width: '100%',
-  display: 'flex'
+  width: '85vw',
+  display: 'flex',
+  backgroundColor: 'gray'
 };
 
 const handTarget: DropTargetSpec<HandProps> = {
@@ -73,11 +78,10 @@ function getPlaceholderIndex(mouseX: number, handElement: Element, cardWidth: nu
 
   const bounds = handElement.getBoundingClientRect();
   // shift placeholder if x position more than card width / 2
-  const xPos = mouseX - bounds.left + handElement.scrollLeft;
+  const xPos = mouseX - bounds.left + (handElement.firstChild.lastChild as Element).scrollLeft;
 
   const halfCardWidth = cardWidth / 2;
 
-  console.log(mouseX, xPos, handElement.scrollLeft);
   if (xPos < halfCardWidth) {
     return 0; // place at the start
   }
@@ -147,7 +151,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
       connectDropTarget(
         <div style={{ ...SelectableStyle, ...style }} >
           <SelectableGroup
-            ref={(ref) => ((window as any).selectableGroup = ref)}
+            id={'selectable' + zone.id}
             className='selectable'
             tolerance={0}
             deselectOnEsc={true}
@@ -156,10 +160,11 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
             onSelectionFinish={this.setSelected}
             onSelectionClear={this.clearSelected}
           >
-            <section style={handStyle} >
-              <div style={{ width: '1vw' }} />
+            <ScrollingComponent
+              style={handStyle}
+            >
               {cards}
-            </section>
+            </ScrollingComponent>
           </SelectableGroup>
         </div >
       ));

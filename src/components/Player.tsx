@@ -12,8 +12,8 @@ const grid = defaultMemoize((row: number, col: number, cardHeight: number,
                              style: React.CSSProperties): React.CSSProperties => ({
         ...style,
         display: 'grid',
-        gridTemplateColumns: `15fr 85fr`,
-        gridTemplateRows: `75fr 25fr`,
+        gridTemplateColumns: `15% 85%`,
+        gridTemplateRows: `75% 25%`,
         gridTemplateAreas: "'info battlefield' 'info hand'"
     }));
 

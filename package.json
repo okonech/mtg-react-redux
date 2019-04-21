@@ -5,6 +5,7 @@
   "dependencies": {
     "firebase": "^5.9.4",
     "firebase-tools": "^6.6.0",
+    "frontend-collective-react-dnd-scrollzone": "^1.0.2",
     "global": "^4.3.2",
     "immer": "^2.1.5",
     "immutability-helper": "^3.0.0",
