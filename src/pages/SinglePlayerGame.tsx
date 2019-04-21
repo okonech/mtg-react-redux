@@ -16,7 +16,7 @@ interface SinglePlayerDispatch {
 
 const gameGrid: React.CSSProperties = {
     display: 'grid',
-    gridTemplateRows: `auto 1fr`,
+    gridTemplateRows: `30px calc(100vh - 30px)`,
     gridTemplateAreas: "'menu' 'player'"
 };
 
