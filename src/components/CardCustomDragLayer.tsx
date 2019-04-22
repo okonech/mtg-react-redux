@@ -58,18 +58,22 @@ export interface DragLayerProps {
 class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCustomDragLayerProps> {
 
     public renderCards = defaultMemoize((cards: string[], cardHeight: number, firstCard: CardType): JSX.Element[] => (
-        cards.map((cardId, index) => (
-            <div
-                style={cardStyle(cardHeight, index)}
-                key={'draglayer' + cardId}
-            >
-                <Card
-                    card={firstCard}
-                    opacity={.9}
-                    cardHeight={cardHeight}
-                />
-            </div >
-        ))));
+        cards.map((cardId, index) => {
+            const previewCard = { ...firstCard, id: `${firstCard.id}${index}` };
+            return (
+                <div
+                    style={cardStyle(cardHeight, index)}
+                    key={'draglayer' + cardId}
+                >
+                    <Card
+                        card={previewCard}
+                        opacity={.9}
+                        cardHeight={cardHeight}
+                    />
+                </div >
+            );
+        }
+        )));
 
     public render() {
         const { item, itemType, isDragging, cardHeight } = this.props;

@@ -17,8 +17,6 @@ export interface CardDragObject {
   zoneId: string;
   initialX: number;
   initialY: number;
-  width: number;
-  height: number;
 }
 
 const dragCardStyle = defaultMemoize((xCoord: number, yCoord: number, hidden: boolean): React.CSSProperties => {
@@ -35,7 +33,6 @@ const dragCardStyle = defaultMemoize((xCoord: number, yCoord: number, hidden: bo
 
 const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
 
-  // todo: make this work like reactg trello board
   isDragging(props, monitor) {
     // If your component gets unmounted while dragged
     // (like a card in Kanban board dragged between lists)
@@ -63,15 +60,16 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
       firstCard: card,
       zoneId,
       initialX: offset.x - bounds.left,
-      initialY: offset.y - bounds.top,
-      height: bounds.height,
-      width: bounds.width
+      initialY: offset.y - bounds.top
     };
   },
   endDrag(props: DraggableCardProps, monitor: DragSourceMonitor) {
     console.log('End drag ' + props.selectedCards);
     const item = monitor.getItem();
-    document.getElementById(item.firstCard.id).style.display = 'block';
+    const element = document.getElementById(item.firstCard.id);
+    if (element) {
+      element.style.display = 'block';
+    }
   }
 
 };

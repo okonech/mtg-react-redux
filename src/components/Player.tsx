@@ -30,6 +30,7 @@ export default class Player extends React.PureComponent<AllProps, {}> {
                     style={{ gridArea: 'info' }}
                     player={player}
                     moveCards={moveCards}
+                    selectCards={selectCards}
                     key={library.id}
                 />
                 <BattleField

@@ -1,5 +1,7 @@
 import React from 'react';
 import { PlayerData } from '../selectors/player';
+import { noSelect } from '../util/styling';
+
 
 interface PlayerInfoProps {
     player: PlayerData;
@@ -7,11 +9,12 @@ interface PlayerInfoProps {
     style?: React.CSSProperties;
 }
 
-const playerStyle: React.CSSProperties = {
+const playerStyle: React.CSSProperties = noSelect({
     display: 'flex',
     position: 'relative',
-    justifyContent: 'center'
-};
+    justifyContent: 'center',
+    pointerEvents: 'none'
+});
 
 const NameStyle: React.CSSProperties = {
     position: 'absolute',
@@ -29,13 +32,11 @@ const PlayerInfo = (props: PlayerInfoProps) => {
     const { player, style, icon } = props;
     const { name, life } = player;
     return (
-        <article
-            style={{ ...playerStyle, ...style }}
-        >
+        <article style={{ ...playerStyle, ...style }}>
             <span style={NameStyle}>
                 {name}
             </span>
-            <img src={icon} />
+            <img draggable={false} src={icon} />
             <span style={CountStyle}>
                 {life}
             </span>

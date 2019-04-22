@@ -1,4 +1,5 @@
 import React from 'react';
+import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
 import PlayerInfo from '../components/PlayerInfo';
 import ZoneInfo from '../components/ZoneInfo';
@@ -6,6 +7,7 @@ import { PlayerData } from '../selectors/player';
 interface InfoAreaProps {
     player: PlayerData;
     moveCards: moveCardsType;
+    selectCards: selectCardsType;
     style?: React.CSSProperties;
 }
 
@@ -21,7 +23,7 @@ const infoStyle: React.CSSProperties = {
 
 const InfoArea = (props: InfoAreaProps) => {
 
-    const { player, moveCards, style } = props;
+    const { player, moveCards, selectCards, style } = props;
     const { hand, library, graveyard, exile } = player;
     const drawCard = () => moveCards(library.id, [library.cards[0].id], hand.id, 0, 0, 0);
     return (
@@ -34,21 +36,29 @@ const InfoArea = (props: InfoAreaProps) => {
             <ZoneInfo
                 style={{ gridArea: 'library' }}
                 zone={library}
+                moveCards={moveCards}
+                selectCards={selectCards}
                 icon='/icons/book-pile.svg'
                 click={drawCard}
             />
             <ZoneInfo
                 style={{ gridArea: 'hand' }}
+                moveCards={moveCards}
+                selectCards={selectCards}
                 icon='/icons/poker-hand.svg'
                 zone={hand}
             />
             <ZoneInfo
                 style={{ gridArea: 'graveyard' }}
+                moveCards={moveCards}
+                selectCards={selectCards}
                 icon='/icons/tombstone.svg'
                 zone={graveyard}
             />
             <ZoneInfo
                 style={{ gridArea: 'exile' }}
+                moveCards={moveCards}
+                selectCards={selectCards}
                 icon='/icons/rolling-energy.svg'
                 zone={exile}
             />
