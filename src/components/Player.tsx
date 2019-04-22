@@ -12,9 +12,11 @@ const grid = defaultMemoize((row: number, col: number, cardHeight: number,
                              style: React.CSSProperties): React.CSSProperties => ({
         ...style,
         display: 'grid',
-        gridTemplateColumns: `minmax(min-content, 150px) 1fr`,
+        gridTemplateColumns: `60px 1fr`,
         gridTemplateRows: `75fr calc(${cardHeight}vh + 11px)`,
-        gridTemplateAreas: "'info battlefield' 'info hand'"
+        gridTemplateAreas: "'info battlefield' 'info hand'",
+        boxSizing: 'border-box',
+        borderTop: '1px solid black'
     }));
 
 export default class Player extends React.PureComponent<AllProps, {}> {

@@ -17,7 +17,8 @@ const infoStyle: React.CSSProperties = {
     gridTemplateAreas: "'player' 'library' 'hand' 'graveyard' 'exile'",
     background: 'rgb(97, 92, 92)',
     boxSizing: 'border-box',
-    border: '1px solid black',
+    borderRight: '1px solid black',
+    borderLeft: '1px solid black',
     minWidth: '40px'
 };
 
