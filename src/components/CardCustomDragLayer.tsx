@@ -57,8 +57,9 @@ export interface DragLayerProps {
 
 class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCustomDragLayerProps> {
 
-    public renderCards = defaultMemoize((cards: string[], cardHeight: number, firstCard: CardType): JSX.Element[] => (
-        cards.map((cardId, index) => {
+    public renderCards = defaultMemoize((cards: string[], cardHeight: number, firstCard: CardType): JSX.Element[] => {
+        const renderCards = cards.length > 5 ? cards.slice(0, 5) : cards;
+        return renderCards.map((cardId, index) => {
             const previewCard = { ...firstCard, id: `${firstCard.id}${index}` };
             return (
                 <div
@@ -72,8 +73,8 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
                     />
                 </div >
             );
-        }
-        )));
+        });
+    });
 
     public render() {
         const { item, itemType, isDragging, cardHeight } = this.props;
