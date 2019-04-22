@@ -2,6 +2,7 @@ import React from 'react';
 import { PlayerData } from '../selectors/player';
 import { noSelect } from '../util/styling';
 
+
 interface PlayerInfoProps {
     player: PlayerData;
     icon: string;
