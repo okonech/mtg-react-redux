@@ -28,7 +28,7 @@ const handStyle: React.CSSProperties = {
 const SelectableStyle: React.CSSProperties = {
   height: '100%',
   // TODO: fix this. Used to be 85vw
-  width: 'auto',
+  width: '93vw',
   display: 'flex',
   flexDirection: 'row',
   backgroundColor: 'gray'

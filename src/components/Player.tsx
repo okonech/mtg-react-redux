@@ -13,7 +13,7 @@ const grid = defaultMemoize((row: number, col: number, cardHeight: number,
         ...style,
         display: 'grid',
         gridTemplateColumns: `minmax(min-content, 150px) 1fr`,
-        gridTemplateRows: `75% 25%`,
+        gridTemplateRows: `75fr calc(${cardHeight}vh + 11px)`,
         gridTemplateAreas: "'info battlefield' 'info hand'"
     }));
 
