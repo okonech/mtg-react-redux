@@ -1,45 +1,40 @@
+import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
 import React from 'react';
 import { PlayerData } from '../selectors/player';
-import { noSelect } from '../util/styling';
-interface PlayerInfoProps {
+
+const styles = (theme: Theme) => {
+    return createStyles({
+        main: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            overflow: 'hidden'
+        },
+        avatar: {
+            width: '100%',
+            height: 'auto'
+        }
+    });
+};
+
+interface PlayerInfoProps extends WithStyles<typeof styles> {
     player: PlayerData;
     icon: string;
     style?: React.CSSProperties;
 }
 
-const playerStyle: React.CSSProperties = noSelect({
-    display: 'flex',
-    position: 'relative',
-    justifyContent: 'center',
-    pointerEvents: 'none'
-});
-
-const NameStyle: React.CSSProperties = {
-    position: 'absolute',
-    alignSelf: 'flex-start',
-    fontWeight: 800
-};
-
-const CountStyle: React.CSSProperties = {
-    position: 'absolute',
-    alignSelf: 'flex-end',
-    fontWeight: 800
-};
-
 const PlayerInfo = (props: PlayerInfoProps) => {
-    const { player, style, icon } = props;
-    const { name, life } = player;
+    const { player, style, icon, classes } = props;
+    const { name } = player;
     return (
-        <article style={{ ...playerStyle, ...style }}>
-            <span style={NameStyle}>
-                {name}
-            </span>
-            <img draggable={false} src={icon} />
-            <span style={CountStyle}>
-                {life}
-            </span>
+        <article
+            className={classes.main}
+        >
+            <Avatar className={classes.avatar} style={style} alt={name} src={icon} />
         </article>
+
     );
 };
 
-export default PlayerInfo;
+export default withStyles(styles)(PlayerInfo);

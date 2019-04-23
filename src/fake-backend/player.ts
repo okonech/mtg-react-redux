@@ -66,7 +66,7 @@ function mapDataToZones(player: Player, cards: Card[]): Zone[] {
     });
 
     return [
-        idToZone(player.library, cards.slice(0, 90).map((card) => card.id)),
+        idToZone(player.library, cards.slice(0, 93).map((card) => card.id)),
         // idToZone(player.battlefield, cards.slice(90, 93).map((card) => card.id)),
         idToZone(player.battlefield),
         idToZone(player.hand, cards.slice(93).map((card) => card.id)),

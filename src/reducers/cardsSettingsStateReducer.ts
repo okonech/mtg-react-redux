@@ -29,6 +29,8 @@ export default function cardsSettingsStateReducer(state: CardsSettingsState = {}
                     }
                 ));
                 break;
+            default:
+                break;
         }
     });
 }

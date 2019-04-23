@@ -2,11 +2,11 @@ import { Identifier } from 'dnd-core';
 import * as React from 'react';
 import { DragLayer, XYCoord } from 'react-dnd';
 import { defaultMemoize } from 'reselect';
+import Card from '../components/Card';
 import { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { Card as CardType } from '../reducers/cardsReducer';
 import snapToGrid from '../util/snapToGrid';
-import Card from './Card';
 
 const layerStyle = defaultMemoize((props: DragLayerProps & CardCustomDragLayerProps): React.CSSProperties => {
     const { currentOffset } = props;

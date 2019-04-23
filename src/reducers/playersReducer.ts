@@ -33,6 +33,8 @@ function playersById(state: PlayersById = {}, action: PlayersAction) {
             case 'DELETE_PLAYERS':
                 action.payload.ids.forEach((id) => delete draft[id]);
                 break;
+            default:
+                break;
         }
     });
 }
@@ -46,6 +48,8 @@ function playerIds(state: string[] = [], action: PlayersAction) {
             case 'DELETE_PLAYERS':
                 const toDelete = action.payload.ids;
                 toDelete.forEach((delId) => draft.splice(draft.findIndex((id) => id === delId), 1));
+                break;
+            default:
                 break;
         }
     });

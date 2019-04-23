@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import Menu from '../components/Menu';
+import Menu from '../components/MenuAppBar';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
 
 const gameGrid: React.CSSProperties = {
     display: 'grid',
-    gridTemplateRows: `30px calc(25vh - 7.5px) calc(25vh - 7.5px) calc(25vh - 7.5px) calc(25vh - 7.5px)`,
-    gridTemplateAreas: "'menu' 'player1' 'player2' 'player3' 'player4'"
+    gridTemplateRows: `auto repeat(4, calc(25vh - 12px))`,
+    height: '100%',
+    width: '100%'
 };
 
 interface FourPlayerGameProps {
@@ -37,25 +38,21 @@ class FourPlayerGame extends React.PureComponent<FourPlayerGameProps, {}> {
         if (!loading) {
             return (
                 <section style={gameGrid}>
-                    <Menu style={{ gridArea: 'menu' }} />
+                    <Menu />
                     <Player
-                        style={{ gridArea: 'player1' }}
                         id={players[0]}
                         pageDivision={{ row: 1, col: 4 }}
                     />
                     <Player
-                        style={{ gridArea: 'player2' }}
                         id={players[1]}
                         pageDivision={{ row: 1, col: 4 }}
                     />
                     <Player
-                        style={{ gridArea: 'player3' }}
-                        id={players[0]}
+                        id={players[2]}
                         pageDivision={{ row: 1, col: 4 }}
                     />
                     <Player
-                        style={{ gridArea: 'player4' }}
-                        id={players[1]}
+                        id={players[3]}
                         pageDivision={{ row: 1, col: 4 }}
                     />
                 </section>

@@ -1,3 +1,7 @@
+import { createStyles, SvgIcon, Typography } from '@material-ui/core';
+import { Theme } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import React from 'react';
 import {
     ConnectDragPreview, ConnectDragSource, ConnectDropTarget, DragSource,
@@ -12,9 +16,30 @@ import { Types } from '../Constants';
 import { CardZone } from '../selectors/player';
 import { noSelect } from '../util/styling';
 
-export interface ZoneInfoProps {
+const styles = (theme: Theme) => {
+    const { divider } = theme.palette;
+    return createStyles({
+        main: {
+            display: 'flex',
+            position: 'relative',
+            justifyContent: 'center',
+            borderTop: `1px solid ${divider}`
+        },
+        icon: {
+            height: '100%',
+            width: '100%'
+        },
+        text: noSelect({
+            position: 'absolute',
+            alignSelf: 'center',
+            fontWeight: 800,
+            fontSize: '110%'
+        }) as CSSProperties
+    });
+};
+export interface ZoneInfoProps extends WithStyles<typeof styles> {
     zone: CardZone;
-    icon: string;
+    icon: any;
     moveCards: moveCardsType;
     selectCards: selectCardsType;
     style?: React.CSSProperties;
@@ -39,7 +64,6 @@ const cardSource: DragSourceSpec<ZoneInfoProps, CardDragObject> = {
         const { selectCards, zone } = props;
         const { id, cards } = zone;
         const selected = cards[cards.length - 1];
-        console.log('Start drag ' + selected.name);
 
         const node = findDOMNode(component) as Element;
         const bounds = node.getBoundingClientRect();
@@ -54,9 +78,6 @@ const cardSource: DragSourceSpec<ZoneInfoProps, CardDragObject> = {
             initialX: offset.x - bounds.left,
             initialY: offset.y - bounds.top
         };
-    },
-    endDrag(props: ZoneInfoProps, monitor: DragSourceMonitor) {
-        console.log('End drag ' + props.zone.id);
     },
     canDrag(props: ZoneInfoProps, monitor: DragSourceMonitor) {
         const { cards } = props.zone;
@@ -75,18 +96,6 @@ const zoneTarget: DropTargetSpec<ZoneInfoProps> = {
     }
 };
 
-const zoneStyle: React.CSSProperties = noSelect({
-    display: 'flex',
-    position: 'relative',
-    justifyContent: 'center',
-    borderTop: '1px solid black'
-});
-
-const CountStyle: React.CSSProperties = {
-    position: 'absolute',
-    alignSelf: 'center',
-    fontWeight: 800
-};
 class ZoneInfo extends React.PureComponent<ZoneInfoProps & DropTargetCollectedProps & DragSourceCollectedProps> {
 
     // remove this code to return drag prevew  
@@ -104,21 +113,27 @@ class ZoneInfo extends React.PureComponent<ZoneInfoProps & DropTargetCollectedPr
     }
 
     public render() {
-        const { zone, style, icon, click, connectDragSource, connectDropTarget } = this.props;
-        const { cards } = zone;
-        const count = cards.length;
-
+        const { zone, icon, style, click, connectDragSource, connectDropTarget, classes } = this.props;
+        const count = zone.cards.length;
         return (
             connectDragSource(
                 connectDropTarget(
                     <article
+                        className={classes.main}
                         onClick={click}
-                        style={{ ...zoneStyle, ...style }}
+                        style={style}
                     >
-                        <img draggable={false} src={icon} />
-                        <span style={CountStyle}>
+                        <SvgIcon
+                            color='primary'
+                            className={classes.icon}
+                        >
+                            {icon}
+                        </SvgIcon>
+                        <Typography
+                            className={classes.text}
+                        >
                             {count}
-                        </span>
+                        </Typography>
                     </article>
                 )
             )
@@ -137,4 +152,4 @@ export default DragSource<ZoneInfoProps>(
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
         dragItem: monitor.getItem()
-    }))(ZoneInfo));
+    }))(withStyles(styles)(ZoneInfo)));
