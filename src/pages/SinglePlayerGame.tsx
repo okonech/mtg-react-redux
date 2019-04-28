@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import Menu from '../components/Menu';
+import MenuAppBar from '../components/MenuAppBar';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
 
@@ -16,8 +16,9 @@ interface SinglePlayerDispatch {
 
 const gameGrid: React.CSSProperties = {
     display: 'grid',
-    gridTemplateRows: `30px calc(100vh - 30px)`,
-    gridTemplateAreas: "'menu' 'player'"
+    gridTemplateRows: `auto repeat(1, 1fr)`,
+    height: '100%',
+    width: '100%'
 };
 
 const mapStateToProps = (state: AppState) => ({
@@ -41,9 +42,8 @@ class SinglePlayerGame extends React.PureComponent<SinglePlayerProps & SinglePla
         if (!loading) {
             return (
                 <section style={gameGrid}>
-                    <Menu style={{ gridArea: 'menu' }} />
+                    <MenuAppBar />
                     <Player
-                        style={{ gridArea: 'player' }}
                         id={players[0]}
                         pageDivision={{ row: 1, col: 1 }}
                     />
@@ -52,7 +52,7 @@ class SinglePlayerGame extends React.PureComponent<SinglePlayerProps & SinglePla
         } else {
             return (
                 <React.Fragment>
-                    <Menu />
+                    <MenuAppBar />
                     Loading...
                 </React.Fragment>
             );

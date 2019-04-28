@@ -19,16 +19,16 @@ export interface CardDragObject {
   initialY: number;
 }
 
-const dragCardStyle = defaultMemoize((xCoord: number, yCoord: number, hidden: boolean): React.CSSProperties => {
+const dragCardStyle = defaultMemoize((xCoord: number, yCoord: number, cardHeight: number): React.CSSProperties => {
   const transform = `translate3d(${Math.max(0, xCoord)}px, ${Math.max(0, yCoord)}px, 0)`;
-  if (hidden) {
-    return { display: 'none' };
-  }
   return (!!xCoord && !!yCoord) ? {
     position: 'absolute',
     transform,
-    WebkitTransform: transform
-  } : {};
+    WebkitTransform: transform,
+    height: `${cardHeight}vh`
+  } : {
+      height: `${cardHeight}vh`
+    };
 });
 
 const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
@@ -45,7 +45,6 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
 
     const { selectCards, selectedCards, zoneId, card } = props;
     const { id } = card;
-    console.log('Start drag ' + selectedCards + ' ' + id);
     const node = findDOMNode(component) as Element;
     const bounds = node.getBoundingClientRect();
     const offset = monitor.getInitialClientOffset();
@@ -64,7 +63,6 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
     };
   },
   endDrag(props: DraggableCardProps, monitor: DragSourceMonitor) {
-    console.log('End drag ' + props.selectedCards);
     const item = monitor.getItem();
     const element = document.getElementById(item.firstCard.id);
     if (element) {
@@ -119,7 +117,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 
   public render() {
-    const { card, isDragging, connectDragSource, selectedCards, selecting, hidden,
+    const { card, isDragging, connectDragSource, selectedCards, selecting,
             onMouseEnter, onMouseLeave, selectableRef, cardHeight, xCoord, yCoord } = this.props;
 
     const { id } = card;
@@ -131,7 +129,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           // handles drag transform in non list areas
-          style={dragCardStyle(xCoord, yCoord, hidden)}
+          style={dragCardStyle(xCoord, yCoord, cardHeight)}
         >
           <Card
             key={'card' + id}

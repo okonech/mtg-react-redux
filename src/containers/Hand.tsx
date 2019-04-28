@@ -1,4 +1,7 @@
 
+import { createStyles } from '@material-ui/core';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
 import withScrolling from 'frontend-collective-react-dnd-scrollzone';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
@@ -11,28 +14,30 @@ import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { CardZone } from '../selectors/player';
 
+const styles = (theme: Theme) => createStyles({
+  main: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    overflowX: 'hidden',
+    overflowY: 'hidden',
+    backgroundColor: theme.palette.background.paper
+  },
+  cards: {
+    height: '100%',
+    width: 'calc(100% - 18px)',
+    display: 'flex',
+    flexDirection: 'row',
+    overflowX: 'auto',
+    scrollbarWidth: 'thin',
+    marginLeft: '9px',
+    marginRight: '9px',
+    scrollbarColor: `${theme.palette.secondary.dark} ${theme.palette.action.hover}`
+  }
+});
+
 const ScrollingComponent = withScrolling('section');
-
-const handStyle: React.CSSProperties = {
-  height: '100%',
-  width: '96%',
-  display: 'flex',
-  flexDirection: 'row',
-  overflowX: 'auto',
-  scrollbarWidth: 'thin',
-  scrollbarColor: 'rebeccapurple gray',
-  marginLeft: '2%',
-  marginRight: '2%'
-};
-
-const SelectableStyle: React.CSSProperties = {
-  height: '100%',
-  // TODO: fix this. Used to be 85vw
-  width: 'calc(100vw - 60px)',
-  display: 'flex',
-  flexDirection: 'row',
-  backgroundColor: 'gray'
-};
 
 const handTarget: DropTargetSpec<HandProps> = {
   hover(props: HandProps, monitor: DropTargetMonitor, component: Hand) {
@@ -65,7 +70,7 @@ const handTarget: DropTargetSpec<HandProps> = {
   }
 };
 
-interface HandProps {
+interface HandProps extends WithStyles<typeof styles> {
   zone: CardZone;
   moveCards: moveCardsType;
   selectCards: selectCardsType;
@@ -142,7 +147,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
   public mouseLeave = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: true }));
 
   public render() {
-    const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards, style } = this.props;
+    const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards, style, classes } = this.props;
     const { placeholderIndex, selectEnabled } = this.state;
 
     let indexShift = 0;
@@ -182,7 +187,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
 
     return (
       connectDropTarget(
-        <div style={{ ...SelectableStyle, ...style }} >
+        <div className={classes.main} style={style} >
           <SelectableGroup
             id={'selectable' + zone.id}
             className='selectable'
@@ -194,7 +199,7 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
             onSelectionClear={this.clearSelected}
           >
             <ScrollingComponent
-              style={handStyle}
+              className={classes.cards}
             >
               {cards}
             </ScrollingComponent>
@@ -204,9 +209,10 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
   }
 }
 
-export default DropTarget<HandProps, HandTargetCollectedProps>(Types.CARD, handTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop(),
-  dragItem: monitor.getItem()
-}))(Hand);
+export default withStyles(styles)(
+  DropTarget<HandProps, HandTargetCollectedProps>(Types.CARD, handTarget, (connect, monitor) => ({
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop(),
+    dragItem: monitor.getItem()
+  }))(Hand));

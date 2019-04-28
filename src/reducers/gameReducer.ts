@@ -21,6 +21,8 @@ export default function gameReducer(state: GameState = initialState, action: Gam
             case 'NEXT_TURN':
                 draft.turn++;
                 break;
+            default:
+                break;
         }
     });
 }

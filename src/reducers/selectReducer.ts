@@ -28,6 +28,8 @@ export default function selectReducer(state: SelectState = defaultState, action:
                 const clear = draft.selected;
                 clear.splice(0, clear.length);
                 break;
+            default:
+                break;
         }
     });
 }

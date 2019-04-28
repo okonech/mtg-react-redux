@@ -31,6 +31,8 @@ export default function zonesReducer(state: ZonesState = {}, action: ZoneActions
                 cards.forEach((card) => delCards.splice(delCards.indexOf(card), 1));
                 draft[toZone].cards.splice(toIdx, 0, ...cards);
                 break;
+            default:
+                break;
         }
     });
 }

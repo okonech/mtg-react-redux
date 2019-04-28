@@ -24,6 +24,8 @@ export default function cardsReducer(state: CardsState = {}, action: CardsAction
       case 'DELETE_CARDS':
         action.payload.ids.forEach((id) => delete draft[id]);
         break;
+      default:
+        break;
     }
   });
 }

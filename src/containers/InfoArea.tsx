@@ -1,70 +1,90 @@
+import { createStyles } from '@material-ui/core';
+import { Theme } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
+import LifeCounter from '../components/LifeCounter';
 import PlayerInfo from '../components/PlayerInfo';
+import BookPileSvg from '../components/svg/BookPileSvg';
+import HeartSvg from '../components/svg/HeartSvg';
+import PokerHandSvg from '../components/svg/PokerHandSvg';
+import RollingEnergySvg from '../components/svg/RollingEnergySvg';
+import TombstoneSvg from '../components/svg/TombstoneSvg';
 import ZoneInfo from '../components/ZoneInfo';
 import { PlayerData } from '../selectors/player';
-interface InfoAreaProps {
+
+const styles = (theme: Theme) => {
+    const { background, divider } = theme.palette;
+    return createStyles({
+        main: {
+            display: 'grid',
+            gridTemplateRows: `25% repeat(5,15%)`,
+            gridTemplateAreas: "'player' 'life' 'library' 'hand' 'graveyard' 'exile'",
+            background: background.paper,
+            boxSizing: 'border-box',
+            borderRight: `1px solid ${divider}`,
+            borderLeft: `1px solid ${divider}`,
+            minWidth: '40px'
+        }
+    });
+};
+
+interface InfoAreaProps extends WithStyles<typeof styles> {
     player: PlayerData;
     moveCards: moveCardsType;
     selectCards: selectCardsType;
     style?: React.CSSProperties;
 }
 
-const infoStyle: React.CSSProperties = {
-    display: 'grid',
-    gridTemplateRows: `30% 17.5% 17.5% 17.5% 17.5%`,
-    gridTemplateAreas: "'player' 'library' 'hand' 'graveyard' 'exile'",
-    background: 'rgb(97, 92, 92)',
-    boxSizing: 'border-box',
-    borderRight: '1px solid black',
-    borderLeft: '1px solid black',
-    minWidth: '40px'
-};
-
 const InfoArea = (props: InfoAreaProps) => {
 
-    const { player, moveCards, selectCards, style } = props;
+    const { player, moveCards, selectCards, style, classes } = props;
     const { hand, library, graveyard, exile } = player;
     const drawCard = () => moveCards(library.id, [library.cards[0].id], hand.id, hand.cards.length, 0, 0);
     return (
-        <section style={{ ...infoStyle, ...style }}>
+        <section className={classes.main} style={style}>
             <PlayerInfo
                 style={{ gridArea: 'player' }}
-                icon='/icons/crowned-skull.svg'
+                icon='/images/avatar.png'
                 player={player}
+            />
+            <LifeCounter
+                style={{ gridArea: 'life' }}
+                icon={<HeartSvg />}
+                life={player.life}
             />
             <ZoneInfo
                 style={{ gridArea: 'library' }}
                 zone={library}
                 moveCards={moveCards}
                 selectCards={selectCards}
-                icon='/icons/book-pile.svg'
+                icon={<BookPileSvg />}
                 click={drawCard}
             />
             <ZoneInfo
                 style={{ gridArea: 'hand' }}
                 moveCards={moveCards}
                 selectCards={selectCards}
-                icon='/icons/poker-hand.svg'
+                icon={<PokerHandSvg />}
                 zone={hand}
             />
             <ZoneInfo
                 style={{ gridArea: 'graveyard' }}
                 moveCards={moveCards}
                 selectCards={selectCards}
-                icon='/icons/tombstone.svg'
+                icon={<TombstoneSvg />}
                 zone={graveyard}
             />
             <ZoneInfo
                 style={{ gridArea: 'exile' }}
                 moveCards={moveCards}
                 selectCards={selectCards}
-                icon='/icons/rolling-energy.svg'
+                icon={<RollingEnergySvg />}
                 zone={exile}
             />
         </section>
     );
 };
 
-export default InfoArea;
+export default withStyles(styles)(InfoArea);

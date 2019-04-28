@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import Menu from '../components/Menu';
+import MenuAppBar from '../components/MenuAppBar';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
 
 const gameGrid: React.CSSProperties = {
     display: 'grid',
-    gridTemplateRows: `30px calc(50vh - 15px) calc(50vh - 15px)`,
-    gridTemplateAreas: "'menu' 'player1' 'player2'"
+    gridTemplateRows: `auto repeat(2, 1fr)`,
+    height: '100%',
+    width: '100%'
 };
 
 interface TwoPlayerGameProps {
@@ -41,14 +42,12 @@ class TwoPlayerGame extends React.PureComponent<TwoPlayerGameProps & TwoPlayerDi
         if (!loading) {
             return (
                 <section style={gameGrid}>
-                    <Menu style={{ gridArea: 'menu' }} />
+                    <MenuAppBar />
                     <Player
-                        style={{ gridArea: 'player1' }}
                         id={players[0]}
                         pageDivision={{ row: 1, col: 2 }}
                     />
                     <Player
-                        style={{ gridArea: 'player2' }}
                         id={players[1]}
                         pageDivision={{ row: 1, col: 2 }}
                     />
@@ -57,7 +56,7 @@ class TwoPlayerGame extends React.PureComponent<TwoPlayerGameProps & TwoPlayerDi
         } else {
             return (
                 <React.Fragment>
-                    <Menu />
+                    <MenuAppBar />
                     Loading...
                 </React.Fragment>
             );

@@ -1,4 +1,7 @@
 
+import { createStyles } from '@material-ui/core';
+import { Theme } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
@@ -9,15 +12,18 @@ import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { CardCoordZone } from '../selectors/player';
 
-const BattleFieldStyle: React.CSSProperties = {
-    height: '100%',
-    width: '100%',
-    backgroundColor: 'green'
-};
+const styles = (theme: Theme) => {
+    console.log(theme);
+    return createStyles({
+        main: {
+            width: '100%',
+            height: '100%',
+            backgroundColor: theme.palette.background.default,
+            boxSizing: 'border-box',
+            borderBottom: `1px solid ${theme.palette.divider}`
 
-const SelectableStyle: React.CSSProperties = {
-    height: '100%',
-    width: '100%'
+        }
+    });
 };
 
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
@@ -51,7 +57,7 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
         selectCards([]);
     }
 };
-interface BattleFieldProps {
+interface BattleFieldProps extends WithStyles<typeof styles> {
     zone: CardCoordZone;
     moveCards: moveCardsType;
     selectCards: selectCardsType;
@@ -90,7 +96,7 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
     public clearSelected = () => this.props.selectCards([]);
 
     public render() {
-        const { zone, connectDropTarget, selected, cardHeight, selectCards, style } = this.props;
+        const { zone, connectDropTarget, selected, cardHeight, selectCards, style, classes } = this.props;
         const { selectEnabled } = this.state;
         const cards = zone.cards.reduce((acc, curr) => {
 
@@ -113,7 +119,7 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
 
         return (
             connectDropTarget(
-                <div style={{ ...SelectableStyle, ...style }} >
+                <div className={classes.main} style={style}>
                     <SelectableGroup
                         ref={(ref) => ((window as any).selectableGroup = ref)}
                         className='selectable'
@@ -124,9 +130,7 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
                         onSelectionFinish={this.setSelected}
                         onSelectionClear={this.clearSelected}
                     >
-                        <section style={BattleFieldStyle}>
-                            {cards}
-                        </section>
+                        {cards}
                     </SelectableGroup>
                 </div >
             )
@@ -139,4 +143,4 @@ export default DropTarget(Types.CARD, battlefieldTarget, (connect, monitor) => (
     isOver: monitor.isOver(),
     canDrop: monitor.canDrop(),
     dragItem: monitor.getItem()
-}))(BattleField);
+}))(withStyles(styles)(BattleField));
