@@ -6,8 +6,8 @@ import { defaultMemoize } from 'reselect';
 import BattleField from '../containers/BattleField';
 import CardCustomDragLayer from '../containers/CardCustomDragLayer';
 import Hand from '../containers/Hand';
-import InfoArea from '../containers/InfoArea';
 import { PlayerMappedDispatch, PlayerMappedProps } from '../containers/Player';
+import InfoArea from './InfoArea';
 
 const styles = (theme: Theme) => {
     return createStyles({

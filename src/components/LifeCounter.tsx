@@ -43,16 +43,13 @@ export interface LifeCounterProps extends WithStyles<typeof styles> {
     life: number;
     icon: any;
     style?: React.CSSProperties;
-    // temp
-    click?: () => void;
 }
 
 const LifeCounter = (props: LifeCounterProps) => {
-    const { life, icon, style, click, classes } = props;
+    const { life, icon, style, classes } = props;
     return (
         <article
             className={classes.main}
-            onClick={click}
             style={style}
         >
             <SvgIcon

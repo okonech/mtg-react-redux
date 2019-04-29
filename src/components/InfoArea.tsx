@@ -1,18 +1,18 @@
 import { createStyles } from '@material-ui/core';
-import { Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
-import LifeCounter from '../components/LifeCounter';
-import PlayerInfo from '../components/PlayerInfo';
-import BookPileSvg from '../components/svg/BookPileSvg';
-import HeartSvg from '../components/svg/HeartSvg';
-import PokerHandSvg from '../components/svg/PokerHandSvg';
-import RollingEnergySvg from '../components/svg/RollingEnergySvg';
-import TombstoneSvg from '../components/svg/TombstoneSvg';
-import ZoneInfo from '../components/ZoneInfo';
+import ZoneInfoDnd from '../containers/ZoneInfoDnd';
 import { PlayerData } from '../selectors/player';
+import LifeCounter from './LifeCounter';
+import PlayerInfo from './PlayerInfo';
+import BookPileSvg from './svg/BookPileSvg';
+import HeartSvg from './svg/HeartSvg';
+import PokerHandSvg from './svg/PokerHandSvg';
+import RollingEnergySvg from './svg/RollingEnergySvg';
+import TombstoneSvg from './svg/TombstoneSvg';
 
 const styles = (theme: Theme) => {
     const { background, divider } = theme.palette;
@@ -54,7 +54,7 @@ const InfoArea = (props: InfoAreaProps) => {
                 icon={<HeartSvg />}
                 life={player.life}
             />
-            <ZoneInfo
+            <ZoneInfoDnd
                 style={{ gridArea: 'library' }}
                 zone={library}
                 moveCards={moveCards}
@@ -62,21 +62,21 @@ const InfoArea = (props: InfoAreaProps) => {
                 icon={<BookPileSvg />}
                 click={drawCard}
             />
-            <ZoneInfo
+            <ZoneInfoDnd
                 style={{ gridArea: 'hand' }}
                 moveCards={moveCards}
                 selectCards={selectCards}
                 icon={<PokerHandSvg />}
                 zone={hand}
             />
-            <ZoneInfo
+            <ZoneInfoDnd
                 style={{ gridArea: 'graveyard' }}
                 moveCards={moveCards}
                 selectCards={selectCards}
                 icon={<TombstoneSvg />}
                 zone={graveyard}
             />
-            <ZoneInfo
+            <ZoneInfoDnd
                 style={{ gridArea: 'exile' }}
                 moveCards={moveCards}
                 selectCards={selectCards}

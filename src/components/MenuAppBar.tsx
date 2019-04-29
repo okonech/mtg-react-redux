@@ -28,6 +28,7 @@ const HomeLink = (props) => <Link to='/player' {...props} />;
 const OnePlayerLink = (props) => <Link to='/test-game' {...props} />;
 const TwoPlayerLink = (props) => <Link to='/test-two-player-game' {...props} />;
 const FourPlayerLink = (props) => <Link to='/test-four-player-game-other' {...props} />;
+const FourPlayerColLink = (props) => <Link to='/test-four-player-game' {...props} />;
 
 const MenuAppBar = (props: MenuProps) => {
     const { classes, style } = props;
@@ -53,6 +54,9 @@ const MenuAppBar = (props: MenuProps) => {
                 </Button>
                 <Button color='inherit' component={FourPlayerLink}>
                     Four Player
+                </Button>
+                <Button color='inherit' component={FourPlayerColLink}>
+                    Four Player Column
                 </Button>
                 <span className={classes.grow} />
                 <div>
