@@ -1,25 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import LoadingPage from '../components/LoadingPage';
 import MenuAppBar from '../components/MenuAppBar';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
 
-const gameGrid: React.CSSProperties = {
-    display: 'grid',
-    gridTemplateRows: `auto repeat(2, 1fr)`,
-    height: '100%',
-    width: '100%'
-};
-
-interface TwoPlayerGameProps {
+interface SinglePlayerProps {
     players: string[];
     loading: boolean;
 }
 
-interface TwoPlayerDispatch {
+interface SinglePlayerDispatch {
     initPlayers: (game: string) => void;
 }
+
+const gameGrid: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateRows: `auto repeat(1, 1fr)`,
+    height: '100%',
+    width: '100%'
+};
 
 const mapStateToProps = (state: AppState) => ({
     players: state.players.playerIds,
@@ -30,7 +31,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     initPlayers: (game: string) => dispatch(({ type: 'INIT_PLAYERS', payload: game }))
 });
 
-class TwoPlayerGame extends React.PureComponent<TwoPlayerGameProps & TwoPlayerDispatch, {}> {
+class SinglePlayerGame extends React.PureComponent<SinglePlayerProps & SinglePlayerDispatch, {}> {
 
     constructor(props: any) {
         super(props);
@@ -45,23 +46,17 @@ class TwoPlayerGame extends React.PureComponent<TwoPlayerGameProps & TwoPlayerDi
                     <MenuAppBar />
                     <Player
                         id={players[0]}
-                        pageDivision={{ row: 1, col: 2 }}
-                    />
-                    <Player
-                        id={players[1]}
-                        pageDivision={{ row: 1, col: 2 }}
+                        pageDivision={{ row: 1, col: 1 }}
                     />
                 </section>
             );
         } else {
             return (
-                <React.Fragment>
-                    <MenuAppBar />
-                    Loading...
-                </React.Fragment>
+                <LoadingPage />
             );
         }
     }
 }
-// TODO: fix this to proper typing
-export default connect(mapStateToProps, mapDispatchToProps)(TwoPlayerGame);
+
+export default connect<SinglePlayerProps, SinglePlayerDispatch, {}, AppState>
+    (mapStateToProps, mapDispatchToProps)(SinglePlayerGame);

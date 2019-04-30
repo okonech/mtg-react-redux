@@ -1,7 +1,7 @@
 
 import { createStyles } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import withScrolling from 'frontend-collective-react-dnd-scrollzone';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
@@ -16,7 +16,8 @@ import { CardZone } from '../selectors/player';
 
 const styles = (theme: Theme) => createStyles({
   main: {
-    width: '100%',
+    // instead of width, somehow fixes chrome overflow ???
+    maxWidth: '100%',
     height: '100%',
     display: 'flex',
     flexDirection: 'row',

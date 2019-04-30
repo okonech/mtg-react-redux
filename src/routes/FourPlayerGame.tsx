@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import LoadingPage from '../components/LoadingPage';
 import Menu from '../components/MenuAppBar';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
@@ -59,10 +60,7 @@ class FourPlayerGame extends React.PureComponent<FourPlayerGameProps, {}> {
             );
         } else {
             return (
-                <React.Fragment>
-                    <Menu />
-                    Loading...
-                </React.Fragment>
+                <LoadingPage />
             );
         }
     }
