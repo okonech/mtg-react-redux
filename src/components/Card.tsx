@@ -42,7 +42,7 @@ const cardStyle = defaultMemoize((props: any): React.CSSProperties => {
   const { secondary, primary } = theme.palette;
   return noSelect({
     opacity,
-    // purble selecting, red selected, black default
+    // primary selecting, secondary selected,  black default
     border: selected ? `1px solid ${secondary.main}` : selecting ? `1px solid ${primary.main}` : `1px solid black`,
     // todo: convert to memoized function that takes props and returns style obj
     height: `${cardHeight}vh`,
@@ -58,7 +58,7 @@ const Card = (props: AllProps) => {
     <MuiCard id={id} style={cardStyle(props)} raised={true} className={classes.main}>
       <CardMedia
         className={classes.media}
-        image={url}
+        image={url.small}
       >
         <Typography className={classes.text}>
           {name}

@@ -13,7 +13,6 @@ import { Types } from '../Constants';
 import { CardCoordZone } from '../selectors/player';
 
 const styles = (theme: Theme) => {
-    console.log(theme);
     return createStyles({
         main: {
             width: '100%',

@@ -8,10 +8,23 @@ export interface CardsState {
   [id: string]: Card;
 }
 
-export interface Card {
+export type Card = CardView & CardLogic;
+
+export interface CardView {
   id: string;
   name: string;
-  url: string;
+  url: {
+    small: string;
+    normal: string;
+  };
+  foil: boolean;
+  tapped: boolean;
+}
+export interface CardLogic {
+  colorIdentity: string[];
+  owner: string;
+  controller: string;
+
 }
 
 export default function cardsReducer(state: CardsState = {}, action: CardsAction): CardsState {

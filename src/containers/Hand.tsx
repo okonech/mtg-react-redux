@@ -176,13 +176,21 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
     },                              []);
 
     if (isOver && canDrop) {
+      const placeholder = {
+        name: '',
+        id: '',
+        url: {
+          small: '/images/cardback.jpg',
+          normal: '/images/cardback.jpg'
+        },
+        foil: false,
+        tapped: false,
+        colorIdentity: [],
+        owner: '',
+        controller: ''
+      };
       cards.splice(placeholderIndex + indexShift, 0, (
-        <Card
-          key={'handplaceholder'}
-          card={{ name: '', id: '', url: '/images/cardback.jpg' }}
-          opacity={0.2}
-          cardHeight={cardHeight}
-        />
+        <Card key={'handplaceholder'} card={placeholder} opacity={0.2} cardHeight={cardHeight} />
       ));
     }
 
