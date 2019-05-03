@@ -41,7 +41,10 @@ const InfoArea = (props: InfoAreaProps) => {
 
     const { player, moveCards, selectCards, style, classes } = props;
     const { hand, library, graveyard, exile } = player;
-    const drawCard = () => moveCards(library.id, [library.cards[0].id], hand.id, hand.cards.length, 0, 0);
+    const libCards = library.cards;
+    const drawCard = () => moveCards(library.id, [libCards[libCards.length - 1].id],
+                                     hand.id, hand.cards.length, 0, 0);
+
     return (
         <section className={classes.main} style={style}>
             <PlayerInfo
