@@ -1,7 +1,7 @@
 
 import { createStyles } from '@material-ui/core';
-import { Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
@@ -11,6 +11,7 @@ import { moveCards as moveCardsType } from '../actions/zonesActions';
 import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { CardCoordZone } from '../selectors/player';
+import { setSnapEnabled, setSnapOverNode, snapToGrid } from '../util/snapToGrid';
 
 const styles = (theme: Theme) => {
     return createStyles({
@@ -26,31 +27,20 @@ const styles = (theme: Theme) => {
 };
 
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
-    hover(props, monitor, component: BattleField) {
-        // chrome hack since chrome dislikes item allowing drop over itself
-        // https://github.com/react-dnd/react-dnd/issues/766
-        const { cards } = monitor.getItem();
-        cards.forEach((id) => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.style.display = 'none';
-            }
-        });
-    },
     drop(props: BattleFieldProps, monitor, component: BattleField) {
         const { moveCards, selectCards, zone } = props;
-        const { zoneId, cards, initialX, initialY } = monitor.getItem() as CardDragObject;
-        const node = findDOMNode(component) as Element;
-        const bounds = node.getBoundingClientRect();
-        const xCoord = monitor.getClientOffset().x - bounds.left - initialX;
-        const yCoord = monitor.getClientOffset().y - bounds.top - initialY;
+        const { zoneId, cards } = monitor.getItem() as CardDragObject;
 
-        cards.forEach((id) => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.style.display = 'block';
-            }
-        });
+        const node = findDOMNode(component) as Element;
+
+        // TODO: fix snap logic here
+        const bounds = node.getBoundingClientRect();
+        const { x, y } = monitor.getSourceClientOffset();
+
+        const { x: snapX, y: snapY } = snapToGrid({ x, y });
+
+        const xCoord = snapX - bounds.left;
+        const yCoord = snapY - bounds.top;
 
         moveCards(zoneId, cards, zone.id, zone.cards.length, xCoord, yCoord);
         selectCards([]);
@@ -76,14 +66,19 @@ interface BattleFieldState {
     selectEnabled: boolean;
 }
 
-class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTargetCollectedProps, BattleFieldState>  {
+type AllProps = BattleFieldProps & BattleFieldTargetCollectedProps;
 
-    constructor(props: BattleFieldProps & BattleFieldTargetCollectedProps) {
+class BattleField extends React.Component<AllProps, BattleFieldState>  {
+    public battleFieldRef: React.RefObject<HTMLDivElement>;
+
+    constructor(props: AllProps) {
         super(props);
 
         this.state = {
             selectEnabled: true
         };
+
+        this.battleFieldRef = React.createRef();
     }
 
     public mouseEnter = ((event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: false })));
@@ -93,6 +88,31 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
     public setSelected = (items: SelectableItem[]) => this.props.selectCards(items.map((item) => item.props.card.id));
 
     public clearSelected = () => this.props.selectCards([]);
+
+    public componentDidUpdate(prevProps: AllProps) {
+
+        if (!prevProps.isOver && this.props.isOver) {
+            // enter handler
+            setSnapEnabled(true);
+            setSnapOverNode(this.battleFieldRef.current);
+
+            // chrome hack since chrome dislikes item allowing drop over itself
+            // https://github.com/react-dnd/react-dnd/issues/766
+            const { cards } = this.props.dragItem;
+            cards.forEach((id) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.style.display = 'none';
+                }
+            });
+        }
+
+        if (prevProps.isOver && !this.props.isOver) {
+            // leave handler
+            setSnapEnabled(false);
+        }
+
+    }
 
     public render() {
         const { zone, connectDropTarget, selected, cardHeight, selectCards, style, classes } = this.props;
@@ -118,7 +138,7 @@ class BattleField extends React.PureComponent<BattleFieldProps & BattleFieldTarg
 
         return (
             connectDropTarget(
-                <div className={classes.main} style={style}>
+                <div className={classes.main} style={style} ref={this.battleFieldRef}>
                     <SelectableGroup
                         ref={(ref) => ((window as any).selectableGroup = ref)}
                         className='selectable'

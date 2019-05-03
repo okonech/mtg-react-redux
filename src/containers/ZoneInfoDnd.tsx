@@ -5,7 +5,6 @@ import {
     DragSourceMonitor, DragSourceSpec, DropTarget, DropTargetSpec
 } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { findDOMNode } from 'react-dom';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
 import { CardDragObject } from '../components/DraggableCard';
@@ -41,18 +40,12 @@ const cardSource: DragSourceSpec<ZoneInfoDndProps, CardDragObject> = {
         const { id, cards } = zone;
         const selected = cards[cards.length - 1];
 
-        const node = findDOMNode(component) as Element;
-        const bounds = node.getBoundingClientRect();
-        const offset = monitor.getInitialClientOffset();
-
         selectCards([selected.id]);
 
         return {
             cards: [selected.id],
             firstCard: selected,
-            zoneId: id,
-            initialX: offset.x - bounds.left,
-            initialY: offset.y - bounds.top
+            zoneId: id
         };
     },
     canDrag(props: ZoneInfoDndProps, monitor: DragSourceMonitor) {

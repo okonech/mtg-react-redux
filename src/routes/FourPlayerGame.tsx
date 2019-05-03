@@ -5,6 +5,7 @@ import LoadingPage from '../components/LoadingPage';
 import Menu from '../components/MenuAppBar';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
+import { setCardHeight } from '../util/cardSize';
 
 const gameGrid: React.CSSProperties = {
     display: 'grid',
@@ -35,6 +36,7 @@ class FourPlayerGame extends React.PureComponent<FourPlayerGameProps, {}> {
     }
 
     public render() {
+        setCardHeight(5.625);
         const { players, loading } = this.props;
         if (!loading) {
             return (
@@ -42,19 +44,15 @@ class FourPlayerGame extends React.PureComponent<FourPlayerGameProps, {}> {
                     <Menu />
                     <Player
                         id={players[0]}
-                        pageDivision={{ row: 1, col: 4 }}
                     />
                     <Player
                         id={players[1]}
-                        pageDivision={{ row: 1, col: 4 }}
                     />
                     <Player
                         id={players[2]}
-                        pageDivision={{ row: 1, col: 4 }}
                     />
                     <Player
                         id={players[3]}
-                        pageDivision={{ row: 1, col: 4 }}
                     />
                 </section>
             );

@@ -5,6 +5,7 @@ import LoadingPage from '../components/LoadingPage';
 import MenuAppBar from '../components/MenuAppBar';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
+import { setCardHeight } from '../util/cardSize';
 
 interface SinglePlayerProps {
     players: string[];
@@ -36,9 +37,11 @@ class SinglePlayerGame extends React.PureComponent<SinglePlayerProps & SinglePla
     constructor(props: any) {
         super(props);
         props.initPlayers('test');
+        setCardHeight(22.5);
     }
 
     public render() {
+        setCardHeight(22.5);
         const { players, loading } = this.props;
         if (!loading) {
             return (
@@ -46,7 +49,6 @@ class SinglePlayerGame extends React.PureComponent<SinglePlayerProps & SinglePla
                     <MenuAppBar />
                     <Player
                         id={players[0]}
-                        pageDivision={{ row: 1, col: 1 }}
                     />
                 </section>
             );

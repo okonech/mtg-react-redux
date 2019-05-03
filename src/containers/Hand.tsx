@@ -34,7 +34,9 @@ const styles = (theme: Theme) => createStyles({
     scrollbarWidth: 'thin',
     marginLeft: '9px',
     marginRight: '9px',
-    scrollbarColor: `${theme.palette.secondary.dark} ${theme.palette.action.hover}`
+    scrollbarColor: `${theme.palette.secondary.dark} ${theme.palette.action.hover}`,
+    boxSizing: 'border-box',
+    paddingTop: '3px'
   }
 });
 
@@ -43,18 +45,9 @@ const ScrollingComponent = withScrolling('section');
 const handTarget: DropTargetSpec<HandProps> = {
   hover(props: HandProps, monitor: DropTargetMonitor, component: Hand) {
     const node = findDOMNode(component) as Element;
-    const { cards } = monitor.getItem();
     const placeholderIndex = getPlaceholderIndex(props.zone, monitor, node);
     component.setState({ placeholderIndex });
 
-    // chrome hack since chrome dislikes item allowing drop over itself
-    // https://github.com/react-dnd/react-dnd/issues/766
-    cards.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) {
-        element.style.display = 'none';
-      }
-    });
   },
   drop(props: HandProps, monitor, component: Hand) {
     const { moveCards, selectCards, zone } = props;
@@ -128,9 +121,11 @@ function getPlaceholderIndex(zone: CardZone, monitor: DropTargetMonitor, handEle
 
 }
 
-class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, HandState> {
+type AllProps = HandProps & HandTargetCollectedProps;
 
-  constructor(props: HandProps & HandTargetCollectedProps) {
+class Hand extends React.PureComponent<AllProps, HandState> {
+
+  constructor(props: AllProps) {
     super(props);
 
     this.state = {
@@ -146,6 +141,24 @@ class Hand extends React.PureComponent<HandProps & HandTargetCollectedProps, Han
   public mouseEnter = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: false }));
 
   public mouseLeave = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: true }));
+
+  public componentDidUpdate(prevProps: AllProps) {
+
+    if (!prevProps.isOver && this.props.isOver) {
+      // enter handler
+
+      // chrome hack since chrome dislikes item allowing drop over itself
+      // https://github.com/react-dnd/react-dnd/issues/766
+      const { cards } = this.props.dragItem;
+      cards.forEach((id) => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.style.display = 'none';
+        }
+      });
+    }
+
+  }
 
   public render() {
     const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards, style, classes } = this.props;

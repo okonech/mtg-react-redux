@@ -5,6 +5,7 @@ import LoadingPage from '../components/LoadingPage';
 import MenuAppBar from '../components/MenuAppBar';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
+import { setCardHeight } from '../util/cardSize';
 
 const gameGrid: React.CSSProperties = {
     display: 'grid',
@@ -39,6 +40,7 @@ class TwoPlayerGame extends React.PureComponent<TwoPlayerGameProps & TwoPlayerDi
     }
 
     public render() {
+        setCardHeight(11.25);
         const { players, loading } = this.props;
         if (!loading) {
             return (
@@ -46,11 +48,9 @@ class TwoPlayerGame extends React.PureComponent<TwoPlayerGameProps & TwoPlayerDi
                     <MenuAppBar />
                     <Player
                         id={players[0]}
-                        pageDivision={{ row: 1, col: 2 }}
                     />
                     <Player
                         id={players[1]}
-                        pageDivision={{ row: 1, col: 2 }}
                     />
                 </section>
             );

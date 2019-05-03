@@ -6,7 +6,7 @@ import Card from '../components/Card';
 import { Types } from '../Constants';
 import { DragLayerProps } from '../containers/CardCustomDragLayer';
 import { Card as CardType } from '../reducers/cardsReducer';
-import snapToGrid from '../util/snapToGrid';
+import { getSnapEnabled, snapToGrid } from '../util/snapToGrid';
 
 const styles = (theme: Theme) => {
     return createStyles({
@@ -26,9 +26,10 @@ const layerStyle = defaultMemoize((props: DragLayerProps & CardCustomDragLayerPr
 
     let { x, y } = currentOffset;
 
-    if (props.snapToGrid) {
-        [x, y] = snapToGrid(x, y);
+    if (getSnapEnabled()) {
+        ({ x, y } = snapToGrid(currentOffset));
     }
+
     const transform = `translate(${x}px, ${y}px)`;
     return {
         transform,

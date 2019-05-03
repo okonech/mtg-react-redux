@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceMonitor, DragSourceSpec } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { findDOMNode } from 'react-dom';
 import { createSelectable } from 'react-selectable-fast';
 import { defaultMemoize } from 'reselect';
 import { selectCards as selectCardsType } from '../actions/selectActions';
@@ -15,13 +14,11 @@ export interface CardDragObject {
   cards: string[];
   firstCard: CardType;
   zoneId: string;
-  initialX: number;
-  initialY: number;
 }
 
 const dragCardStyle = defaultMemoize((xCoord: number, yCoord: number, cardHeight: number): React.CSSProperties => {
   const transform = `translate3d(${Math.max(0, xCoord)}px, ${Math.max(0, yCoord)}px, 0)`;
-  return (!!xCoord && !!yCoord) ? {
+  return ((typeof xCoord === 'number') && (typeof yCoord === 'number')) ? {
     position: 'absolute',
     transform,
     WebkitTransform: transform,
@@ -45,9 +42,6 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
 
     const { selectCards, selectedCards, zoneId, card } = props;
     const { id } = card;
-    const node = findDOMNode(component) as Element;
-    const bounds = node.getBoundingClientRect();
-    const offset = monitor.getInitialClientOffset();
     const cards = [...selectedCards];
     if (!cards.includes(id)) {
       cards.push(id);
@@ -57,9 +51,7 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
     return {
       cards,
       firstCard: card,
-      zoneId,
-      initialX: offset.x - bounds.left,
-      initialY: offset.y - bounds.top
+      zoneId
     };
   },
   endDrag(props: DraggableCardProps, monitor: DragSourceMonitor) {

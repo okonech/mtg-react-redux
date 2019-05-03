@@ -1,4 +1,4 @@
-import { Button, createStyles, SvgIcon, Typography } from '@material-ui/core';
+import { createStyles, IconButton, SvgIcon, Typography } from '@material-ui/core';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core/styles';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
@@ -16,6 +16,7 @@ const styles = (theme: Theme) => {
             justifyContent: 'center',
             borderTop: `1px solid ${divider}`,
             overflow: 'hidden'
+
         },
         icon: {
             height: '100%',
@@ -25,16 +26,18 @@ const styles = (theme: Theme) => {
             display: 'flex',
             flexDirection: 'row',
             position: 'absolute',
-            alignSelf: 'center'
+            alignSelf: 'center',
+            boxSizing: 'border-box',
+            padding: '4px'
         },
         text: noSelect({
-            position: 'absolute',
             alignSelf: 'center',
             fontWeight: 800,
             fontSize: '110%'
         }) as CSSProperties,
         button: {
-
+            marginLeft: '-8px',
+            marginRight: '-8px'
         }
     });
 };
@@ -58,20 +61,18 @@ const LifeCounter = (props: LifeCounterProps) => {
             >
                 {icon}
             </SvgIcon>
-            <Typography
-                className={classes.text}
-            >
-                {life}
-            </Typography>
-            <span
-                className={classes.row}
-            >
-                <Button color='secondary' className={classes.button}>
+            <span className={classes.row} >
+                <IconButton color='secondary' className={classes.button}>
                     <RemoveCircle />
-                </Button>
-                <Button color='secondary' className={classes.button}>
+                </IconButton >
+                <Typography
+                    className={classes.text}
+                >
+                    {life}
+                </Typography>
+                <IconButton color='secondary' className={classes.button}>
                     <AddCircle />
-                </Button>
+                </IconButton >
             </span>
 
         </article>
