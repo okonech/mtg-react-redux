@@ -1,11 +1,7 @@
 import React from 'react';
 
-interface WithHoverProps {
-    isHovered?: boolean;
-}
-
 const withHover = <P extends object>(Component: React.ComponentType<P>) =>
-    class WithLoading extends React.Component<P & WithHoverProps> {
+    class WithLoading extends React.Component<P> {
         public state = {
             isHovered: false
         };
@@ -19,7 +15,7 @@ const withHover = <P extends object>(Component: React.ComponentType<P>) =>
         }
 
         public render() {
-            const { isHovered, ...props } = this.props;
+            const { ...props } = this.props;
             return (
                 <Component
                     isHovered={this.state.isHovered}

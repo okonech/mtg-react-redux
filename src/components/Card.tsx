@@ -19,7 +19,9 @@ const styles = (theme: Theme) => {
     },
     text: {
       padding: 5,
-      wordWrap: 'break-word'
+      wordWrap: 'break-word',
+      display: 'inline',
+      backgroundColor: theme.palette.getContrastText(theme.palette.text.primary)
     }
   });
 };
@@ -61,28 +63,49 @@ const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
 
 const Card = (props: AllProps) => {
 
-  const { card, classes, isHovered, onMouseEnter, onMouseLeave } = props;
+  const { card, classes, isHovered, onMouseEnter, onMouseLeave, selecting } = props;
   const { name, url, id } = card;
-  return (
-    <MuiCard
-      id={id}
-      style={cardStyle(props)}
-      raised={isHovered}
-      className={classes.main}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <CardMedia
-        className={classes.media}
-        image={url.small}
-      >
-        <Typography className={classes.text}>
-          {name}
-        </Typography>
-      </CardMedia>
 
-    </MuiCard>
-  );
+  let displayCard;
+
+  if (isHovered && !selecting) {
+    displayCard = (
+      <MuiCard
+        id={id}
+        style={cardStyle(props)}
+        raised={isHovered}
+        className={classes.main}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        <CardMedia
+          className={classes.media}
+          image={url.small}
+        >
+          <Typography className={classes.text}>
+            {(isHovered && !selecting) ? name : ''}
+          </Typography>
+        </CardMedia>
+      </MuiCard>
+    );
+  } else {
+    displayCard = (
+      <MuiCard
+        id={id}
+        style={cardStyle(props)}
+        raised={isHovered}
+        className={classes.main}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        <CardMedia
+          className={classes.media}
+          image={url.small}
+        />
+      </MuiCard>
+    );
+  }
+  return displayCard;
 };
 
 export default withTheme()(withStyles(styles)(withHover(Card)));
