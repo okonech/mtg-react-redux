@@ -3,6 +3,8 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import React, { Component } from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import MultiBackend, { TouchTransition } from 'react-dnd-multi-backend';
+import TouchBackend from 'react-dnd-touch-backend';
 import { Route } from 'react-router';
 import { HashRouter } from 'react-router-dom';
 import FourPlayerGame from './routes/FourPlayerGame';
@@ -27,6 +29,19 @@ const theme = createMuiTheme({
   }
 });
 
+const HTML5toTouch = {
+  backends: [
+    {
+      backend: HTML5Backend
+    },
+    {
+      backend: TouchBackend({ enableMouseEvents: true }), // Note that you can call your backends with options
+      preview: true,
+      transition: TouchTransition
+    }
+  ]
+};
+
 class App extends Component {
   public render() {
     return (
@@ -46,4 +61,4 @@ class App extends Component {
   }
 }
 
-export default DragDropContext(HTML5Backend)(App);
+export default DragDropContext(MultiBackend(HTML5toTouch))(App);
