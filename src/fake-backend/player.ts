@@ -20,7 +20,7 @@ export async function initPlayers(game: string): Promise<PlayersData> {
     await Promise.all(players.map(async (rawPlayer) => {
 
         const player = mapRawToPlayer(rawPlayer);
-        const cards = await mapRawToCards(player, rawPlayer.library);
+        const cards = await mapRawToCardsFake(player, rawPlayer.library);
         const zones = mapDataToZones(player, cards);
 
         allCards.push(...cards);
@@ -62,8 +62,8 @@ export async function mapRawToCardsFake(player: Player, cards: string[]): Promis
             foil: false,
             tapped: false,
             colorIdentity: ['W'],
-            owner: 'testPlayer',
-            controller: 'testPlayer'
+            owner: player.id,
+            controller: player.id
         }
     ));
 }

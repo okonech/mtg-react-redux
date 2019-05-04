@@ -9,7 +9,9 @@ const styles = (theme: Theme) => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            boxSizing: 'border-box',
+            padding: '4px'
         },
         avatar: {
             width: '100%',

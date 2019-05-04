@@ -10,15 +10,10 @@ import { Zone } from '../reducers/zonesReducer';
 import { PlayerData, playerSelector } from '../selectors/player';
 import { selectedSelector } from '../selectors/selected';
 
-interface PageDivision {
-    row: number;
-    col: number;
-}
 export interface PlayerMappedProps {
     player: PlayerData;
     selected: string[];
     id: string;
-    pageDivision: PageDivision;
 }
 
 export interface PlayerMappedDispatch {
@@ -28,11 +23,10 @@ export interface PlayerMappedDispatch {
     selectCards?: selectCards;
 }
 
-const mapStateToProps = (state: AppState, ownProps: { id: string, pageDivision: PageDivision }) => ({
+const mapStateToProps = (state: AppState, ownProps: { id: string }) => ({
     player: playerSelector(state, ownProps.id),
     selected: selectedSelector(state),
-    id: ownProps.id,
-    pageDivision: ownProps.pageDivision
+    id: ownProps.id
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerMappedProps) => ({

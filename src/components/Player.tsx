@@ -7,6 +7,7 @@ import BattleField from '../containers/BattleField';
 import CardCustomDragLayer from '../containers/CardCustomDragLayer';
 import Hand from '../containers/Hand';
 import { PlayerMappedDispatch, PlayerMappedProps } from '../containers/Player';
+import { getCardSizeVh } from '../util/cardSize';
 import InfoArea from './InfoArea';
 
 const styles = (theme: Theme) => {
@@ -35,10 +36,11 @@ const grid = defaultMemoize((cardHeight: number, style: React.CSSProperties): Re
 }));
 
 const Player = (props: AllProps) => {
-    const { player, moveCards, selectCards, selected, pageDivision, style, classes } = props;
+    const { player, moveCards, selectCards, selected, style, classes } = props;
     const { hand, battlefield, library } = player;
-    const { col } = pageDivision;
-    const cardHeight = (25 / col) - ((10 / 4) / col);
+
+    const { height: cardHeight } = getCardSizeVh();
+
     return (
         <div className={classes.main} style={grid(cardHeight, style)}>
             <InfoArea
