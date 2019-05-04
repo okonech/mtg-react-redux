@@ -35,7 +35,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "clean": "rm -rf node_modules",
-    "prod": "npm run build && serve -s build"
+    "prod": "npm run build && serve -s build",
+    "start-https": "set HTTPS=true&&npm start"
   },
   "devDependencies": {
     "@types/deep-freeze": "^0.1.1",
