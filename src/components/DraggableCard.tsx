@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceMonitor, DragSourceSpec } from 'react-dnd';
+import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceSpec } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { createSelectable } from 'react-selectable-fast';
 import { defaultMemoize } from 'reselect';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { Types } from '../Constants';
 import { Card as CardType } from '../reducers/cardsReducer';
-import Card from './Card';
+import CardHover from './CardHover';
 
 // draggable card component with id, key, x, y position
 
@@ -35,10 +35,10 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
     // (like a card in Kanban board dragged between lists)
     // you can implement something like this to keep its
     // appearance dragged:
-    return monitor.getItem().id === props.card.id;
+    return monitor.getItem().cards.includes(props.card.id);
   },
 
-  beginDrag(props: DraggableCardProps, monitor: DragSourceMonitor, component: DraggableCard): CardDragObject {
+  beginDrag(props, monitor, component: DraggableCard): CardDragObject {
 
     const { selectCards, selectedCards, zoneId, card } = props;
     const { id } = card;
@@ -53,13 +53,6 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
       firstCard: card,
       zoneId
     };
-  },
-  endDrag(props: DraggableCardProps, monitor: DragSourceMonitor) {
-    const item = monitor.getItem();
-    const element = document.getElementById(item.firstCard.id);
-    if (element) {
-      element.style.display = 'block';
-    }
   }
 
 };
@@ -109,7 +102,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 
   public render() {
-    const { card, isDragging, connectDragSource, selectedCards, selecting,
+    const { card, connectDragSource, selectedCards, selecting,
             onMouseEnter, onMouseLeave, selectableRef, cardHeight, xCoord, yCoord } = this.props;
 
     const { id } = card;
@@ -123,12 +116,9 @@ class DraggableCard extends React.PureComponent<AllProps> {
           // handles drag transform in non list areas
           style={dragCardStyle(xCoord, yCoord, cardHeight)}
         >
-          <Card
+          <CardHover
             key={'card' + id}
             card={card}
-            // set currently dragged card to invisible while dragging it
-            // gives appearance of the dragged card being the actual dragged card and not the copy
-            opacity={isDragging ? 0 : 1}
             // this can cause chrome to not drag
             selected={selectedCards.includes(id)}
             selecting={selecting}
