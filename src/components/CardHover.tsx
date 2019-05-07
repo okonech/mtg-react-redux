@@ -1,5 +1,5 @@
 
-import withHover from '../hocs/WithHover';
+import WithHover from '../hocs/WithHover';
 import Card from './Card';
 
-export default withHover(Card);
+export default WithHover(Card);

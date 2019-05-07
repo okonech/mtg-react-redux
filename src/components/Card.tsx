@@ -3,7 +3,6 @@ import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { defaultMemoize } from 'reselect';
-import withHover from '../hocs/WithHover';
 import { Card as CardType } from '../reducers/cardsReducer';
 import { noSelect } from '../util/styling';
 
@@ -13,6 +12,9 @@ const styles = (theme: Theme) => {
       borderRadius: '5%',
       boxSizing: 'border-box',
       flexShrink: 0
+      // '&:hover': {
+      //   transform: 'scale(1.04)'
+      // }
     },
     media: {
       height: '100%'
@@ -27,10 +29,10 @@ const styles = (theme: Theme) => {
 };
 
 interface CardProps extends WithStyles<typeof styles> {
-  opacity: number;
+  opacity?: number;
   card: CardType;
   cardHeight: number;
-
+  hidden?: boolean;
 }
 
 interface SelectableProps {
@@ -48,15 +50,16 @@ interface HoverProps {
 type AllProps = CardProps & SelectableProps & HoverProps & WithTheme;
 
 const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
-  const { opacity, selected, selecting, cardHeight, theme, isHovered } = props;
+  const { opacity, selected, selecting, cardHeight, theme, isHovered, hidden } = props;
   const { secondary, primary } = theme.palette;
   return noSelect({
-    opacity,
+    opacity: opacity || 1,
     // primary selecting, secondary selected,  black default
     border: selected ? `1px solid ${secondary.main}` : selecting ? `1px solid ${primary.main}` : `1px solid black`,
     // todo: convert to memoized function that takes props and returns style obj
     height: `${cardHeight}vh`,
     width: `${cardHeight * 0.716}vh`,
+    display: hidden ? 'none' : 'block',
     transform: (isHovered && !selecting) ? 'scale(1.025)' : 'none'
   });
 });
@@ -66,46 +69,29 @@ const Card = (props: AllProps) => {
   const { card, classes, isHovered, onMouseEnter, onMouseLeave, selecting } = props;
   const { name, url, id } = card;
 
-  let displayCard;
+  const displayName = (isHovered && !selecting) ? (
+    <Typography className={classes.text}>
+      {isHovered ? name : ''}
+    </Typography>
+  ) : <div />;
 
-  if (isHovered && !selecting) {
-    displayCard = (
-      <MuiCard
-        id={id}
-        style={cardStyle(props)}
-        raised={isHovered}
-        className={classes.main}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
+  return (
+    <MuiCard
+      id={id}
+      style={cardStyle(props)}
+      raised={isHovered}
+      className={classes.main}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <CardMedia
+        className={classes.media}
+        image={url.small}
       >
-        <CardMedia
-          className={classes.media}
-          image={url.small}
-        >
-          <Typography className={classes.text}>
-            {(isHovered && !selecting) ? name : ''}
-          </Typography>
-        </CardMedia>
-      </MuiCard>
-    );
-  } else {
-    displayCard = (
-      <MuiCard
-        id={id}
-        style={cardStyle(props)}
-        raised={isHovered}
-        className={classes.main}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-      >
-        <CardMedia
-          className={classes.media}
-          image={url.small}
-        />
-      </MuiCard>
-    );
-  }
-  return displayCard;
+        {displayName}
+      </CardMedia>
+    </MuiCard>
+  );
 };
 
-export default withTheme()(withStyles(styles)(withHover(Card)));
+export default withTheme()(withStyles(styles)(Card));

@@ -2,8 +2,9 @@ import { v4 as uuid } from 'uuid';
 import { Card } from '../reducers/cardsReducer';
 import { Player } from '../reducers/playersReducer';
 import { Zone } from '../reducers/zonesReducer';
+import fakeResponse from './fake-response.json';
 import { Player as RawPlayer, players } from './playerData';
-import { getCards } from './scryfall';
+import { getCards, ScryfallCollectionCard } from './scryfall';
 
 export interface PlayersData {
     cards: Card[];
@@ -51,26 +52,17 @@ function mapRawToPlayer(player: RawPlayer): Player {
 }
 
 export async function mapRawToCardsFake(player: Player, cards: string[]): Promise<Card[]> {
-    return cards.map((card) => (
-        {
-            id: uuid(),
-            name: card,
-            url: {
-                small: '/images/cardback.jpg',
-                normal: '/images/cardback.jpg'
-            },
-            foil: false,
-            tapped: false,
-            colorIdentity: ['W'],
-            owner: player.id,
-            controller: player.id
-        }
-    ));
+    return parseCardData(player, fakeResponse[player.name]);
 }
 
 export async function mapRawToCards(player: Player, cards: string[]): Promise<Card[]> {
     const apiCards = await getCards(cards);
-    return apiCards.map((card) => {
+    console.log(JSON.stringify(apiCards));
+    return parseCardData(player, apiCards);
+}
+
+function parseCardData(player: Player, cards: ScryfallCollectionCard[]): Card[] {
+    return cards.map((card) => {
         const { card_faces, color_identity } = card;
         let { name, image_uris } = card;
 

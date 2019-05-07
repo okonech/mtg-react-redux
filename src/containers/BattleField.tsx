@@ -31,6 +31,13 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
         const { moveCards, selectCards, zone } = props;
         const { zoneId, cards } = monitor.getItem() as CardDragObject;
 
+        cards.forEach((id) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.style.display = 'block';
+            }
+        });
+
         const node = findDOMNode(component) as Element;
 
         // TODO: fix snap logic here
@@ -71,23 +78,32 @@ type AllProps = BattleFieldProps & BattleFieldTargetCollectedProps;
 class BattleField extends React.Component<AllProps, BattleFieldState>  {
     public battleFieldRef: React.RefObject<HTMLDivElement>;
 
+    public state: BattleFieldState = {
+        selectEnabled: true
+    };
+
     constructor(props: AllProps) {
         super(props);
-
-        this.state = {
-            selectEnabled: true
-        };
 
         this.battleFieldRef = React.createRef();
     }
 
-    public mouseEnter = ((event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: false })));
+    public mouseEnter = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: false }));
 
-    public mouseLeave = ((event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: true })));
+    public mouseLeave = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: true }));
 
-    public setSelected = (items: SelectableItem[]) => this.props.selectCards(items.map((item) => item.props.card.id));
+    public setSelected = (items: SelectableItem[]) => {
+        if (items.length > 0) {
+            this.props.selectCards(items.map((item) => item.props.card.id));
+        }
+    }
 
-    public clearSelected = () => this.props.selectCards([]);
+    public clearSelected = () => {
+        const { selectCards, selected } = this.props;
+        if (selected.length > 0) {
+            selectCards([]);
+        }
+    }
 
     public componentDidUpdate(prevProps: AllProps) {
 
@@ -96,8 +112,8 @@ class BattleField extends React.Component<AllProps, BattleFieldState>  {
             setSnapEnabled(true);
             setSnapOverNode(this.battleFieldRef.current);
 
-            // chrome hack since chrome dislikes item allowing drop over itself
-            // https://github.com/react-dnd/react-dnd/issues/766
+            // chrome hack, can't send display none prop directly to card
+            // https://github.com/react-dnd/react-dnd/issues/477
             const { cards } = this.props.dragItem;
             cards.forEach((id) => {
                 const element = document.getElementById(id);

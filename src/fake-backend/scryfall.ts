@@ -15,7 +15,7 @@ function chunk(arr: string[], len: number): string[][] {
     return chunks;
 }
 
-interface ScryfallCollectionCard {
+export interface ScryfallCollectionCard {
     cmc: number;
     collector_number: string;
     color_identity: color[];

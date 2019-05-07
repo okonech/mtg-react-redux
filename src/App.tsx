@@ -1,4 +1,5 @@
 
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import React, { Component } from 'react';
 import { DragDropContext } from 'react-dnd';
@@ -46,6 +47,7 @@ class App extends Component {
   public render() {
     return (
       <MuiThemeProvider theme={theme}>
+        <CssBaseline />
         <HashRouter>
           <React.Fragment>
             <Route exact={true} path='/' component={LoginPage} />

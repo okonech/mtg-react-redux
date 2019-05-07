@@ -1,7 +1,7 @@
 
 import { createStyles } from '@material-ui/core';
-import { Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
 import withScrolling from 'frontend-collective-react-dnd-scrollzone';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
@@ -125,18 +125,23 @@ type AllProps = HandProps & HandTargetCollectedProps;
 
 class Hand extends React.PureComponent<AllProps, HandState> {
 
-  constructor(props: AllProps) {
-    super(props);
+  public state: HandState = {
+    selectEnabled: true,
+    placeholderIndex: undefined
+  };
 
-    this.state = {
-      placeholderIndex: undefined,
-      selectEnabled: true
-    };
+  public setSelected = (items: SelectableItem[]) => {
+    if (items.length > 0) {
+      this.props.selectCards(items.map((item) => item.props.card.id));
+    }
   }
 
-  public setSelected = (items: SelectableItem[]) => this.props.selectCards(items.map((item) => item.props.card.id));
-
-  public clearSelected = () => this.props.selectCards([]);
+  public clearSelected = () => {
+    const { selectCards, selected } = this.props;
+    if (selected.length > 0) {
+      selectCards([]);
+    }
+  }
 
   public mouseEnter = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: false }));
 
@@ -147,8 +152,8 @@ class Hand extends React.PureComponent<AllProps, HandState> {
     if (!prevProps.isOver && this.props.isOver) {
       // enter handler
 
-      // chrome hack since chrome dislikes item allowing drop over itself
-      // https://github.com/react-dnd/react-dnd/issues/766
+      // chrome hack, can't send display none prop directly to card
+      // https://github.com/react-dnd/react-dnd/issues/477
       const { cards } = this.props.dragItem;
       cards.forEach((id) => {
         const element = document.getElementById(id);
