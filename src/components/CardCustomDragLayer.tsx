@@ -53,7 +53,6 @@ const cardStyle = defaultMemoize((cardHeight: number, index: number): React.CSSP
 
 export interface CardCustomDragLayerProps extends WithStyles<typeof styles> {
     cardHeight: number;
-    snapToGrid?: boolean;
 }
 
 class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCustomDragLayerProps> {

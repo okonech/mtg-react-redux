@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import CardCustomDragLayer from '../components/CardCustomDragLayer';
 import LoadingPage from '../components/LoadingPage';
 import Menu from '../components/MenuAppBar';
 import Player from '../containers/Player';
@@ -36,7 +37,8 @@ class FourPlayerGame extends React.PureComponent<FourPlayerGameProps, {}> {
     }
 
     public render() {
-        setCardHeight(5.625);
+        const cardHeight = 5.625;
+        setCardHeight(cardHeight);
         const { players, loading } = this.props;
         if (!loading) {
             return (
@@ -53,6 +55,9 @@ class FourPlayerGame extends React.PureComponent<FourPlayerGameProps, {}> {
                     />
                     <Player
                         id={players[3]}
+                    />
+                    <CardCustomDragLayer
+                        cardHeight={cardHeight}
                     />
                 </section>
             );

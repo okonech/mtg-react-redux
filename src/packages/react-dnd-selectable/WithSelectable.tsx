@@ -1,38 +1,34 @@
 import React from 'react';
-import uuid from 'uuid';
 import { SelectableContext } from './SelectableContext';
 import { WithSelectableContext } from './WithSelectableContext';
 
 interface SelectableState {
     selected: boolean;
     selecting: boolean;
+    id: string;
 }
 
 interface SelectableProps {
-    context: SelectableContext;
+    context?: SelectableContext;
 }
 
 // only wrapped components can be selected
-const CreateSelectable = <P extends object>(Component: React.ComponentType<P>) => {
+const WithSelectable = <P extends { id: string }>(Component: React.ComponentType<P>) => {
     class Selectable extends React.PureComponent<P & SelectableProps, SelectableState> {
 
-        public selectableRef: React.RefObject<HTMLDivElement>;
+        public selectableRef = (ref: HTMLDivElement) => (this.childNode = ref);
+        public childNode: HTMLDivElement;
 
-        public state = {
+        public state: SelectableState = {
             selected: false,
             selecting: false,
-            id: uuid()
+            id: this.props.id
         };
 
-        constructor(props: P & SelectableProps) {
-            super(props);
-            this.selectableRef = React.createRef();
-        }
-
         public componentDidMount() {
-            const { current } = this.selectableRef;
+            const { context } = this.props;
             // put mounted item into registry
-            this.props.context.registry.set(this.state.id, current);
+            context.registry.set(this.state.id, this.childNode);
         }
 
         public componentWillUnmount() {
@@ -57,18 +53,17 @@ const CreateSelectable = <P extends object>(Component: React.ComponentType<P>) =
 
         public render() {
             const { props, state, selectableRef } = this;
-            const { id, selected, selecting } = state;
+            const { selected, selecting } = state;
 
             // remove context prop from passed props
             const { context, ...origProps } = props;
             return (
-                <div ref={selectableRef} id={id}>
-                    <Component
-                        selected={selected}
-                        selecting={selecting}
-                        {...origProps as P}
-                    />
-                </div>
+                <Component
+                    selectableRef={selectableRef}
+                    selected={selected}
+                    selecting={selecting}
+                    {...origProps as P}
+                />
             );
         }
     }
@@ -76,4 +71,4 @@ const CreateSelectable = <P extends object>(Component: React.ComponentType<P>) =
     return WithSelectableContext(Selectable);
 };
 
-export default CreateSelectable;
+export default WithSelectable;

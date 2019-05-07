@@ -22,7 +22,7 @@ export function getCardSizePx() {
     const { height, width } = cardSize;
     const { clientHeight } = document.documentElement;
     return {
-        height: (height / 100) * clientHeight,
-        width: (width / 100) * clientHeight
+        height: Math.round((height / 100) * clientHeight),
+        width: Math.round((width / 100) * clientHeight)
     };
 }

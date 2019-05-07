@@ -4,7 +4,6 @@ import { withStyles, WithStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { defaultMemoize } from 'reselect';
 import BattleField from '../containers/BattleField';
-import CardCustomDragLayer from '../containers/CardCustomDragLayer';
 import Hand from '../containers/Hand';
 import { PlayerMappedDispatch, PlayerMappedProps } from '../containers/Player';
 import { getCardSizeVh } from '../util/cardSize';
@@ -66,9 +65,6 @@ const Player = (props: AllProps) => {
                 selectCards={selectCards}
                 key={hand.id}
                 selected={selected}
-                cardHeight={cardHeight}
-            />
-            <CardCustomDragLayer
                 cardHeight={cardHeight}
             />
         </div>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import LoadingPage from '../components/LoadingPage';
 import MenuAppBar from '../components/MenuAppBar';
+import CardCustomDragLayer from '../containers/CardCustomDragLayer';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
 import { setCardHeight } from '../util/cardSize';
@@ -40,7 +41,8 @@ class TwoPlayerGame extends React.PureComponent<TwoPlayerGameProps & TwoPlayerDi
     }
 
     public render() {
-        setCardHeight(11.25);
+        const cardHeight = 11.25;
+        setCardHeight(cardHeight);
         const { players, loading } = this.props;
         if (!loading) {
             return (
@@ -51,6 +53,9 @@ class TwoPlayerGame extends React.PureComponent<TwoPlayerGameProps & TwoPlayerDi
                     />
                     <Player
                         id={players[1]}
+                    />
+                    <CardCustomDragLayer
+                        cardHeight={cardHeight}
                     />
                 </section>
             );
