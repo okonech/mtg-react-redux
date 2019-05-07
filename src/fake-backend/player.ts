@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid';
 import { Card } from '../reducers/cardsReducer';
 import { Player } from '../reducers/playersReducer';
 import { Zone } from '../reducers/zonesReducer';
+import shuffle from '../util/shuffle';
 import fakeResponse from './fake-response.json';
 import { Player as RawPlayer, players } from './playerData';
 import { getCards, ScryfallCollectionCard } from './scryfall';
@@ -13,7 +14,7 @@ export interface PlayersData {
 }
 
 export async function initPlayers(game: string): Promise<PlayersData> {
-    await setTimeout(null, 100);
+    await setTimeout(null, 0);
     const allCards = new Array<Card>();
     const allPlayers = new Array<Player>();
     const allZones = new Array<Zone>();
@@ -21,9 +22,8 @@ export async function initPlayers(game: string): Promise<PlayersData> {
     await Promise.all(players.map(async (rawPlayer) => {
 
         const player = mapRawToPlayer(rawPlayer);
-        const cards = await mapRawToCardsFake(player, rawPlayer.library);
+        const cards = shuffle(await mapRawToCardsFake(player, rawPlayer.library));
         const zones = mapDataToZones(player, cards);
-
         allCards.push(...cards);
         allPlayers.push(player);
         allZones.push(...zones);
@@ -34,7 +34,6 @@ export async function initPlayers(game: string): Promise<PlayersData> {
         zones: allZones,
         players: allPlayers
     };
-
 }
 
 function mapRawToPlayer(player: RawPlayer): Player {
