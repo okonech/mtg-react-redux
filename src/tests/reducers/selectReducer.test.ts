@@ -3,7 +3,6 @@ import { selectCards } from '../../actions/selectActions';
 import selectReducer, { selectedSelector, SelectState } from '../../reducers/selectReducer';
 
 let state: SelectState = {
-    canSelect: false,
     selected: []
 };
 
@@ -20,7 +19,6 @@ it('selects cards', () => {
     deepFreeze(action);
     state = selectReducer(oldState, action);
     expect(state).toEqual({
-        canSelect: false,
         selected
     });
 });
@@ -33,7 +31,6 @@ it('selects more cards', () => {
     deepFreeze(action);
     state = selectReducer(oldState, action);
     expect(state).toEqual({
-        canSelect: false,
         selected
     });
 });
@@ -54,7 +51,6 @@ it('clears selected cards', () => {
     deepFreeze(action);
     state = selectReducer(oldState, action);
     expect(state).toEqual({
-        canSelect: false,
         selected
     });
 });

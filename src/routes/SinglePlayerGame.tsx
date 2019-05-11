@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import LoadingPage from '../components/LoadingPage';
 import MenuAppBar from '../components/MenuAppBar';
+import CardCustomDragLayer from '../containers/CardCustomDragLayer';
 import Player from '../containers/Player';
 import { AppState } from '../reducers/index';
 import { setCardHeight } from '../util/cardSize';
@@ -37,11 +38,11 @@ class SinglePlayerGame extends React.PureComponent<SinglePlayerProps & SinglePla
     constructor(props: any) {
         super(props);
         props.initPlayers('test');
-        setCardHeight(22.5);
     }
 
     public render() {
-        setCardHeight(22.5);
+        const cardHeight = 22.5;
+        setCardHeight(cardHeight);
         const { players, loading } = this.props;
         if (!loading) {
             return (
@@ -49,6 +50,9 @@ class SinglePlayerGame extends React.PureComponent<SinglePlayerProps & SinglePla
                     <MenuAppBar />
                     <Player
                         id={players[0]}
+                    />
+                    <CardCustomDragLayer
+                        cardHeight={cardHeight}
                     />
                 </section>
             );

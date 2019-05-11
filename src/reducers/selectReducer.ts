@@ -5,12 +5,10 @@ import { MoveCardsAction } from '../actions/zonesActions';
 // Single boolean loading value to be toggled
 
 export interface SelectState {
-    canSelect: boolean;
     selected: string[];
 }
 
 const defaultState: SelectState = {
-    canSelect: false,
     selected: []
 };
 

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceSpec } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { createSelectable } from 'react-selectable-fast';
 import { defaultMemoize } from 'reselect';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { Types } from '../Constants';
+import { WithSelectable } from '../packages/react-dnd-selectable';
 import { Card as CardType } from '../reducers/cardsReducer';
 import CardHover from './CardHover';
 
@@ -58,10 +58,9 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
 };
 
 interface DraggableCardProps {
+  id: string;
   card: CardType;
   zoneId: string;
-  onMouseEnter: (event) => void;
-  onMouseLeave: (event) => void;
   selectedCards: string[];
   selectCards: selectCardsType;
   cardHeight: number;
@@ -102,19 +101,15 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 
   public render() {
-    const { card, connectDragSource, selectedCards, selecting,
-            onMouseEnter, onMouseLeave, selectableRef, cardHeight, xCoord, yCoord } = this.props;
-
-    const { id } = card;
+    const { card, connectDragSource, selectedCards, selecting, selectableRef,
+            cardHeight, xCoord, yCoord, id } = this.props;
 
     return (
       connectDragSource(
         <div
-          ref={selectableRef}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
           // handles drag transform in non list areas
           style={dragCardStyle(xCoord, yCoord, cardHeight)}
+          ref={selectableRef}
         >
           <CardHover
             key={'card' + id}
@@ -130,9 +125,9 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 }
 
-export default createSelectable(DragSource<DraggableCardProps & SelectableProps, DraggableCardSourceCollectedProps>(
+export default DragSource<DraggableCardProps & SelectableProps, DraggableCardSourceCollectedProps>(
   Types.CARD, cardSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging()
-  }))(DraggableCard));
+  }))(WithSelectable(DraggableCard));

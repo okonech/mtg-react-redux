@@ -1,15 +1,15 @@
 
 import { createStyles } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
-import { SelectableGroup, SelectableItem } from 'react-selectable-fast';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
 import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
+import { SelectableGroup } from '../packages/react-dnd-selectable';
 import { CardCoordZone } from '../selectors/player';
 import { setSnapEnabled, setSnapOverNode, snapToGrid } from '../util/snapToGrid';
 
@@ -69,18 +69,10 @@ interface BattleFieldTargetCollectedProps {
     dragItem: CardDragObject;
 }
 
-interface BattleFieldState {
-    selectEnabled: boolean;
-}
-
 type AllProps = BattleFieldProps & BattleFieldTargetCollectedProps;
 
-class BattleField extends React.Component<AllProps, BattleFieldState>  {
+class BattleField extends React.PureComponent<AllProps>  {
     public battleFieldRef: React.RefObject<HTMLDivElement>;
-
-    public state: BattleFieldState = {
-        selectEnabled: true
-    };
 
     constructor(props: AllProps) {
         super(props);
@@ -88,13 +80,9 @@ class BattleField extends React.Component<AllProps, BattleFieldState>  {
         this.battleFieldRef = React.createRef();
     }
 
-    public mouseEnter = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: false }));
-
-    public mouseLeave = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: true }));
-
-    public setSelected = (items: SelectableItem[]) => {
+    public setSelected = (items: string[]) => {
         if (items.length > 0) {
-            this.props.selectCards(items.map((item) => item.props.card.id));
+            this.props.selectCards(items);
         }
     }
 
@@ -132,16 +120,14 @@ class BattleField extends React.Component<AllProps, BattleFieldState>  {
 
     public render() {
         const { zone, connectDropTarget, selected, cardHeight, selectCards, style, classes } = this.props;
-        const { selectEnabled } = this.state;
         const cards = zone.cards.reduce((acc, curr) => {
 
             acc.push(
                 <DraggableCard
+                    id={curr.id}
                     zoneId={zone.id}
                     card={curr}
                     key={'draggable' + curr.id}
-                    onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}
                     selectedCards={selected}
                     selectCards={selectCards}
                     cardHeight={cardHeight}
@@ -156,12 +142,8 @@ class BattleField extends React.Component<AllProps, BattleFieldState>  {
             connectDropTarget(
                 <div className={classes.main} style={style} ref={this.battleFieldRef}>
                     <SelectableGroup
-                        ref={(ref) => ((window as any).selectableGroup = ref)}
+                        groupId={zone.id}
                         className='selectable'
-                        tolerance={0}
-                        deselectOnEsc={true}
-                        disabled={!selectEnabled}
-                        resetOnStart={true}
                         onSelectionFinish={this.setSelected}
                         onSelectionClear={this.clearSelected}
                     >

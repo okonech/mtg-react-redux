@@ -1,17 +1,17 @@
 
 import { createStyles } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import withScrolling from 'frontend-collective-react-dnd-scrollzone';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
-import { SelectableGroup, SelectableItem } from 'react-selectable-fast';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
 import Card from '../components/Card';
 import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
+import SelectableGroup from '../packages/react-dnd-selectable/SelectableGroup';
 import { CardZone } from '../selectors/player';
 
 const styles = (theme: Theme) => createStyles({
@@ -82,7 +82,6 @@ interface HandTargetCollectedProps {
 
 interface HandState {
   placeholderIndex: number;
-  selectEnabled: boolean;
 }
 
 function getPlaceholderIndex(zone: CardZone, monitor: DropTargetMonitor, handElement: Element) {
@@ -126,13 +125,12 @@ type AllProps = HandProps & HandTargetCollectedProps;
 class Hand extends React.PureComponent<AllProps, HandState> {
 
   public state: HandState = {
-    selectEnabled: true,
     placeholderIndex: undefined
   };
 
-  public setSelected = (items: SelectableItem[]) => {
+  public setSelected = (items: string[]) => {
     if (items.length > 0) {
-      this.props.selectCards(items.map((item) => item.props.card.id));
+      this.props.selectCards(items);
     }
   }
 
@@ -142,10 +140,6 @@ class Hand extends React.PureComponent<AllProps, HandState> {
       selectCards([]);
     }
   }
-
-  public mouseEnter = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: false }));
-
-  public mouseLeave = (event: any) => (this.props.dragItem ? null : this.setState({ selectEnabled: true }));
 
   public componentDidUpdate(prevProps: AllProps) {
 
@@ -167,18 +161,17 @@ class Hand extends React.PureComponent<AllProps, HandState> {
 
   public render() {
     const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards, style, classes } = this.props;
-    const { placeholderIndex, selectEnabled } = this.state;
+    const { placeholderIndex } = this.state;
 
     let indexShift = 0;
     let shownCount = 0;
     const cards = zone.cards.reduce((acc, curr, idx) => {
       acc.push(
         <DraggableCard
+          id={curr.id}
           zoneId={zone.id}
           card={curr}
           key={'draggable' + curr.id}
-          onMouseEnter={this.mouseEnter}
-          onMouseLeave={this.mouseLeave}
           selectedCards={selected}
           selectCards={selectCards}
           cardHeight={cardHeight}
@@ -216,12 +209,8 @@ class Hand extends React.PureComponent<AllProps, HandState> {
       connectDropTarget(
         <div className={classes.main} style={style} >
           <SelectableGroup
-            id={'selectable' + zone.id}
+            groupId={zone.id}
             className='selectable'
-            tolerance={0}
-            deselectOnEsc={true}
-            disabled={!selectEnabled}
-            resetOnStart={true}
             onSelectionFinish={this.setSelected}
             onSelectionClear={this.clearSelected}
           >
