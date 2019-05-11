@@ -1,80 +1,79 @@
-import { Theme } from '@material-ui/core';
-import { createStyles } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import Paper from '@material-ui/core/Paper';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink, LinkProps } from 'react-router-dom';
 
-const styles = (theme: Theme) => createStyles({
-  main: {
-    paddingTop: theme.spacing.unit * 8,
-    width: 'auto',
-    display: 'block', // Fix IE 11 issue.
-    paddingLeft: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto'
-    }
-  },
+const useStyles = makeStyles((theme) => ({
   paper: {
+    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`
+    alignItems: 'center'
   },
   avatar: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing.unit
+    marginTop: theme.spacing(1)
   },
   submit: {
-    marginTop: theme.spacing.unit * 3
+    margin: theme.spacing(3, 0, 2)
   }
-});
+}));
 
-interface LoginPageProps extends WithStyles<typeof styles> {
-  style?: React.CSSProperties;
-}
+type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
+const PlayerLink = React.forwardRef<HTMLAnchorElement, Omit<LinkProps, 'innerRef' | 'to'>>(
+  (props, ref) => <RouterLink innerRef={ref as any} to='player' {...props} />
+);
 
-const PlayerLink = (props) => <Link to='player' {...props} />;
-
-const LoginPage = (props: LoginPageProps) => {
-  const { classes } = props;
+const LoginPage = () => {
+  const classes = useStyles();
 
   return (
-    <main className={classes.main}>
+    <Container component='main' maxWidth='xs'>
       <CssBaseline />
-      <Paper className={classes.paper}>
+      <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
           Sign in
         </Typography>
-        <form className={classes.form}>
-          <FormControl margin='normal' required={true} fullWidth={true}>
-            <InputLabel htmlFor='email'>Email Address</InputLabel>
-            <Input id='email' name='email' autoComplete='email' autoFocus={true} />
-          </FormControl>
-          <FormControl margin='normal' required={true} fullWidth={true}>
-            <InputLabel htmlFor='password'>Password</InputLabel>
-            <Input name='password' type='password' id='password' autoComplete='current-password' />
-          </FormControl>
+        <form className={classes.form} noValidate={true}>
+          <TextField
+            variant='outlined'
+            margin='normal'
+            required={true}
+            fullWidth={true}
+            id='email'
+            label='Email Address'
+            name='email'
+            autoComplete='email'
+            autoFocus={true}
+          />
+          <TextField
+            variant='outlined'
+            margin='normal'
+            required={true}
+            fullWidth={true}
+            name='password'
+            label='Password'
+            type='password'
+            id='password'
+            autoComplete='current-password'
+          />
           <FormControlLabel
             control={<Checkbox value='remember' color='primary' />}
             label='Remember me'
@@ -84,14 +83,27 @@ const LoginPage = (props: LoginPageProps) => {
             fullWidth={true}
             variant='contained'
             color='primary'
+            className={classes.submit}
             component={PlayerLink}
           >
-            Sign in
+            Sign In
           </Button>
+          <Grid container={true}>
+            <Grid item={true} xs={true}>
+              <Link href='#' variant='body2'>
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item={true}>
+              <Link href='#' variant='body2'>
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
         </form>
-      </Paper>
-    </main>
+      </div>
+    </Container>
   );
 };
 
-export default withStyles(styles)(LoginPage);
+export default LoginPage;

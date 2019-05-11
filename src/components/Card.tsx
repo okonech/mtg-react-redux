@@ -23,6 +23,7 @@ const styles = (theme: Theme) => {
       padding: 5,
       wordWrap: 'break-word',
       display: 'inline',
+      fontSize: '.8rem',
       backgroundColor: theme.palette.getContrastText(theme.palette.text.primary)
     }
   });
@@ -33,6 +34,7 @@ interface CardProps extends WithStyles<typeof styles> {
   card: CardType;
   cardHeight: number;
   hidden?: boolean;
+  isHovered?: boolean;
 }
 
 interface SelectableProps {
@@ -41,13 +43,7 @@ interface SelectableProps {
   selecting?: boolean;
 }
 
-interface HoverProps {
-  isHovered?: boolean;
-  onMouseEnter?: (event) => void;
-  onMouseLeave?: (event) => void;
-}
-
-type AllProps = CardProps & SelectableProps & HoverProps & WithTheme;
+type AllProps = CardProps & SelectableProps & WithTheme;
 
 const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
   const { opacity, selected, selecting, cardHeight, theme, isHovered, hidden } = props;
@@ -56,7 +52,6 @@ const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
     opacity: opacity || 1,
     // primary selecting, secondary selected,  black default
     border: selected ? `1px solid ${secondary.main}` : selecting ? `1px solid ${primary.main}` : `1px solid black`,
-    // todo: convert to memoized function that takes props and returns style obj
     height: `${cardHeight}vh`,
     width: `${cardHeight * 0.716}vh`,
     display: hidden ? 'none' : 'block',
@@ -66,7 +61,7 @@ const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
 
 const Card = (props: AllProps) => {
 
-  const { card, classes, isHovered, onMouseEnter, onMouseLeave, selecting } = props;
+  const { card, classes, isHovered, selecting } = props;
   const { name, url, id } = card;
 
   const displayName = (isHovered && !selecting) ? (
@@ -81,8 +76,6 @@ const Card = (props: AllProps) => {
       style={cardStyle(props)}
       raised={isHovered}
       className={classes.main}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
     >
       <CardMedia
         className={classes.media}
@@ -94,4 +87,4 @@ const Card = (props: AllProps) => {
   );
 };
 
-export default withTheme()(withStyles(styles)(Card));
+export default withTheme((withStyles(styles)(Card)));

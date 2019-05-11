@@ -1,7 +1,7 @@
 import React from 'react';
 
 const WithHover = <P extends object>(Component: React.ComponentType<P>) =>
-    class WithLoading extends React.PureComponent<P> {
+    class WithHoverHoc extends React.PureComponent<P> {
         public state = {
             isHovered: false
         };
@@ -12,6 +12,12 @@ const WithHover = <P extends object>(Component: React.ComponentType<P>) =>
 
         public onMouseLeave = () => {
             this.setState({ isHovered: false });
+        }
+
+        public componentDidMount() {
+            if (this.state.isHovered) {
+                this.setState({ isHovered: false });
+            }
         }
 
         public componentDidUpdate(prevProps, prevState) {

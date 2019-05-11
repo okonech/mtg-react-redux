@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { AppState } from '../reducers';
 import { Card, CardsState } from '../reducers/cardsReducer';
 import { CardsSettings, CardsSettingsState } from '../reducers/cardsSettingsStateReducer';
+import { singlePlayerSelector } from '../reducers/playersReducer';
 import { Zone } from '../reducers/zonesReducer';
 
 export interface CardZone {
@@ -28,7 +29,7 @@ export interface PlayerData {
 
 const getZones = (state: AppState) => state.zones;
 const getCards = (state: AppState) => state.cards;
-const getPlayer = (state: AppState, playerId: string) => state.players.playersById[playerId];
+const getPlayer = (state: AppState, playerId: string) => singlePlayerSelector(state.players, playerId);
 const getCardsSettings = (state: AppState) => state.cardsSettingsState;
 
 const getPlayerZones = createSelector(

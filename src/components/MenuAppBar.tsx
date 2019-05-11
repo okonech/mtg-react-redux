@@ -8,7 +8,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 
 const styles = {
     grow: {
@@ -24,11 +24,22 @@ interface MenuProps extends WithStyles<typeof styles> {
     style?: React.CSSProperties;
 }
 
-const HomeLink = (props) => <Link to='/player' {...props} />;
-const OnePlayerLink = (props) => <Link to='/test-game' {...props} />;
-const TwoPlayerLink = (props) => <Link to='/test-two-player-game' {...props} />;
-const FourPlayerLink = (props) => <Link to='/test-four-player-game-other' {...props} />;
-const FourPlayerColLink = (props) => <Link to='/test-four-player-game' {...props} />;
+type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
+const HomeLink = React.forwardRef<HTMLAnchorElement, Omit<RouterLinkProps, 'innerRef' | 'to'>>(
+    (props, ref) => <RouterLink innerRef={ref as any} to='/player' {...props} />
+);
+const OnePlayerLink = React.forwardRef<HTMLAnchorElement, Omit<RouterLinkProps, 'innerRef' | 'to'>>(
+    (props, ref) => <RouterLink innerRef={ref as any} to='/test-game' {...props} />
+);
+const TwoPlayerLink = React.forwardRef<HTMLAnchorElement, Omit<RouterLinkProps, 'innerRef' | 'to'>>(
+    (props, ref) => <RouterLink innerRef={ref as any} to='/test-two-player-game' {...props} />
+);
+const FourPlayerLink = React.forwardRef<HTMLAnchorElement, Omit<RouterLinkProps, 'innerRef' | 'to'>>(
+    (props, ref) => <RouterLink innerRef={ref as any} to='/test-four-player-game-other' {...props} />
+);
+const FourPlayerColLink = React.forwardRef<HTMLAnchorElement, Omit<RouterLinkProps, 'innerRef' | 'to'>>(
+    (props, ref) => <RouterLink innerRef={ref as any} to='/test-four-player-game' {...props} />
+);
 
 const MenuAppBar = (props: MenuProps) => {
     const { classes, style } = props;

@@ -1,17 +1,17 @@
 
 import { createStyles } from '@material-ui/core';
-import { Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
-import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import { SelectableGroup } from '../packages/react-dnd-selectable';
 import { CardCoordZone } from '../selectors/player';
 import { setSnapEnabled, setSnapOverNode, snapToGrid } from '../util/snapToGrid';
+import DraggableCard, { CardDragObject } from './DraggableCard';
 
 const styles = (theme: Theme) => {
     return createStyles({
@@ -39,8 +39,6 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
         });
 
         const node = findDOMNode(component) as Element;
-
-        // TODO: fix snap logic here
         const bounds = node.getBoundingClientRect();
         const { x, y } = monitor.getSourceClientOffset();
 
@@ -142,7 +140,7 @@ class BattleField extends React.PureComponent<AllProps>  {
             connectDropTarget(
                 <div className={classes.main} style={style} ref={this.battleFieldRef}>
                     <SelectableGroup
-                        groupId={zone.id}
+                        groupId={`${zone.id}-selectable-group`}
                         className='selectable'
                         onSelectionFinish={this.setSelected}
                         onSelectionClear={this.clearSelected}
