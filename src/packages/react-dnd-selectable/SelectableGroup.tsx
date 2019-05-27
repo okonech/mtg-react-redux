@@ -15,6 +15,7 @@ export const Types = {
 
 export interface DragSelectable {
     id: string;
+    clientBounds: ClientRect | DOMRect;
 }
 
 interface SelectableGroupProps {
@@ -27,12 +28,16 @@ interface SelectableGroupProps {
 }
 
 const cardSource: DragSourceSpec<SelectableGroupProps, DragSelectable> = {
-    beginDrag(props, monitor, component: SelectableGroup) {
+    beginDrag(props, monitor, dropTargetComponent): DragSelectable {
         const { onSelectionClear } = props;
+        // wrapped in DropTarget, need that ref to reach actual component
+        const component = dropTargetComponent.getDecoratedComponentInstance() as SelectableGroup;
+        const { selecting, selectableRef } = component.state;
         if (onSelectionClear) {
-            onSelectionClear(component.state.selecting);
+            onSelectionClear(selecting);
         }
         return {
+            clientBounds: selectableRef.getBoundingClientRect(),
             id: props.groupId
         };
     },
@@ -81,7 +86,7 @@ const battlefieldTarget: DropTargetSpec<SelectableGroupProps> = {
         let edit = false;
         registry.forEach((value, key) => {
 
-            if (rectIntersect(selRect, value.getBoundingClientRect())) {
+            if (rectIntersect(selRect, value.getBoundingClientRect(), props.tolerance)) {
                 if (!selecting.includes(key)) {
                     newSel.push(key);
                     edit = true;
@@ -112,7 +117,7 @@ interface SelectableGroupTargetCollectedProps {
 
 type AllProps = SelectableGroupProps & SelectableGroupSourceCollectedProps & SelectableGroupTargetCollectedProps;
 
-class SelectableGroup extends React.Component<AllProps, SelectableContext> {
+class SelectableGroup extends React.PureComponent<AllProps, SelectableContext> {
 
     public state = defaultContext();
 

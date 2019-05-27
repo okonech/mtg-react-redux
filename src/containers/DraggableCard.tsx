@@ -3,16 +3,16 @@ import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceSpec } fro
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { defaultMemoize } from 'reselect';
 import { selectCards as selectCardsType } from '../actions/selectActions';
+import Card from '../components/Card';
 import { Types } from '../Constants';
+import WithHover from '../hocs/WithHover';
 import { WithSelectable } from '../packages/react-dnd-selectable';
 import { Card as CardType } from '../reducers/cardsReducer';
-import CardHover from './CardHover';
 
 // draggable card component with id, key, x, y position
 
 export interface CardDragObject {
   cards: string[];
-  firstCard: CardType;
   zoneId: string;
 }
 
@@ -50,9 +50,23 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
 
     return {
       cards,
-      firstCard: card,
       zoneId
     };
+  },
+  endDrag(props, monitor, component: DraggableCard) {
+    if (!monitor.didDrop()) {
+      // if invalid drop and drop not handled, show items again
+      const { cards } = monitor.getItem() as CardDragObject;
+      cards.forEach((id) => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.style.display = 'block';
+        }
+      });
+      if (props.selectedCards.length > 0) {
+        props.selectCards([]);
+      }
+    }
   }
 
 };
@@ -82,7 +96,13 @@ interface SelectableProps {
   selecting?: boolean;
 }
 
-type AllProps = DraggableCardProps & DraggableCardSourceCollectedProps & SelectableProps;
+interface HoverProps {
+  isHovered?: boolean;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+}
+
+type AllProps = DraggableCardProps & DraggableCardSourceCollectedProps & SelectableProps & HoverProps;
 
 class DraggableCard extends React.PureComponent<AllProps> {
 
@@ -102,7 +122,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
 
   public render() {
     const { card, connectDragSource, selectedCards, selecting, selectableRef,
-            cardHeight, xCoord, yCoord, id } = this.props;
+            cardHeight, xCoord, yCoord, id, onMouseEnter, onMouseLeave, isHovered } = this.props;
 
     return (
       connectDragSource(
@@ -110,14 +130,17 @@ class DraggableCard extends React.PureComponent<AllProps> {
           // handles drag transform in non list areas
           style={dragCardStyle(xCoord, yCoord, cardHeight)}
           ref={selectableRef}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
         >
-          <CardHover
+          <Card
             key={'card' + id}
             card={card}
             // this can cause chrome to not drag
             selected={selectedCards.includes(id)}
             selecting={selecting}
             cardHeight={cardHeight}
+            isHovered={isHovered}
           />
         </div>
       )
@@ -130,4 +153,4 @@ export default DragSource<DraggableCardProps & SelectableProps, DraggableCardSou
     connectDragSource: connect.dragSource(),
     connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging()
-  }))(WithSelectable(DraggableCard));
+  }))(WithHover(WithSelectable(DraggableCard)));

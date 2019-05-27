@@ -40,5 +40,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerMappedProps) =
         dispatch(selectCards(cards)))
 });
 
-// todo: fix types
 export default connect(mapStateToProps, mapDispatchToProps)(Player);

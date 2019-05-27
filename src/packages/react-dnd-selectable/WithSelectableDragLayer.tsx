@@ -9,17 +9,26 @@ interface SelectableDragLayerProps {
     currentClientOffset?: XYCoord;
     itemType: Identifier;
     isDragging: boolean;
+    item: any;
 }
 
-const getStyle = (initialOffset: XYCoord, currentOffset: XYCoord): React.CSSProperties => {
+const getStyle = (initialOffset: XYCoord, currentOffset: XYCoord,
+                  clientBounds: ClientRect | DOMRect): React.CSSProperties => {
     const { x: initX, y: initY } = initialOffset;
     const { x: currX, y: currY } = currentOffset;
+    const { left: clientLeft, top: clientTop, right: clientRight, bottom: clientBottom } = clientBounds;
 
-    const left = Math.min(initX, currX);
-    const top = Math.min(initY, currY);
+    // adjust selectable bound away from cursor during drag
+    // for anyone reading this, html5 dnd is terrible
+    const adj = (initY < currY) ? 1 : 0;
 
-    const height = Math.abs(initY - currY);
-    const width = Math.abs(initX - currX);
+    const left = Math.max(Math.min(initX, currX), clientLeft);
+    const top = Math.max(Math.min(initY, currY) + adj, clientTop);
+    const right = Math.min(Math.max(initX, currX), clientRight);
+    const bottom = Math.min(Math.max(initY, currY), clientBottom);
+
+    const height = Math.abs(top - bottom);
+    const width = Math.abs(left - right);
 
     return {
         position: 'absolute',
@@ -37,7 +46,7 @@ const WithSelectableDragLayer = <P extends object>(Component: React.ComponentTyp
 
         public render() {
             const { props } = this;
-            const { isDragging, itemType, currentClientOffset, initialClientOffset } = props;
+            const { isDragging, itemType, item, currentClientOffset, initialClientOffset } = props;
 
             if (!isDragging || !initialClientOffset) {
                 return null;
@@ -47,7 +56,7 @@ const WithSelectableDragLayer = <P extends object>(Component: React.ComponentTyp
                 return (
                     <div
                         className={'selectable-selectbox'}
-                        style={getStyle(currentClientOffset, initialClientOffset)}
+                        style={getStyle(currentClientOffset, initialClientOffset, item.clientBounds)}
                     />
                 );
             }
