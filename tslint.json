@@ -122,6 +122,7 @@
                 },
                 "esSpecCompliant": true
             }
-        ]
+        ],
+        "jsx-no-multiline-js": false
     }
 }

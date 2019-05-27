@@ -9,10 +9,10 @@ import { findDOMNode } from 'react-dom';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
 import Card from '../components/Card';
-import DraggableCard, { CardDragObject } from '../components/DraggableCard';
 import { Types } from '../Constants';
 import SelectableGroup from '../packages/react-dnd-selectable/SelectableGroup';
 import { CardZone } from '../selectors/player';
+import DraggableCard, { CardDragObject } from './DraggableCard';
 
 const styles = (theme: Theme) => createStyles({
   main: {
@@ -31,6 +31,7 @@ const styles = (theme: Theme) => createStyles({
     display: 'flex',
     flexDirection: 'row',
     overflowX: 'auto',
+    overflowY: 'hidden',
     scrollbarWidth: 'thin',
     marginLeft: '9px',
     marginRight: '9px',
@@ -46,7 +47,9 @@ const handTarget: DropTargetSpec<HandProps> = {
   hover(props: HandProps, monitor: DropTargetMonitor, component: Hand) {
     const node = findDOMNode(component) as Element;
     const placeholderIndex = getPlaceholderIndex(props.zone, monitor, node);
-    component.setState({ placeholderIndex });
+    if (component.state.placeholderIndex !== placeholderIndex) {
+      component.setState({ placeholderIndex });
+    }
 
   },
   drop(props: HandProps, monitor, component: Hand) {
@@ -100,7 +103,7 @@ function getPlaceholderIndex(zone: CardZone, monitor: DropTargetMonitor, handEle
   // loop through cards until one with width is found, or return 0
   const cardElements = selectable.children;
   const len = cardElements.length;
-  for (let idx = 0; idx < len; idx++) {
+  for (let idx = len - 1; idx >= 0; idx--) {
     cardWidth = cardElements[idx].clientWidth;
     if (cardWidth > 0) {
       break;
@@ -111,12 +114,11 @@ function getPlaceholderIndex(zone: CardZone, monitor: DropTargetMonitor, handEle
     // all elements hidden, place at 0 
     return 0;
   }
-  const halfCardWidth = cardWidth / 2;
 
-  if (xPos < halfCardWidth) {
+  if (xPos < cardWidth) {
     return 0; // place at the start
   }
-  return Math.floor((xPos - halfCardWidth) / (cardWidth));
+  return Math.floor(xPos / cardWidth);
 
 }
 
@@ -209,7 +211,7 @@ class Hand extends React.PureComponent<AllProps, HandState> {
       connectDropTarget(
         <div className={classes.main} style={style} >
           <SelectableGroup
-            groupId={zone.id}
+            groupId={`${zone.id}-selectable-group`}
             className='selectable'
             onSelectionFinish={this.setSelected}
             onSelectionClear={this.clearSelected}

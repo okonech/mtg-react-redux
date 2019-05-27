@@ -7,10 +7,10 @@ import {
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
-import { CardDragObject } from '../components/DraggableCard';
 import ZoneInfo from '../components/ZoneInfo';
 import { Types } from '../Constants';
 import { CardZone } from '../selectors/player';
+import { CardDragObject } from './DraggableCard';
 
 export interface ZoneInfoDndProps {
     zone: CardZone;
@@ -44,7 +44,6 @@ const cardSource: DragSourceSpec<ZoneInfoDndProps, CardDragObject> = {
 
         return {
             cards: [selected.id],
-            firstCard: selected,
             zoneId: id
         };
     },
@@ -59,7 +58,12 @@ const zoneTarget: DropTargetSpec<ZoneInfoDndProps> = {
     drop(props: ZoneInfoDndProps, monitor, component: ZoneInfoDnd) {
         const { moveCards, selectCards, zone } = props;
         const { zoneId, cards } = monitor.getItem() as CardDragObject;
-
+        cards.forEach((id) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.style.display = 'block';
+            }
+        });
         moveCards(zoneId, cards, zone.id, zone.cards.length, 0, 0);
         selectCards([]);
     }

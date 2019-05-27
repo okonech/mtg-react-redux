@@ -45,30 +45,30 @@ const layerStyle = defaultMemoize((props: DragLayerProps & CardCustomDragLayerPr
 const cardStyle = defaultMemoize((cardHeight: number, index: number): React.CSSProperties => (
     {
         position: 'absolute',
-        top: cardHeight / 2 * index,
-        left: cardHeight / 2 * index,
+        top: Math.floor(cardHeight / 1.75 * index),
+        left: Math.floor(cardHeight / 1.75 * index),
         zIndex: 100 - index
     }
 ));
 
 export interface CardCustomDragLayerProps extends WithStyles<typeof styles> {
     cardHeight: number;
+    selectedCards: CardType[];
 }
 
 class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCustomDragLayerProps> {
 
-    public renderCards = defaultMemoize((cards: string[], cardHeight: number, firstCard: CardType): JSX.Element[] => {
-        const renderCards = cards.length > 5 ? cards.slice(0, 5) : cards;
-        return renderCards.map((cardId, index) => {
-            const previewCard = { ...firstCard, id: `${firstCard.id}${index}` };
+    public renderCards = defaultMemoize((cardHeight: number, selectedCards: CardType[]): JSX.Element[] => {
+        const renderCards = selectedCards.length > 5 ? selectedCards.slice(0, 5) : selectedCards;
+        return renderCards.reverse().map((card, index) => {
             return (
                 <div
                     style={cardStyle(cardHeight, index)}
-                    key={'draglayer' + cardId}
+                    key={`draglayer-${card.id}`}
                 >
                     <Card
-                        card={previewCard}
-                        opacity={.9}
+                        card={{ ...card, id: `${card.id}-drag-preview` }}
+                        opacity={.95}
                         cardHeight={cardHeight}
                     />
                 </div >
@@ -77,12 +77,11 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
     });
 
     public render() {
-        const { item, itemType, isDragging, cardHeight, classes } = this.props;
+        const { itemType, isDragging, cardHeight, classes, selectedCards } = this.props;
         if (!isDragging || (itemType !== Types.CARD)) {
             return null;
         }
-        const { cards, firstCard } = item;
-        const length = cards.length;
+        const length = selectedCards.length;
         if (length > 3) {
             return (
                 <Badge
@@ -92,13 +91,13 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
                     style={layerStyle(this.props)}
                     classes={{ badge: classes.badge }}
                 >
-                    {this.renderCards(cards, cardHeight, firstCard)}
+                    {this.renderCards(cardHeight, selectedCards)}
                 </Badge>
             );
         }
         return (
             <div style={layerStyle(this.props)}>
-                {this.renderCards(cards, cardHeight, firstCard)}
+                {this.renderCards(cardHeight, selectedCards)}
             </div>
         );
     }

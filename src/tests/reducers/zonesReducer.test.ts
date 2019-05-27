@@ -91,6 +91,36 @@ it('moves card', () => {
     });
 });
 
+it('doesnt duplicate cards', () => {
+    zones = [
+        {
+            id: '1',
+            cards: [
+                '30',
+                '32'
+            ]
+        },
+        {
+            id: '2',
+            cards: [
+                '20',
+                '31',
+                '21',
+                '22'
+            ]
+        }
+    ];
+    const action = moveCards('1', ['20', '21'], '2', 1, 0, 0);
+    const oldState = { ...state };
+    deepFreeze(oldState);
+    deepFreeze(action);
+    state = zonesReducer(oldState, action);
+    expect(state).toEqual({
+        1: zones[0],
+        2: zones[1]
+    });
+});
+
 it('select zone', () => {
     const oldState = { ...state };
     deepFreeze(oldState);

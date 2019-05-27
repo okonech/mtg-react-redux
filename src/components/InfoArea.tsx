@@ -8,11 +8,11 @@ import ZoneInfoDnd from '../containers/ZoneInfoDnd';
 import { PlayerData } from '../selectors/player';
 import LifeCounter from './LifeCounter';
 import PlayerInfo from './PlayerInfo';
-import BookPileSvg from './svg/BookPileSvg';
+import RollingEnergySvg from './svg/ExileSvg';
+import TombstoneSvg from './svg/GraveyardSvg';
+import PokerHandSvg from './svg/HandSvg';
 import HeartSvg from './svg/HeartSvg';
-import PokerHandSvg from './svg/PokerHandSvg';
-import RollingEnergySvg from './svg/RollingEnergySvg';
-import TombstoneSvg from './svg/TombstoneSvg';
+import BookPileSvg from './svg/LibrarySvg';
 
 const styles = (theme: Theme) => {
     const { background, divider } = theme.palette;
