@@ -7,14 +7,16 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
 import React from 'react';
-import TurnPhases from './TurnPhases';
+import ChatRoom from './chatroom/ChatRoom';
+import PlayerList from './chatroom/PlayerList';
 
-const drawerWidth = 160;
+const drawerWidth = 300;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            display: 'flex'
+            display: 'flex',
+            borderLeft: `1px solid ${theme.palette.divider}`
         },
         appBar: {
             zIndex: theme.zIndex.drawer + 1,
@@ -40,18 +42,17 @@ const useStyles = makeStyles((theme: Theme) =>
         drawer: {
             width: drawerWidth,
             flexShrink: 0,
-            whiteSpace: 'nowrap',
             height: '100%'
         },
         // TODO: clean these styles
         drawerOpen: {
-            width: drawerWidth,
             transition: theme.transitions.create('width', {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.enteringScreen
             }),
             top: 'auto',
             position: 'inherit',
+            borderLeft: `1px solid ${theme.palette.divider}`,
             scrollbarWidth: 'thin',
             scrollbarColor: `${theme.palette.secondary.dark} ${theme.palette.action.hover}`
         },
@@ -67,6 +68,7 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             top: 'auto',
             position: 'inherit',
+            borderLeft: `1px solid ${theme.palette.divider}`,
             scrollbarWidth: 'thin',
             scrollbarColor: `${theme.palette.secondary.dark} ${theme.palette.action.hover}`
         },
@@ -84,7 +86,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const DrawerLeftMini = (props) => {
+const DrawerRightMini = (props) => {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -109,6 +111,18 @@ const DrawerLeftMini = (props) => {
         </IconButton>
     );
 
+    const closedDrawer = (
+        <PlayerList />
+    );
+
+    const openDrawer = (
+        <React.Fragment>
+            <PlayerList />
+            <Divider />
+            <ChatRoom />
+        </React.Fragment>
+    );
+
     return (
         <Drawer
             variant='permanent'
@@ -128,9 +142,9 @@ const DrawerLeftMini = (props) => {
                 {open ? openButton : closedButton}
             </div>
             <Divider />
-            <TurnPhases />
+            {open ? openDrawer : closedDrawer}
         </Drawer>
     );
 };
 
-export default DrawerLeftMini;
+export default DrawerRightMini;

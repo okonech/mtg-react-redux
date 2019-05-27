@@ -1,14 +1,14 @@
 import React from 'react';
 import MenuAppBar from '../components/MenuAppBar';
 import Players from '../containers/Players';
-import ChatInfo from './ChatInfo';
 import DrawerLeftMini from './DrawerLeftMini';
+import DrawerRightMini from './DrawerRightMini';
 
 const gameGrid: React.CSSProperties = {
     display: 'grid',
     gridTemplateRows: `auto 1fr`,
     gridTemplateColumns: `auto 1fr auto`,
-    gridTemplateAreas: "'menu menu menu' 'drawer-left players chatinfo'",
+    gridTemplateAreas: "'menu menu menu' 'drawer-left players chatroom'",
     height: '100%',
     width: '100%'
 };
@@ -30,7 +30,7 @@ const GamePage = (props: GamePageProps) => {
                 playerRows={playerRows}
                 playersNum={playersNum}
             />
-            <ChatInfo style={{ gridArea: 'chatinfo' }} />
+            <DrawerRightMini style={{ gridArea: 'chatroom' }} />
         </section>
     );
 };

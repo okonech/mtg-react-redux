@@ -27,14 +27,14 @@ const styles = (theme: Theme) => createStyles({
   },
   cards: {
     height: '100%',
-    width: 'calc(100% - 18px)',
+    width: 'calc(100% - 24px)',
     display: 'flex',
     flexDirection: 'row',
     overflowX: 'auto',
     overflowY: 'hidden',
     scrollbarWidth: 'thin',
-    marginLeft: '9px',
-    marginRight: '9px',
+    marginLeft: '12px',
+    marginRight: '12px',
     scrollbarColor: `${theme.palette.secondary.dark} ${theme.palette.action.hover}`,
     boxSizing: 'border-box',
     paddingTop: '3px'
