@@ -49,7 +49,7 @@ const InfoArea = (props: InfoAreaProps) => {
         <section className={classes.main} style={style}>
             <PlayerInfo
                 style={{ gridArea: 'player' }}
-                icon='/images/avatar.png'
+                icon={`/images/${player.name}.png`}
                 player={player}
             />
             <LifeCounter

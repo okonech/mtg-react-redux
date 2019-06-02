@@ -36,9 +36,9 @@ const styles = (theme: Theme) => {
         },
         completed: {
             '& $connectorLine': {
-                borderColor: theme.palette.primary.main
+                borderColor: theme.palette.primary.dark
             },
-            'color': theme.palette.primary.main
+            'color': theme.palette.primary.dark
         },
         disabled: {
             '& $connectorLine': {
