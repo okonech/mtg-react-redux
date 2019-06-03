@@ -14,3 +14,6 @@ deck editor:
     iframe on left with scryfall search
         this is in a drawer and can maybe also have a typeahead search
     drag the result images to the deck editor and it adds the card to the deck
+
+
+Give each player an outline color, so cards on the stack are outlined with that player's color

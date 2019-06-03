@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
+import { Badge, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import React from 'react';
@@ -19,8 +19,21 @@ const styles = (theme: Theme) => {
             width: 45,
             height: 45
         },
+        playerName: {
+
+        },
         listItem: {
             paddingLeft: '4px'
+        },
+        online: {
+            '& span': {
+                top: 'initial',
+                bottom: 0,
+                height: '10px',
+                width: '10px',
+                right: '3px',
+                backgroundColor: '#68B826'
+            }
         },
         divider: {
             marginBottom: '8px'
@@ -53,9 +66,15 @@ const PlayerList = (props) => {
                 return (
                     <ListItem key={item.name} button={true} className={classes.listItem}>
                         <ListItemAvatar>
-                            <Avatar alt={item.name} src={item.avatar} className={classes.player} />
+                            <Badge color='secondary' variant='dot' className={classes.online}>
+                                <Avatar alt={item.name} src={item.avatar} className={classes.player} />
+                            </Badge>
                         </ListItemAvatar>
-                        <ListItemText primary={item.name} />
+                        <ListItemText>
+                            <Typography variant='subtitle1' gutterBottom={true}>
+                                {item.name}
+                            </Typography>
+                        </ListItemText>
                     </ListItem>
                 );
             })}
