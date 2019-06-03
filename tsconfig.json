@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "outDir": "build/dist",
-    "rootDir": "src",
     "experimentalDecorators": true,
     "importHelpers": true,
     "inlineSourceMap": false,
@@ -30,16 +28,5 @@
     "isolatedModules": true,
     "noEmit": true,
     "strictNullChecks": false
-  },
-  "exclude": [
-    "node_modules",
-    "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest"
-  ],
-  "include": [
-    "src"
-  ]
+  }
 }
