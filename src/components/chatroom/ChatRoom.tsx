@@ -79,15 +79,15 @@ const ChatRoom = (props) => {
                 {images.map((item, index) => {
                     return (
                         <React.Fragment
-                            key={item.name}
+                            key={index}
                         >
-                            <div key={index} className={classes.chatRoomMessage}>
+                            <div className={classes.chatRoomMessage}>
                                 <Avatar alt='Remy Sharp' src={item.avatar} />
                                 <div className={classes.messageText}>
                                     {item.message}
                                 </div>
                             </div>
-                            <Divider className={classes.divider} key={index} />
+                            <Divider className={classes.divider} />
                         </React.Fragment>
                     );
                 })}
