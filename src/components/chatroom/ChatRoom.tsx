@@ -31,7 +31,7 @@ const styles = (theme: Theme) => {
         input: {
             flex: 1,
             marginTop: '8px',
-            marginRight: '4px'
+            margin: '4px'
         },
         chatRoomMessage: {
             display: 'flex',

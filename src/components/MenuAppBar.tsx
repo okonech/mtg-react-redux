@@ -28,6 +28,9 @@ type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 const HomeLink = React.forwardRef<HTMLAnchorElement, Omit<RouterLinkProps, 'innerRef' | 'to'>>(
     (props, ref) => <RouterLink innerRef={ref as any} to='/player' {...props} />
 );
+const DeckEditorLink = React.forwardRef<HTMLAnchorElement, Omit<RouterLinkProps, 'innerRef' | 'to'>>(
+    (props, ref) => <RouterLink innerRef={ref as any} to='/deck-editor' {...props} />
+);
 const OnePlayerLink = React.forwardRef<HTMLAnchorElement, Omit<RouterLinkProps, 'innerRef' | 'to'>>(
     (props, ref) => <RouterLink innerRef={ref as any} to='/test-game' {...props} />
 );
@@ -56,6 +59,9 @@ const MenuAppBar = (props: MenuProps) => {
                 </IconButton>
                 <Button color='inherit' component={HomeLink}>
                     Home
+                </Button>
+                <Button color='inherit' component={DeckEditorLink}>
+                    Deck Editor
                 </Button>
                 <Button color='inherit' component={OnePlayerLink}>
                     Single Player

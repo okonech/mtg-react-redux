@@ -8,6 +8,7 @@ import MultiBackend, { TouchTransition } from 'react-dnd-multi-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import { Route } from 'react-router';
 import { HashRouter } from 'react-router-dom';
+import DeckEditor from './routes/DeckEditor';
 import FourPlayerGame from './routes/FourPlayerGame';
 import FourPlayerGameOther from './routes/FourPlayerGameOther';
 import LoggedInLandingPage from './routes/LoggedInLandingPage';
@@ -49,6 +50,7 @@ class App extends Component {
           <React.Fragment>
             <Route exact={true} path='/' component={LoginPage} />
             <Route path='/player' component={LoggedInLandingPage} />
+            <Route path='/deck-editor' component={DeckEditor} />
             <Route path='/test-game' component={SinglePlayerGame} />
             <Route path='/test-two-player-game' component={TwoPlayerGame} />
             <Route path='/test-four-player-game' component={FourPlayerGame} />
