@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { defaultMemoize } from 'reselect';
-import LoadingPage from '../components/LoadingPage';
 import CardCustomDragLayer from '../containers/CardCustomDragLayer';
 import Player from '../containers/Player';
 import { setCardHeight } from '../util/cardSize';
+import LoadingPage from './pages/LoadingPage';
 
 interface PlayersProps {
     playerRows: number;

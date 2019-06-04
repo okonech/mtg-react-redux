@@ -1,9 +1,9 @@
 import React from 'react';
-import GamePage from '../components/GamePage';
+import DeckEditorPage from '../components/pages/DeckEditorPage';
 
 const DeckEditor = () => {
     return (
-        <GamePage
+        <DeckEditorPage
             playerRows={1}
             playerCols={1}
             playersNum={1}

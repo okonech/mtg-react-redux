@@ -1,8 +1,8 @@
 import React from 'react';
-import MenuAppBar from '../components/MenuAppBar';
-import Players from '../containers/Players';
-import DrawerLeftMini from './DrawerLeftMini';
-import DrawerRightMini from './DrawerRightMini';
+import Players from '../../containers/Players';
+import DrawerLeftMini from '../DrawerLeftMini';
+import DrawerRightMini from '../DrawerRightMini';
+import MenuAppBar from '../MenuAppBar';
 
 const gameGrid: React.CSSProperties = {
     display: 'grid',
