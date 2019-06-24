@@ -199,12 +199,14 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function EnhancedTable() {
+function EnhancedTable(props) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
     const [dense, setDense] = React.useState(false);
+
+    const { styles } = props;
 
     function handleRequestSort(event, property) {
         const isDesc = orderBy === property && order === 'desc';
@@ -228,7 +230,7 @@ function EnhancedTable() {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} style={styles}>
             <Paper className={classes.paper}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <div className={classes.tableWrapper}>

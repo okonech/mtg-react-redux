@@ -17,3 +17,6 @@ deck editor:
 
 
 Give each player an outline color, so cards on the stack are outlined with that player's color
+
+look into svg sprites for the mana symbols
+already have the sprite sheet
