@@ -40,4 +40,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerMappedProps) =
         dispatch(selectCards(cards)))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Player);
+export default connect(mapStateToProps, mapDispatchToProps as any)(Player);

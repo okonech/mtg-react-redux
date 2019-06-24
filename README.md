@@ -1,3 +1,5 @@
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
+
 TODO:
 
 have avatar be commander or commanders (2 halves, both vertical) and have this drag out the commander card if in cmder zone

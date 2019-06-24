@@ -138,7 +138,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 }));
 
 const EnhancedTableToolbar = (props) => {
-    const classes = useToolbarStyles();
+    const classes = useToolbarStyles({});
     const { numSelected } = props;
 
     return (
@@ -200,7 +200,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EnhancedTable(props) {
-    const classes = useStyles();
+    const classes = useStyles({});
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);

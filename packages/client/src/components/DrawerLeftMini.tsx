@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const DrawerLeftMini = (props) => {
-    const classes = useStyles();
+    const classes = useStyles({});
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 

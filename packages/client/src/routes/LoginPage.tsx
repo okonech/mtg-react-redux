@@ -39,7 +39,7 @@ const PlayerLink = React.forwardRef<HTMLAnchorElement, Omit<LinkProps, 'innerRef
 );
 
 const LoginPage = () => {
-  const classes = useStyles();
+  const classes = useStyles({});
 
   return (
     <Container component='main' maxWidth='xs'>
