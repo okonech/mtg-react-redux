@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceSpec } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import { WithSelectable } from 'react-dnd-selectable';
 import { defaultMemoize } from 'reselect';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import Card from '../components/Card';
 import { Types } from '../Constants';
 import WithHover from '../hocs/WithHover';
-import { WithSelectable } from '../packages/react-dnd-selectable';
 import { Card as CardType } from '../reducers/cardsReducer';
 
 // draggable card component with id, key, x, y position

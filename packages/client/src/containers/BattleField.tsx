@@ -1,14 +1,14 @@
 
 import { createStyles } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
+import { SelectableGroup } from 'react-dnd-selectable';
 import { findDOMNode } from 'react-dom';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
 import { Types } from '../Constants';
-import { SelectableGroup } from '../packages/react-dnd-selectable';
 import { CardCoordZone } from '../selectors/player';
 import { setSnapEnabled, setSnapOverNode, snapToGrid } from '../util/snapToGrid';
 import DraggableCard, { CardDragObject } from './DraggableCard';
