@@ -1,6 +1,6 @@
 {
     "name": "react-dnd-selectable",
-    "version": null,
+    "version": "1.0.0",
     "description": "Drag select HOC for react-dnd",
     "scripts": {
         "build": "npm run lint && npm run compile",
@@ -24,5 +24,6 @@
     },
     "peerDependencies": {
         "react-dnd": "^7.4.5"
-    }
+    },
+    "gitHead": "2ebb81725b07ea8c089d7b9e6d2ff7bc1b603a4e"
 }
