@@ -11,8 +11,8 @@ import { PlayerData, playerSelector } from '../selectors/player';
 import { selectedSelector } from '../selectors/selected';
 
 export interface PlayerMappedProps {
-    player: PlayerData;
-    selected: string[];
+    player?: PlayerData;
+    selected?: string[];
     id: string;
 }
 

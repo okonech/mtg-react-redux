@@ -41,7 +41,8 @@ const styles = (theme: Theme) => createStyles({
   }
 });
 
-const ScrollingComponent = withScrolling('section');
+const ScrollingComponent = withScrolling('div');
+console.log(ScrollingComponent);
 
 const handTarget: DropTargetSpec<HandProps> = {
   hover(props: HandProps, monitor: DropTargetMonitor, component: Hand) {
