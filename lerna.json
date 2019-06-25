@@ -5,7 +5,7 @@
       "ignoreChanges": [
         "ignored-file"
       ],
-      "message": "chore(release): publish"
+      "conventionalCommits": true
     }
   },
   "packages": [
