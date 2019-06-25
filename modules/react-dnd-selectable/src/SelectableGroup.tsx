@@ -4,7 +4,7 @@ import {
     DragSource, DragSourceSpec, DropTarget, DropTargetSpec, XYCoord
 } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import rectIntersect from '../../util/rectanglesIntersect';
+import rectIntersect from './util/rectanglesIntersect';
 import { defaultContext, SelectableContext, SelectableProvider } from './SelectableContext';
 
 // draggable card component with id, key, x, y position
