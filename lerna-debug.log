@@ -1,0 +1,98 @@
+0 silly argv { _: [ 'version' ],
+0 silly argv   'conventional-graduate': true,
+0 silly argv   conventionalGraduate: true,
+0 silly argv   lernaVersion: '3.15.0',
+0 silly argv   '$0':
+0 silly argv    'C:\\Users\\aokonechnikov\\AppData\\Roaming\\npm\\node_modules\\lerna\\cli.js' }
+1 notice cli v3.15.0
+2 verbose rootPath C:\Users\Alex\VSCode\mtg-react-redux
+3 info versioning independent
+4 silly isAnythingCommitted
+5 verbose isAnythingCommitted 1
+6 silly currentBranch
+7 verbose currentBranch deck-editor
+8 silly remoteBranchExists
+9 silly isBehindUpstream
+10 silly isBehindUpstream deck-editor is behind origin/deck-editor by 0 commit(s) and ahead by 3
+11 silly hasTags
+12 verbose hasTags true
+13 silly git-describe.sync "v1.0.2-3-g0951e47-dirty" => {"lastTagName":"v1.0.2","lastVersion":"v1.0.2","refCount":"3","sha":"0951e47","isDirty":true}
+14 warn conventional-graduate all packages
+15 info Graduating all prereleased packages
+16 info Looking for changed packages since v1.0.2
+17 info ignoring diff in paths matching [ 'ignored-file' ]
+18 silly checking diff modules/react-dnd-selectable
+19 silly found diff in modules/react-dnd-selectable/README.md
+20 verbose filtered diff [ 'modules/react-dnd-selectable/README.md' ]
+21 silly checking diff packages/client
+22 silly no diff found in @mtg-react-redux/client
+23 verbose updated @mtg-react-redux/react-dnd-selectable
+24 verbose updated @mtg-react-redux/client
+25 silly independent for @mtg-react-redux/react-dnd-selectable at C:\Users\Alex\VSCode\mtg-react-redux\modules\react-dnd-selectable
+26 verbose getChangelogConfig using preset "conventional-changelog-angular"
+27 silly npa { type: 'tag',
+27 silly npa   registry: true,
+27 silly npa   where: undefined,
+27 silly npa   raw: 'conventional-changelog-angular',
+27 silly npa   name: 'conventional-changelog-angular',
+27 silly npa   escapedName: 'conventional-changelog-angular',
+27 silly npa   scope: undefined,
+27 silly npa   rawSpec: '',
+27 silly npa   saveSpec: null,
+27 silly npa   fetchSpec: 'latest',
+27 silly npa   gitRange: undefined,
+27 silly npa   gitCommittish: undefined,
+27 silly npa   hosted: undefined }
+28 verbose getChangelogConfig Attempting to resolve preset "conventional-changelog-angular"
+29 info getChangelogConfig Successfully resolved preset "conventional-changelog-angular"
+30 verbose independent increment 1.0.2 by minor
+31 silly independent for @mtg-react-redux/client at C:\Users\Alex\VSCode\mtg-react-redux\packages\client
+32 verbose independent increment 1.0.2 by patch
+33 info execute Skipping releases
+34 silly lifecycle No script for "preversion" in "mtg-react-redux", continuing
+35 silly lifecycle No script for "preversion" in "@mtg-react-redux/react-dnd-selectable", continuing
+36 silly lifecycle No script for "version" in "@mtg-react-redux/react-dnd-selectable", continuing
+37 silly independent for @mtg-react-redux/react-dnd-selectable at C:\Users\Alex\VSCode\mtg-react-redux\modules\react-dnd-selectable
+38 silly independent writing new entry: "# 1.1.0 (2019-06-27)\n\n\n### Features\n\n* code cleanup and conversion support ([02b4bea](https://github.com/okonech/mtg-react-redux/commit/02b4bea))\n* my cool new feature ([0951e47](https://github.com/okonech/mtg-react-redux/commit/0951e47))\n\n\n\n## 1.0.2 (2019-06-27)\n\n\n\n## 1.0.2-rc.2 (2019-06-27)\n\n\n\n## 1.0.2-rc.1 (2019-06-27)\n\n\n\n## 1.0.2-rc.0 (2019-06-27)\n\n\n\n## 1.0.1 (2019-06-25)\n\n\n### Bug Fixes\n\n* setup ([3b6135a](https://github.com/okonech/mtg-react-redux/commit/3b6135a))\n\n\n\n# 1.0.0 (2019-06-25)\n\n\n\n# 1.0.0-rc.1 (2019-06-25)\n\n\n\n# 1.0.0-rc.0 (2019-06-25)\n\n\n\n"
+39 verbose independent wrote C:\Users\Alex\VSCode\mtg-react-redux\modules\react-dnd-selectable\CHANGELOG.md
+40 silly lifecycle No script for "preversion" in "@mtg-react-redux/client", continuing
+41 silly lifecycle No script for "version" in "@mtg-react-redux/client", continuing
+42 silly independent for @mtg-react-redux/client at C:\Users\Alex\VSCode\mtg-react-redux\packages\client
+43 silly independent writing new entry: "## 1.0.3 (2019-06-27)\n\n\n\n## 1.0.2 (2019-06-27)\n\n\n\n## 1.0.2-rc.2 (2019-06-27)\n\n\n\n## 1.0.2-rc.1 (2019-06-27)\n\n\n\n## 1.0.2-rc.0 (2019-06-27)\n\n\n\n## 1.0.1 (2019-06-25)\n\n\n\n# 1.0.0 (2019-06-25)\n\n\n\n# 1.0.0-rc.1 (2019-06-25)\n\n\n\n# 1.0.0-rc.0 (2019-06-25)\n\n**Note:** Version bump only for package @mtg-react-redux/client\n\n\n\n"
+44 verbose independent wrote C:\Users\Alex\VSCode\mtg-react-redux\packages\client\CHANGELOG.md
+45 silly lifecycle No script for "version" in "mtg-react-redux", continuing
+46 silly gitAdd [ 'C:\\Users\\Alex\\VSCode\\mtg-react-redux\\modules\\react-dnd-selectable\\package.json',
+46 silly gitAdd   'C:\\Users\\Alex\\VSCode\\mtg-react-redux\\modules\\react-dnd-selectable\\CHANGELOG.md',
+46 silly gitAdd   'C:\\Users\\Alex\\VSCode\\mtg-react-redux\\packages\\client\\package.json',
+46 silly gitAdd   'C:\\Users\\Alex\\VSCode\\mtg-react-redux\\packages\\client\\CHANGELOG.md' ]
+47 silly gitCommit Publish
+47 silly gitCommit
+47 silly gitCommit  - @mtg-react-redux/react-dnd-selectable@1.1.0
+47 silly gitCommit  - @mtg-react-redux/client@1.0.3
+48 verbose git [ 'commit',
+48 verbose git   '-F',
+48 verbose git   'C:\\Users\\AOKONE~1\\AppData\\Local\\Temp\\055895fb-5e51-4f1d-bd7e-01569e1e076f\\lerna-commit.txt' ]
+49 error Error: Command failed: git commit -F C:\Users\AOKONE~1\AppData\Local\Temp\055895fb-5e51-4f1d-bd7e-01569e1e076f\lerna-commit.txt
+49 error
+49 error Warning: Setting commit-msg script in package.json > scripts will be deprecated
+49 error Please move it to husky.hooks in package.json, a .huskyrc file, or a husky.config.js file
+49 error Or run ./node_modules/.bin/husky-upgrade for automatic update
+49 error
+49 error See https://github.com/typicode/husky for usage
+49 error
+49 error husky > commit-msg (node v10.15.3)
+49 error Using environment variable syntax ($GIT_PARAMS) in -e |--edit is deprecated. Use '{-E|--env} HUSKY_GIT_PARAMS instead'
+49 error ⧗   input: Publish
+49 error
+49 error  - @mtg-react-redux/react-dnd-selectable@1.1.0
+49 error  - @mtg-react-redux/client@1.0.3
+49 error ✖   subject may not be empty [subject-empty]
+49 error ✖   type may not be empty [type-empty]
+49 error
+49 error ✖   found 2 problems, 0 warnings
+49 error ⓘ   Get help: https://github.com/conventional-changelog/commitlint/#what-is-commitlint
+49 error
+49 error husky > commit-msg hook failed (add --no-verify to bypass)
+49 error
+49 error     at makeError (C:\Users\Alex\VSCode\mtg-react-redux\node_modules\execa\index.js:174:9)
+49 error     at Promise.all.then.arr (C:\Users\Alex\VSCode\mtg-react-redux\node_modules\execa\index.js:278:16)

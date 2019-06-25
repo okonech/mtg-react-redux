@@ -42,34 +42,29 @@ const getStyle = (initialOffset: XYCoord, currentOffset: XYCoord,
 
 // only wrapped components can be selected
 const WithSelectableDragLayer = <P extends object>(Component: React.ComponentType<P>) => {
-    class SelectableDragLayer extends React.PureComponent<P & SelectableDragLayerProps> {
 
-        public render() {
-            const { props } = this;
-            const { isDragging, itemType, item, currentClientOffset, initialClientOffset } = props;
+    return (props: P & SelectableDragLayerProps) => {
+        const { isDragging, itemType, item, currentClientOffset, initialClientOffset } = props;
 
-            if (!isDragging || !initialClientOffset) {
-                return null;
-            }
+        if (!isDragging || !initialClientOffset) {
+            return null;
+        }
 
-            if (itemType === Types.SELECTABLE) {
-                return (
-                    <div
-                        className={'selectable-selectbox'}
-                        style={getStyle(currentClientOffset, initialClientOffset, item.clientBounds)}
-                    />
-                );
-            }
-            // else return regular drag layer
+        if (itemType === Types.SELECTABLE) {
             return (
-                <Component
-                    {...props as P}
+                <div
+                    className={'selectable-selectbox'}
+                    style={getStyle(currentClientOffset, initialClientOffset, item.clientBounds)}
                 />
             );
         }
-    }
-
-    return SelectableDragLayer;
+        // else return regular drag layer
+        return (
+            <Component
+                {...props as P}
+            />
+        );
+    };
 };
 
 export default WithSelectableDragLayer;

@@ -1,0 +1,29 @@
+{
+    "name": "@mtg-react-redux/react-dnd-selectable",
+    "version": "1.1.1",
+    "description": "Drag select HOC for react-dnd",
+    "scripts": {
+        "build": "npm run lint && npm run compile",
+        "lint": "tslint -c tslint.json src/**/*",
+        "compile": "tsc"
+    },
+    "main": "./dist/index",
+    "types": "./dist/index",
+    "author": "",
+    "license": "MIT",
+    "private": false,
+    "dependencies": {
+        "dnd-core": "^7.7.0",
+        "react": "^16.8.6",
+        "react-dnd-html5-backend": "^8.0.3"
+    },
+    "devDependencies": {
+        "tslint": "^5.18.0",
+        "tslint-react": "^4.0.0",
+        "typescript": "^3.5.2"
+    },
+    "peerDependencies": {
+        "react-dnd": "^7.4.5"
+    },
+    "gitHead": "4d317e43b9208d93ae13b409fb5fed4722a4dfff"
+}
