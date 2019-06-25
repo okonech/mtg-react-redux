@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceSpec } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { WithSelectable } from 'react-dnd-selectable';
+import { WithSelectable } from '@mtg-react-redux/react-dnd-selectable';
 import { defaultMemoize } from 'reselect';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import Card from '../components/Card';

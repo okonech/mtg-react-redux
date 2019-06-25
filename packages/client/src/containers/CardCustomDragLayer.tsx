@@ -1,7 +1,7 @@
 
 import { Identifier } from 'dnd-core';
 import { DragLayer, XYCoord } from 'react-dnd';
-import { WithSelectableDragLayer } from 'react-dnd-selectable';
+import { WithSelectableDragLayer } from '@mtg-react-redux/react-dnd-selectable';
 import { connect } from 'react-redux';
 import CardCustomDragLayer, { CardCustomDragLayerProps } from '../components/CardCustomDragLayer';
 import { AppState } from '../reducers';

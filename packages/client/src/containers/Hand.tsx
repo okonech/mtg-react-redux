@@ -5,7 +5,7 @@ import { Theme } from '@material-ui/core/styles';
 import withScrolling from 'frontend-collective-react-dnd-scrollzone';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
-import {SelectableGroup} from 'react-dnd-selectable';
+import {SelectableGroup} from '@mtg-react-redux/react-dnd-selectable';
 import { findDOMNode } from 'react-dom';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';

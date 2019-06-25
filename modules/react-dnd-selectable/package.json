@@ -1,5 +1,5 @@
 {
-    "name": "react-dnd-selectable",
+    "name": "@mtg-react-redux/react-dnd-selectable",
     "version": "1.0.0",
     "description": "Drag select HOC for react-dnd",
     "scripts": {
