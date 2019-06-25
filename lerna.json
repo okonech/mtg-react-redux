@@ -1,14 +1,17 @@
 {
-    "npmClient": "npm",
-    "command": {
-        "publish": {
-          "ignoreChanges": ["ignored-file", "*.md"],
-          "message": "chore(release): publish"
-        }
-      },
-    "packages": [
-      "packages/*",
-      "modules/*"
-    ],
-    "version": "indepedent"
-  }
+  "npmClient": "npm",
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "ignored-file",
+        "*.md"
+      ],
+      "message": "chore(release): publish"
+    }
+  },
+  "packages": [
+    "modules/*",
+    "packages/*"
+  ],
+  "version": null
+}

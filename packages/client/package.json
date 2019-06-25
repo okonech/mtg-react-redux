@@ -1,6 +1,6 @@
 {
   "name": "mtg-react-redux",
-  "version": "0.1.1",
+  "version": null,
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.1.2",
