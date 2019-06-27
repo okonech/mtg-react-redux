@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.3 (2019-06-27)
+
+
+
+## 1.0.2 (2019-06-27)
+
+
+
+## 1.0.2-rc.2 (2019-06-27)
+
+
+
+## 1.0.2-rc.1 (2019-06-27)
+
+
+
+## 1.0.2-rc.0 (2019-06-27)
+
+
+
+## 1.0.1 (2019-06-25)
+
+
+
+# 1.0.0 (2019-06-25)
+
+
+
+# 1.0.0-rc.1 (2019-06-25)
+
+
+
+# 1.0.0-rc.0 (2019-06-25)
+
+**Note:** Version bump only for package @mtg-react-redux/client
+
+
+
+
+
 ## [1.0.2](https://github.com/okonech/mtg-react-redux/compare/v1.0.2-rc.2...v1.0.2) (2019-06-27)
 
 **Note:** Version bump only for package @mtg-react-redux/client
