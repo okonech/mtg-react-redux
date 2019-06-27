@@ -5,4 +5,4 @@ or for drag selection.
 
 Works for touch devices if the react-dnd-touch-backend is used.
 
-rc test 3
+rc test 4
