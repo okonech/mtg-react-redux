@@ -1,11 +1,11 @@
 {
   "name": "@mtg-react-redux/client",
-  "version": "1.0.4-rc.1",
+  "version": "1.0.4",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.1.2",
     "@material-ui/icons": "^4.2.1",
-    "@mtg-react-redux/react-dnd-selectable": "^1.1.1-rc.1",
+    "@mtg-react-redux/react-dnd-selectable": "^1.1.1",
     "firebase": "^6.2.3",
     "firebase-tools": "^7.0.1",
     "frontend-collective-react-dnd-scrollzone": "^1.0.2",
