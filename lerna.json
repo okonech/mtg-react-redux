@@ -12,5 +12,5 @@
     "modules/*",
     "packages/*"
   ],
-  "version": "1.0.2"
+  "version": "independent"
 }
