@@ -1,6 +1,6 @@
 {
     "name": "@mtg-react-redux/react-dnd-selectable",
-    "version": "1.0.2-rc.2",
+    "version": "1.0.2",
     "description": "Drag select HOC for react-dnd",
     "scripts": {
         "build": "npm run lint && npm run compile",
@@ -25,5 +25,5 @@
     "peerDependencies": {
         "react-dnd": "^7.4.5"
     },
-    "gitHead": "43a39cea22d1dd50d0e06709b458bfcb592cbd83"
+    "gitHead": "4d317e43b9208d93ae13b409fb5fed4722a4dfff"
 }
