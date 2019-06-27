@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.4-rc.1 (2019-06-27)
+
+
+### Bug Fixes
+
+* asdasd ([dead84e](https://github.com/okonech/mtg-react-redux/commit/dead84e))
+
+
+
+## 1.0.2 (2019-06-27)
+
+
+
+## 1.0.2-rc.2 (2019-06-27)
+
+
+
+## 1.0.2-rc.1 (2019-06-27)
+
+
+
+## 1.0.2-rc.0 (2019-06-27)
+
+
+
+## 1.0.1 (2019-06-25)
+
+
+
+# 1.0.0 (2019-06-25)
+
+
+
+# 1.0.0-rc.1 (2019-06-25)
+
+
+
+# 1.0.0-rc.0 (2019-06-25)
+
+
+
+
+
+
 ## 1.0.4-rc.0 (2019-06-27)
 
 
