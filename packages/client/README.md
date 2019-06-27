@@ -20,3 +20,6 @@ Give each player an outline color, so cards on the stack are outlined with that 
 
 look into svg sprites for the mana symbols
 already have the sprite sheet
+
+
+aaa
