@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.2 (2019-06-28)
+
+
+### Bug Fixes
+
+* lerna testing ([49dd3d7](https://github.com/okonech/mtg-react-redux/commit/49dd3d7))
+
+
+
+
+
+
 ## [1.1.1](https://github.com/okonech/mtg-react-redux/compare/@mtg-react-redux/react-dnd-selectable@1.1.1-rc.1...@mtg-react-redux/react-dnd-selectable@1.1.1) (2019-06-27)
 
 **Note:** Version bump only for package @mtg-react-redux/react-dnd-selectable
