@@ -15,12 +15,12 @@
     "dependencies": {
         "dnd-core": "^7.7.0",
         "react": "^16.8.6",
-        "react-dnd-html5-backend": "^8.0.3"
+        "react-dnd-html5-backend": "^7.4.4"
     },
     "devDependencies": {
-        "tslint": "^5.18.0",
+        "tslint": "^5.16.0",
         "tslint-react": "^4.0.0",
-        "typescript": "^3.5.2"
+        "typescript": "^3.4.5"
     },
     "peerDependencies": {
         "react-dnd": "^7.4.5"

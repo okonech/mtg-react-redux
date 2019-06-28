@@ -1,16 +1,16 @@
 
 import { createStyles } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import withScrolling from 'frontend-collective-react-dnd-scrollzone';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
-import {SelectableGroup} from '@mtg-react-redux/react-dnd-selectable';
 import { findDOMNode } from 'react-dom';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
 import Card from '../components/Card';
 import { Types } from '../Constants';
+import SelectableGroup from '../packages/react-dnd-selectable/SelectableGroup';
 import { CardZone } from '../selectors/player';
 import DraggableCard, { CardDragObject } from './DraggableCard';
 
@@ -41,8 +41,7 @@ const styles = (theme: Theme) => createStyles({
   }
 });
 
-const ScrollingComponent = withScrolling('div');
-console.log(ScrollingComponent);
+const ScrollingComponent = withScrolling('section');
 
 const handTarget: DropTargetSpec<HandProps> = {
   hover(props: HandProps, monitor: DropTargetMonitor, component: Hand) {

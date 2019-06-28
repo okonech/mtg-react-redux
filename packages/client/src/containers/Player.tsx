@@ -11,8 +11,8 @@ import { PlayerData, playerSelector } from '../selectors/player';
 import { selectedSelector } from '../selectors/selected';
 
 export interface PlayerMappedProps {
-    player?: PlayerData;
-    selected?: string[];
+    player: PlayerData;
+    selected: string[];
     id: string;
 }
 
@@ -40,4 +40,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, props: PlayerMappedProps) =
         dispatch(selectCards(cards)))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps as any)(Player);
+export default connect(mapStateToProps, mapDispatchToProps)(Player);
