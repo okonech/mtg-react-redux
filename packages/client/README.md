@@ -1,5 +1,3 @@
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
-
 TODO:
 
 have avatar be commander or commanders (2 halves, both vertical) and have this drag out the commander card if in cmder zone
@@ -23,6 +21,6 @@ Give each player an outline color, so cards on the stack are outlined with that 
 look into svg sprites for the mana symbols
 already have the sprite sheet
 
-fix material ui imports to specific paths rather than from core
 
-fix selectable module selectcontext, source-map-explorer has it as over 1mb
+aaa
+bnmbnmb
