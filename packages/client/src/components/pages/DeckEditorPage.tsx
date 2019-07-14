@@ -1,12 +1,12 @@
 import React from 'react';
-import DeckEditor from '../deck-editor/DeckEditor';
+import Table from '../deck-editor/Table';
 import Navbar from '../Navbar';
 
 const gameGrid: React.CSSProperties = {
     display: 'grid',
     gridTemplateRows: `auto 1fr`,
-    gridTemplateColumns: `auto auto`,
-    gridTemplateAreas: "'menu menu' 'editor editor'",
+    gridTemplateColumns: `10% auto auto 10%`,
+    gridTemplateAreas: "'menu menu menu menu' 'spacer1 editor editor spacer2'",
     height: '100%',
     width: '100%'
 };
@@ -21,7 +21,7 @@ const GamePage = (props: GamePageProps) => {
     return (
         <section style={gameGrid}>
             <Navbar style={{ gridArea: 'menu' }} />
-            <DeckEditor style={{ gridArea: 'editor' }} />
+            <Table style={{ gridArea: 'editor' }} />
         </section>
     );
 };
