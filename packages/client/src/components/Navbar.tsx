@@ -22,15 +22,22 @@ const styles = {
 
 interface MenuProps extends WithStyles<typeof styles> {
     style?: React.CSSProperties;
+    auth: any;
+    logOut: () => void;
 }
 
 const Navbar = (props: MenuProps) => {
-    const { classes, style } = props;
+    const { classes, style, auth, logOut } = props;
     const [anchorEl, updateAnchorEl] = useState<HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClose = () => updateAnchorEl(null);
     const handleMenu = (event) => updateAnchorEl(event.currentTarget);
 
+    if (auth.uid) {
+        console.log('logged in');
+    }
+
+    // need to make protected route route to auto redirect to non protected pages
     return (
         <AppBar position='static' style={style}>
             <Toolbar variant='dense'>
@@ -69,7 +76,7 @@ const Navbar = (props: MenuProps) => {
                         <MenuItem component={RouterLink} to='/player'>
                             Profile
                         </MenuItem>
-                        <MenuItem component={RouterLink} to='/'>
+                        <MenuItem component={RouterLink} to='/login' onClick={logOut}>
                             Logout
                         </MenuItem>
                     </Menu>

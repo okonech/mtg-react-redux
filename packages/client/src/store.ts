@@ -8,6 +8,7 @@ import epics from './epics';
 import firebaseConfig from './firebaseConfig';
 import rootReducer, { AppState } from './reducers';
 
+// pass dependencies to each epic
 const epicMiddleware = createEpicMiddleware<any, null, AppState>({
     dependencies: { getFirebase, getFirestore }
 });

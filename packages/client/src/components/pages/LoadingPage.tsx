@@ -2,7 +2,7 @@ import { CircularProgress, createStyles } from '@material-ui/core';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core/styles';
 import React from 'react';
-import Navbar from '../Navbar';
+import Navbar from '../../containers/Navbar';
 
 const styles = (theme: Theme) => {
     return createStyles({

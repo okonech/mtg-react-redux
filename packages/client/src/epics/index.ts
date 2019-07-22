@@ -1,9 +1,17 @@
 
+import firebase from 'firebase';
 import { combineEpics } from 'redux-observable';
-import initPlayers from './initPlayers';
+import authEpics from './authEpics';
+import initPlayers from './initEpics';
+
+export interface FBConfig {
+    getFirestore: () => firebase.firestore.Firestore;
+    getFirebase: () => typeof firebase;
+}
 
 const epics = combineEpics(
-    initPlayers
+    initPlayers,
+    authEpics
 );
 
 export default epics;
