@@ -8,7 +8,8 @@ import { addZones } from '../actions/zonesActions';
 import { initPlayers as initPlayersAction } from '../fake-backend/player';
 import { AppState } from '../reducers';
 
-const initPlayers: Epic<any, any, AppState> = (action$) =>
+// config has getFirebase and getFirestore functions
+const initPlayers: Epic<any, any, AppState> = (action$, $state, config) =>
     action$
         .ofType('INIT_PLAYERS')
         .pipe(

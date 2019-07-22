@@ -92,7 +92,6 @@ function StepIconComponent(props) {
     if (props.error) {
         return <StepIcon {...props} />;
     }
-    console.log(props);
 
     return (
         <SvgIcon {...props}>
