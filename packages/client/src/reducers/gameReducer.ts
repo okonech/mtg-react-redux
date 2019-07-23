@@ -1,13 +1,15 @@
 import produce from 'immer';
 
 export interface GameState {
+    id: string;
     turn: number;
-    currentPlayer: string | undefined;
+    currentPlayer: string;
 }
 
 const initialState: GameState = {
+    id: 'testGame',
     turn: 0,
-    currentPlayer: undefined
+    currentPlayer: null
 };
 
 interface GameAction {

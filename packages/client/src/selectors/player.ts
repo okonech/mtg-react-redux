@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { AppState } from '../reducers';
 import { Card, CardsState } from '../reducers/cardsReducer';
+import { singleCardSelector } from '../reducers/cardsReducer';
 import { CardsSettings, CardsSettingsState } from '../reducers/cardsSettingsStateReducer';
 import { singlePlayerSelector } from '../reducers/playersReducer';
 import { Zone } from '../reducers/zonesReducer';
@@ -44,6 +45,17 @@ const getPlayerZones = createSelector(
     })
 );
 
+const mapZoneToCards = (zone: Zone, cardState: CardsState): CardZone => ({
+    id: zone.id,
+    cards: zone.cards.map((cardId) => singleCardSelector(cardState, cardId))
+});
+
+const mapZoneToCoordCards = (zone: Zone, cardState: CardsState,
+    cardsSettingsState: CardsSettingsState): CardCoordZone => ({
+        id: zone.id,
+        cards: zone.cards.map((cardId) => ({ ...singleCardSelector(cardState, cardId), ...cardsSettingsState[cardId] }))
+    });
+
 export const playerSelector = createSelector(
     [getPlayerZones, getCards, getCardsSettings],
     (player, cards, cardsSettings): PlayerData => ({
@@ -55,14 +67,3 @@ export const playerSelector = createSelector(
         exile: mapZoneToCards(player.exile, cards)
     })
 );
-
-const mapZoneToCards = (zone: Zone, cardState: CardsState): CardZone => ({
-    id: zone.id,
-    cards: zone.cards.map((cardId) => cardState[cardId])
-});
-
-const mapZoneToCoordCards = (zone: Zone, cardState: CardsState,
-                             cardsSettingsState: CardsSettingsState): CardCoordZone => ({
-        id: zone.id,
-        cards: zone.cards.map((cardId) => ({ ...cardState[cardId], ...cardsSettingsState[cardId] }))
-    });

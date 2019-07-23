@@ -9,6 +9,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { BaseComponentProps } from '../util/styling';
 
 const styles = {
     grow: {
@@ -20,8 +21,7 @@ const styles = {
     }
 };
 
-interface MenuProps extends WithStyles<typeof styles> {
-    style?: React.CSSProperties;
+interface MenuProps extends WithStyles<typeof styles>, BaseComponentProps {
     auth: any;
     logOut: () => void;
 }
@@ -44,7 +44,7 @@ const Navbar = (props: MenuProps) => {
                 <IconButton className={classes.menuButton} color='inherit' aria-label='Menu'>
                     <MenuIcon />
                 </IconButton>
-                <Button color='inherit' component={RouterLink} to='/player'>
+                <Button color='inherit' component={RouterLink} to='/'>
                     Home
                 </Button>
                 <Button color='inherit' component={RouterLink} to='/deck-editor'>

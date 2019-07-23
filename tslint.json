@@ -12,10 +12,8 @@
     "rules": {
         "align": [
             true,
-            "arguments",
             "elements",
             "members",
-            "parameters",
             "statements"
         ],
         "class-name": true,
@@ -34,7 +32,6 @@
             true,
             {
                 "order": [
-                    "static-before-instance",
                     "variables-before-functions",
                     "public-static-field",
                     "public-instance-field",
@@ -123,6 +120,10 @@
                 "esSpecCompliant": true
             }
         ],
-        "jsx-no-multiline-js": false
+        "jsx-no-multiline-js": false,
+        "max-line-length": [
+            true,
+            160
+        ]
     }
 }

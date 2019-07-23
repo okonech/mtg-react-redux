@@ -9,8 +9,8 @@ const gameGrid: React.CSSProperties = {
     gridTemplateRows: `auto 1fr`,
     gridTemplateColumns: `auto 1fr auto`,
     gridTemplateAreas: "'menu menu menu' 'drawer-left players chatroom'",
-    height: '100%',
-    width: '100%'
+    height: '100vh',
+    width: '100vw'
 };
 
 interface GamePageProps {
@@ -19,7 +19,7 @@ interface GamePageProps {
     playersNum: number;
 }
 
-const GamePage = (props: GamePageProps) => {
+const GamePage: React.FC<GamePageProps> = (props) => {
     const { playerCols, playerRows, playersNum } = props;
     return (
         <section style={gameGrid}>

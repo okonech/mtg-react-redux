@@ -11,7 +11,7 @@ import { Field, Form } from 'react-final-form';
 import { connect } from 'react-redux';
 import { Link as RouterLink, LinkProps, Redirect } from 'react-router-dom';
 import { Dispatch } from 'redux';
-import { signup } from '../actions/fbAuthActions';
+import { signup } from '../actions/authActions';
 import { TextField } from '../packages/final-form-material-ui';
 import { AppState } from '../reducers';
 import { Omit } from '../util/propsHelper';
@@ -81,7 +81,7 @@ const validate = (values: SignUpFormFields) => {
 interface SignUpProps {
     auth: any;
     authError: string;
-    signUp: signup;
+    signUp: typeof signup;
 }
 
 function SignUp(props: SignUpProps) {

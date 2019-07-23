@@ -6,8 +6,6 @@ export interface SelectCardsAction {
     };
 }
 
-export type selectCards = (cards: string[]) => SelectCardsAction;
-
 export function selectCards(cards: string[]): SelectCardsAction {
     return {
         type: 'SELECT_CARDS',

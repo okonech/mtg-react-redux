@@ -1,9 +1,6 @@
-import SelectableGroup from './SelectableGroup';
-import WithSelectable from './WithSelectable';
-import WithSelectableDragLayer from './WithSelectableDragLayer';
 
-export {
-    SelectableGroup,
-    WithSelectable,
-    WithSelectableDragLayer
-};
+// make card model- get props among regular/multi face cards
+// dehydrate to same type as in backup-restore
+// export primitive for use in card data everywhere
+
+export { CardModelImpl as CardModel, CardPrimitive } from './card';

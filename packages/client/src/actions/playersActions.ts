@@ -1,11 +1,24 @@
 import { Player } from '../reducers/playersReducer';
 
-export interface PlayersAction {
-  type: 'ADD_PLAYERS' | 'UPDATE_PLAYERS' | 'DELETE_PLAYERS';
+export type PlayersAction = PlayersUpdateAction | PlayersDeleteAction;
+
+export interface PlayersUpdateAction {
+  type: 'ADD_PLAYERS' | 'UPDATE_PLAYERS';
   payload: {
-    ids?: string[];
-    items?: Player[];
+    items: Player[];
   };
+}
+
+export interface PlayersDeleteAction {
+  type: 'DELETE_PLAYERS';
+  payload: {
+    ids: string[]
+  };
+}
+
+interface PlayerZone {
+  player: number;
+  zone: string;
 }
 
 export function addPlayers(players: Player[]): PlayersAction {
@@ -16,8 +29,6 @@ export function addPlayers(players: Player[]): PlayersAction {
     }
   };
 }
-
-export type updatePlayers = (players: Player[]) => PlayersAction;
 
 export function updatePlayers(players: Player[]): PlayersAction {
   return {
@@ -35,11 +46,6 @@ export function deletePlayers(ids: string[]): PlayersAction {
       ids
     }
   };
-}
-
-interface PlayerZone {
-  player: number;
-  zone: string;
 }
 
 export function cardsDND(from: PlayerZone, to: PlayerZone, draggedCards: any[]) {

@@ -1,7 +1,7 @@
 
 import { createStyles } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
@@ -11,6 +11,7 @@ import { Types } from '../Constants';
 import { SelectableGroup } from '../packages/react-dnd-selectable';
 import { CardCoordZone } from '../selectors/player';
 import { setSnapEnabled, setSnapOverNode, snapToGrid } from '../util/snapToGrid';
+import { BaseComponentProps } from '../util/styling';
 import DraggableCard, { CardDragObject } from './DraggableCard';
 
 const styles = (theme: Theme) => {
@@ -51,13 +52,12 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
         selectCards([]);
     }
 };
-interface BattleFieldProps extends WithStyles<typeof styles> {
+interface BattleFieldProps extends WithStyles<typeof styles>, BaseComponentProps {
     zone: CardCoordZone;
-    moveCards: moveCardsType;
-    selectCards: selectCardsType;
+    moveCards: typeof moveCardsType;
+    selectCards: typeof selectCardsType;
     selected: string[];
     cardHeight: number;
-    style?: React.CSSProperties;
 }
 
 interface BattleFieldTargetCollectedProps {
@@ -134,7 +134,7 @@ class BattleField extends React.PureComponent<AllProps>  {
                 />
             );
             return acc;
-        },                              []);
+        }, []);
 
         return (
             connectDropTarget(

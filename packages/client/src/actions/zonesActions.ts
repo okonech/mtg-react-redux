@@ -1,12 +1,22 @@
 import { Zone } from '../reducers/zonesReducer';
 
-export interface ZonesAction {
-    type: 'ADD_ZONES' | 'UPDATE_ZONES' | 'DELETE_ZONES';
+export type ZonesAction = ZonesUpdateAction | ZonesDeleteAction;
+
+export interface ZonesUpdateAction {
+    type: 'ADD_ZONES' | 'UPDATE_ZONES';
     payload: {
         items?: Zone[],
         ids?: string[]
     };
 }
+
+export interface ZonesDeleteAction {
+    type: 'DELETE_ZONES';
+    payload: {
+        ids: string[]
+    };
+}
+
 export interface MoveCardsAction {
     type: 'MOVE_CARDS';
     payload: {
@@ -28,8 +38,6 @@ export function addZones(zones: Zone[]): ZonesAction {
     };
 }
 
-export type updateZones = (zones: Zone[]) => ZonesAction;
-
 export function updateZones(zones: Zone[]): ZonesAction {
     return {
         type: 'UPDATE_ZONES',
@@ -48,11 +56,8 @@ export function deleteZones(ids: string[]): ZonesAction {
     };
 }
 
-export type moveCards = (fromZone: string, cards: string[], toZone: string, toIdx: number,
-                         xCoord: number, yCoord: number) => MoveCardsAction;
-
 export function moveCards(fromZone: string, cards: string[], toZone: string,
-                          toIdx: number, xCoord: number, yCoord: number): MoveCardsAction {
+    toIdx: number, xCoord: number, yCoord: number): MoveCardsAction {
     return {
         type: 'MOVE_CARDS',
         payload: {

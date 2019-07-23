@@ -2,6 +2,7 @@ import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import React from 'react';
 import { PlayerData } from '../selectors/player';
+import { BaseComponentProps } from '../util/styling';
 
 const styles = (theme: Theme) => {
     return createStyles({
@@ -20,10 +21,9 @@ const styles = (theme: Theme) => {
     });
 };
 
-interface PlayerInfoProps extends WithStyles<typeof styles> {
+interface PlayerInfoProps extends WithStyles<typeof styles>, BaseComponentProps {
     player: PlayerData;
     icon: string;
-    style?: React.CSSProperties;
 }
 
 const PlayerInfo = (props: PlayerInfoProps) => {

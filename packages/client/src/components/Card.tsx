@@ -2,6 +2,7 @@ import { Card as MuiCard, CardMedia, createStyles, Typography } from '@material-
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core/styles';
 import withTheme, { WithTheme } from '@material-ui/styles/withTheme';
+import { CardModel } from '@mtg-react-redux/models';
 import React from 'react';
 import { defaultMemoize } from 'reselect';
 import { Card as CardType } from '../reducers/cardsReducer';
@@ -63,24 +64,24 @@ const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
 const Card = (props: AllProps) => {
 
   const { card, classes, isHovered, selecting } = props;
-  const { name, url, id } = card;
+  const cardModel = new CardModel(card);
 
   const displayName = (isHovered && !selecting) ? (
     <Typography className={classes.text}>
-      {isHovered ? name : ''}
+      {isHovered ? cardModel.name : ''}
     </Typography>
   ) : <div />;
 
   return (
     <MuiCard
-      id={id}
+      id={cardModel.id}
       style={cardStyle(props)}
       raised={isHovered}
       className={classes.main}
     >
       <CardMedia
         className={classes.media}
-        image={url.small}
+        image={cardModel.imageUrl('small')}
       >
         {displayName}
       </CardMedia>

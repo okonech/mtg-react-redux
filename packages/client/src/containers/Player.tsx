@@ -17,10 +17,10 @@ export interface PlayerMappedProps {
 }
 
 export interface PlayerMappedDispatch {
-    updatePlayers: updatePlayers;
-    updateZones: updateZones;
-    moveCards: moveCards;
-    selectCards: selectCards;
+    updatePlayers: typeof updatePlayers;
+    updateZones: typeof updateZones;
+    moveCards: typeof moveCards;
+    selectCards: typeof selectCards;
 }
 
 const mapStateToProps = (state: AppState, ownProps: { id: string }) => ({

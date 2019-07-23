@@ -3,7 +3,7 @@ import { Epic } from 'redux-observable';
 import { forkJoin, from, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { loginError, loginSuccess, signoutSuccess, signupError, signupSuccess } from '../actions/authActions';
-import { FBLogin, FBLogout, FBSignup } from '../actions/fbAuthActions';
+import { LoginAction, LogoutAction, SignupAction } from '../actions/authActions';
 import { AppState } from '../reducers';
 import { FBConfig } from './index';
 
@@ -13,10 +13,10 @@ const signup: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
         .ofType('SIGN_UP')
         .pipe(
             // create disposable stream to catch errors but keep observable
-            switchMap((act: FBSignup) =>
+            switchMap((act: SignupAction) =>
                 of(act)
                     .pipe(
-                        switchMap((action: FBSignup) =>
+                        switchMap((action: SignupAction) =>
                             forkJoin(
                                 from(config.getFirebase().auth().createUserWithEmailAndPassword(
                                     action.payload.email,
@@ -45,10 +45,10 @@ const login: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
         .ofType('LOG_IN')
         .pipe(
             // create disposable stream to catch errors but keep observable
-            switchMap((act: FBLogin) =>
+            switchMap((act: LoginAction) =>
                 of(act)
                     .pipe(
-                        switchMap((action: FBLogin) =>
+                        switchMap((action: LoginAction) =>
                             from(config.getFirebase().auth().signInWithEmailAndPassword(
                                 action.payload.email,
                                 action.payload.password
@@ -69,10 +69,10 @@ const logout: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
         .ofType('LOG_OUT')
         .pipe(
             // create disposable stream to catch errors but keep observable
-            switchMap((act: FBLogout) =>
+            switchMap((act: LogoutAction) =>
                 of(act)
                     .pipe(
-                        switchMap((action: FBLogout) =>
+                        switchMap((action: LogoutAction) =>
                             config.getFirebase().auth().signOut()
                         ),
                         switchMap(() => of(

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { logout } from '../actions/fbAuthActions';
+import { logout } from '../actions/authActions';
 import Navbar from '../components/Navbar';
 import { AppState } from '../reducers';
 

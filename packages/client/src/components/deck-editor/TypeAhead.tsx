@@ -7,6 +7,7 @@ import parse from 'autosuggest-highlight/parse';
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import { Cards } from 'scryfall-sdk';
+import { addCardByName as deckEditorAddCardByName } from '../../actions/deckEditorActions';
 
 function renderInputComponent(inputProps: any) {
     const { classes, inputRef = () => ({}), ref, ...other } = inputProps;
@@ -90,12 +91,14 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export default function TypeAhead() {
+interface TypeAheadProps {
+    addCardByName: typeof deckEditorAddCardByName;
+}
+
+const TypeAhead: React.SFC<TypeAheadProps> = (props) => {
+    const { addCardByName } = props;
     const classes = useStyles({});
-    const [state, setState] = React.useState({
-        single: '',
-        popper: ''
-    });
+    const [state, setState] = React.useState('');
     const [stateSuggestions, setSuggestions] = React.useState<string[]>([]);
 
     const handleSuggestionsFetchRequested = async ({ value }: any) => {
@@ -107,14 +110,18 @@ export default function TypeAhead() {
         setSuggestions([]);
     };
 
-    const handleChange = (name: keyof typeof state) => (
+    const handleChange = () => (
         event: React.ChangeEvent<{}>,
         { newValue }: Autosuggest.ChangeEvent
     ) => {
-        setState({
-            ...state,
-            [name]: newValue
-        });
+        setState(newValue);
+    };
+
+    const handleSubmit = () => (event: KeyboardEvent) => {
+        if (event.key === 'Enter' && stateSuggestions.length === 0) {
+            addCardByName(state);
+            setState('');
+        }
     };
 
     const autosuggestProps = {
@@ -139,10 +146,11 @@ export default function TypeAhead() {
                 inputProps={{
                     classes,
                     id: 'card-typeahead',
-                    label: 'Card name',
+                    label: 'Add Card',
                     placeholder: 'Enter a card name',
-                    value: state.single,
-                    onChange: handleChange('single')
+                    value: state,
+                    onChange: handleChange(),
+                    onKeyPress: handleSubmit()
                 }}
                 theme={{
                     container: classes.container,
@@ -154,4 +162,6 @@ export default function TypeAhead() {
             />
         </div>
     );
-}
+};
+
+export default TypeAhead;

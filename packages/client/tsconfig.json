@@ -1,18 +1,18 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "outDir": "build/dist",
-        "rootDir": "src"
-    },
-    "exclude": [
-        "node_modules",
-        "build",
-        "scripts",
-        "acceptance-tests",
-        "webpack",
-        "jest"
-      ],
-      "include": [
-        "src"
-      ]
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "build/dist",
+    "rootDir": "src"
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest"
+  ],
+  "include": [
+    "src"
+  ]
 }
