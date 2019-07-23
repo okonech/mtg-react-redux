@@ -1,6 +1,6 @@
 import React from 'react';
+import Navbar from '../../containers/Navbar';
 import Table from '../deck-editor/Table';
-import Navbar from '../Navbar';
 
 const gameGrid: React.CSSProperties = {
     display: 'grid',

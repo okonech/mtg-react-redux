@@ -11,7 +11,7 @@ import DeckEditor from './routes/DeckEditor';
 import FourPlayerGame from './routes/FourPlayerGame';
 import FourPlayerGameOther from './routes/FourPlayerGameOther';
 import LoggedInLandingPage from './routes/LoggedInLandingPage';
-import LoginPage from './routes/LoginPage';
+import Login from './routes/Login';
 import Signup from './routes/Signup';
 import SinglePlayerGame from './routes/SinglePlayerGame';
 import TwoPlayerGame from './routes/TwoPlayerGame';
@@ -48,9 +48,9 @@ class App extends Component {
         <CssBaseline />
         <Router>
           <Switch>
-            <Route exact={true} path='/' component={LoginPage} />
+            <Route exact={true} path='/login' component={Login} />
             <Route exact={true} path='/signup' component={Signup} />
-            <Route path='/player' component={LoggedInLandingPage} />
+            <Route exact={true} path='/' component={LoggedInLandingPage} />
             <Route path='/deck-editor' component={DeckEditor} />
             <Route path='/test-game' component={SinglePlayerGame} />
             <Route path='/test-two-player-game' component={TwoPlayerGame} />
