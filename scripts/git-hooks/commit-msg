@@ -35,11 +35,11 @@ fi
 # Else proceed with auto generation
 
 #commit lint type (or default to chore)
-COMMIT_TYPE="$(git rev-parse --abbrev-ref HEAD | egrep -iom 1 '\b[a-z]{1,}(?!\/).' | head -n1 | sed 's/ .$//')"
+COMMIT_TYPE="$(git rev-parse --abbrev-ref HEAD | egrep -iom 1 '[a-z]{1,}(\/)' | head -n1 | cut -d '/' -f 1)"
 COMMIT_TYPE="${COMMIT_TYPE:-"chore"}"
 
 # Branch id
-BRANCH_ID="$(git rev-parse --abbrev-ref HEAD | head -n1)"
+BRANCH_ID="$(git rev-parse --abbrev-ref HEAD | egrep -iom 1 '([^\/]+$)' | head -n1)"
 
 # Prepend commit with header as lowercase type, jira
 echo "Prepending ${COMMIT_TYPE,,}(${BRANCH_ID^^}): header..."
