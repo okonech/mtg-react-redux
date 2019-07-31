@@ -34,7 +34,9 @@ const Players: React.SFC<PlayersProps> = (props) => {
     setCardHeight(cardHeight);
 
     useEffect(() => {
-        initPlayers(game);
+        if (!game.id) {
+            initPlayers(game);
+        }
     }, [game, initPlayers]);
 
     if (loading) {
