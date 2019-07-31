@@ -76,7 +76,7 @@ interface DraggableCardProps {
   card: CardType;
   zoneId: string;
   selectedCards: string[];
-  selectCards: selectCardsType;
+  selectCards: typeof selectCardsType;
   cardHeight: number;
   xCoord?: number;
   yCoord?: number;
@@ -122,7 +122,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
 
   public render() {
     const { card, connectDragSource, selectedCards, selecting, selectableRef,
-            cardHeight, xCoord, yCoord, id, onMouseEnter, onMouseLeave, isHovered } = this.props;
+      cardHeight, xCoord, yCoord, id, onMouseEnter, onMouseLeave, isHovered } = this.props;
 
     return (
       connectDragSource(

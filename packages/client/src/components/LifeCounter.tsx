@@ -5,7 +5,7 @@ import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import AddCircle from '@material-ui/icons/AddCircle';
 import RemoveCircle from '@material-ui/icons/RemoveCircle';
 import React from 'react';
-import { noSelect } from '../util/styling';
+import { BaseComponentProps, noSelect } from '../util/styling';
 
 const styles = (theme: Theme) => {
     const { divider } = theme.palette;
@@ -42,10 +42,9 @@ const styles = (theme: Theme) => {
     });
 };
 
-export interface LifeCounterProps extends WithStyles<typeof styles> {
+export interface LifeCounterProps extends WithStyles<typeof styles>, BaseComponentProps {
     life: number;
     icon: any;
-    style?: React.CSSProperties;
 }
 
 const LifeCounter = (props: LifeCounterProps) => {

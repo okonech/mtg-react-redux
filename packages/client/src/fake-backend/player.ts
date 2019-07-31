@@ -1,3 +1,5 @@
+import { CardModel } from '@mtg-react-redux/models';
+import { Card as ScryfallCard, CardIdentifier, Cards as CardApi } from 'scryfall-sdk';
 import { v4 as uuid } from 'uuid';
 import { Card } from '../reducers/cardsReducer';
 import { Player } from '../reducers/playersReducer';
@@ -5,7 +7,6 @@ import { Zone } from '../reducers/zonesReducer';
 import shuffle from '../util/shuffle';
 import fakeResponse from './fake-response.json';
 import { Player as RawPlayer, players } from './playerData';
-import { getCards, ScryfallCollectionCard } from './scryfall';
 
 export interface PlayersData {
     cards: Card[];
@@ -22,7 +23,7 @@ export async function initPlayers(game: string): Promise<PlayersData> {
     await Promise.all(players.map(async (rawPlayer) => {
 
         const player = mapRawToPlayer(rawPlayer);
-        const cards = shuffle(await mapRawToCardsFake(player, rawPlayer.library));
+        const cards = shuffle(await mapRawToCards(player, rawPlayer.library));
         const zones = mapDataToZones(player, cards);
         allCards.push(...cards);
         allPlayers.push(player);
@@ -55,34 +56,13 @@ export async function mapRawToCardsFake(player: Player, cards: string[]): Promis
 }
 
 export async function mapRawToCards(player: Player, cards: string[]): Promise<Card[]> {
-    const apiCards = await getCards(cards);
-    console.log(JSON.stringify(apiCards));
+    const apiCards = await CardApi.collection(...cards.map((card) => CardIdentifier.byName(card))).waitForAll();
     return parseCardData(player, apiCards);
 }
 
-function parseCardData(player: Player, cards: ScryfallCollectionCard[]): Card[] {
+function parseCardData(player: Player, cards: ScryfallCard[]): Card[] {
     return cards.map((card) => {
-        const { card_faces, color_identity } = card;
-        let { name, image_uris } = card;
-
-        if (card_faces) {
-            ({ name, image_uris } = card_faces[0]);
-        }
-
-        return {
-            id: uuid(),
-            name,
-            url: {
-                small: image_uris.small,
-                normal: image_uris.normal
-            },
-            foil: false,
-            tapped: false,
-            colorIdentity: color_identity,
-            owner: player.id,
-            controller: player.id
-        };
-
+        return new CardModel(card).dehydrate();
     });
 }
 

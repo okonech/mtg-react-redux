@@ -1,57 +1,20 @@
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import { lighten } from '@material-ui/core/styles/colorManipulator';
-import Switch from '@material-ui/core/Switch';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import clsx from 'clsx';
-import MaterialTable from 'material-table';
+import TextField from '@material-ui/core/TextField';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useTheme from '@material-ui/styles/useTheme';
 import React from 'react';
-import TypeAhead from './TypeAhead';
-
-function createData(name: string, type: string, quantity: number, sideboard: number, owned: number) {
-    return { name, type, quantity, sideboard, owned };
-}
-
-const rows = [
-    createData('Mana Crypt', 'Artifact', 1, 0, 1),
-    createData('Sol Ring', 'Artifact', 1, 0, 1),
-    createData('Sorcerous Spyglass', 'Artifact', 0, 1, 1),
-    createData('Island', 'Land', 10, 0, 10),
-    createData('Timetwister', 'Sorcery', 1, 0, 1)
-];
-
-function desc(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-function stableSort(array, cmp) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = cmp(a[0], b[0]);
-        if (order !== 0) { return order; }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
-
-function getSorting(order, orderBy) {
-    return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
-}
+import { updateCards as deckEditorUpdateCards } from '../../actions/deckEditorActions';
+import { DeckEditorRow, DeckEditorState } from '../../reducers/deckEditorReducer';
+import { getSorting, stableSort } from '../../util/ordering';
+import { BaseComponentProps } from '../../util/styling';
 
 const headRows = [
     { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
@@ -61,16 +24,32 @@ const headRows = [
     { id: 'owned', numeric: true, disablePadding: false, label: 'Owned' }
 ];
 
-function EnhancedTableHead(props) {
+const xsRows = [
+    { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
+    { id: 'quantity', numeric: true, disablePadding: false, label: 'Quantity' },
+    { id: 'sideboard', numeric: true, disablePadding: false, label: 'Sideboard' }
+];
+
+interface TableHeadProps {
+    order: 'asc' | 'desc';
+    orderBy: keyof DeckEditorRow;
+    onRequestSort: (evt, prop) => void;
+}
+
+const EnhancedTableHead: React.FC<TableHeadProps> = (props) => {
     const { order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
+    const theme = useTheme<Theme>();
+    const xsBreak = useMediaQuery(theme.breakpoints.down('xs'));
+
+    const tableRows = xsBreak ? xsRows : headRows;
 
     return (
         <TableHead>
             <TableRow>
-                {headRows.map((row) => (
+                {tableRows.map((row) => (
                     <TableCell
                         key={row.id}
                         align={row.numeric ? 'right' : 'left'}
@@ -89,146 +68,155 @@ function EnhancedTableHead(props) {
             </TableRow>
         </TableHead>
     );
+};
+
+interface EnhancedTableRowProps {
+    xsRow: boolean;
+    editing: boolean;
+    update: typeof deckEditorUpdateCards;
+    data: DeckEditorRow;
 }
 
-const useToolbarStyles = makeStyles((theme) => ({
-    root: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1)
-    },
-    highlight:
-        theme.palette.type === 'light'
-            ? {
-                color: theme.palette.secondary.main,
-                backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-            }
-            : {
-                color: theme.palette.text.primary,
-                backgroundColor: theme.palette.secondary.dark
-            },
-    spacer: {
-        flex: '1 1 20%'
-    },
-    actions: {
-        color: theme.palette.text.secondary
-    },
-    title: {
-        flex: '0 0 auto'
-    }
-}));
+const EnhancedTableRow: React.FC<EnhancedTableRowProps> = (props) => {
+    const { xsRow, editing, data, update } = props;
 
-const EnhancedTableToolbar = (props) => {
-    const classes = useToolbarStyles({});
-    const { numSelected, dense, densityFunc } = props;
+    const handleRowChange = () => (event: React.ChangeEvent<HTMLInputElement>) => {
+        const id = event.target.id.split(':::');
+        const value = Number.parseInt(event.target.value, 10);
+        if (Number.isInteger(value) && value >= 0) {
+            update([{ ...data, [id[1]]: event.target.value }]);
+        }
+    };
+
+    if (editing) {
+        return (
+            <React.Fragment>
+                <TableCell component='th' scope='row'>
+                    {data.name}
+                </TableCell>
+                {xsRow ? null :
+                    <TableCell align='left'>
+                        {data.type}
+                    </TableCell>}
+                <TableCell align='right'>
+                    <TextField
+                        id={`${data.id}:::quantity`}
+                        value={data.quantity}
+                        onChange={handleRowChange()}
+                        type='number'
+                        margin='dense'
+                        variant='outlined'
+                    />
+                </TableCell>
+                <TableCell align='right'>
+                    <TextField
+                        id={`${data.id}:::sideboard`}
+                        value={data.sideboard}
+                        onChange={handleRowChange()}
+                        type='number'
+                        margin='dense'
+                        variant='outlined'
+                    />
+                </TableCell>
+                {xsRow ? null :
+                    <TableCell align='right'>
+                        <TextField
+                            id={`${data.id}:::owned`}
+                            value={data.owned}
+                            onChange={handleRowChange()}
+                            type='number'
+                            margin='dense'
+                            variant='outlined'
+                        />
+                    </TableCell>}
+            </React.Fragment>
+        );
+    }
 
     return (
-        <Toolbar
-            className={clsx(classes.root, {
-                [classes.highlight]: numSelected > 0
-            })}
-        >
-            <div className={classes.title}>
-                <Typography variant='h6' id='tableTitle'>
-                    Nutrition
-          </Typography>
-            </div>
-            <TypeAhead />
-            <div className={classes.spacer} />
-            <Tooltip title='Make each row take less vertical space'>
-                <FormControlLabel
-                    control={<Switch checked={dense} onChange={densityFunc} />}
-                    label='Compact'
-                />
-            </Tooltip>
-        </Toolbar>
+        <React.Fragment>
+            <TableCell component='th' scope='row'>{data.name}</TableCell>
+            {xsRow ? null : <TableCell align='left'>{data.type}</TableCell>}
+            <TableCell align='right'>{data.quantity}</TableCell>
+            <TableCell align='right'>{data.sideboard}</TableCell>
+            {xsRow ? null : <TableCell align='right'>{data.owned}</TableCell>}
+        </React.Fragment>
     );
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
-        width: '100%',
-        marginTop: theme.spacing(3)
+        width: '100%'
     },
     paper: {
         width: '100%',
         marginBottom: theme.spacing(2)
     },
     table: {
-        minWidth: 750
+        minWidth: 300
     },
     tableWrapper: {
         overflowX: 'auto'
     }
 }));
 
-export function EnhancedTable(props) {
+interface TableProps extends BaseComponentProps {
+    dense: boolean;
+    data: DeckEditorState['cards'];
+    select: (id: string) => void;
+    editing: boolean;
+    updateCards: typeof deckEditorUpdateCards;
+}
+
+const EnhancedTable: React.FC<TableProps> = (props) => {
+    const { dense, data, select, editing, updateCards } = props;
     const classes = useStyles({});
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
-    const [selected, setSelected] = React.useState([]);
-    const [dense, setDense] = React.useState(false);
+    const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
+    const [orderBy, setOrderBy] = React.useState<keyof DeckEditorRow>('name');
+    const theme = useTheme<Theme>();
+    const xsBreak = useMediaQuery(theme.breakpoints.down('xs'));
 
-    const { style } = props;
-
-    function handleRequestSort(event, property) {
+    function handleRequestSort(event, property: keyof DeckEditorRow) {
         const isDesc = orderBy === property && order === 'desc';
         setOrder(isDesc ? 'asc' : 'desc');
         setOrderBy(property);
     }
 
-    function handleSelectAllClick(event) {
-        if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);
-            setSelected(newSelecteds);
-            return;
-        }
-        setSelected([]);
+    function rowSelect(id) {
+        return () => select(id);
     }
-
-    function handleChangeDense(event) {
-        setDense(event.target.checked);
-    }
-
-    const isSelected = (name) => selected.indexOf(name) !== -1;
 
     return (
-        <div style={style}>
+        <Box className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar numSelected={selected.length} dense={dense} densityFunc={handleChangeDense} />
                 <div className={classes.tableWrapper}>
                     <Table
                         className={classes.table}
                         aria-labelledby='tableTitle'
-                        size={dense ? 'small' : 'medium'}
+                        size={'small'}
+                        padding={dense ? 'checkbox' : 'default'}
                     >
                         <EnhancedTableHead
-                            numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
                         />
                         <TableBody>
-                            {stableSort(rows, getSorting(order, orderBy))
+                            {stableSort(Object.values(data), getSorting(order, orderBy))
                                 .map((row) => {
-                                    const isItemSelected = isSelected(row.name);
                                     return (
                                         <TableRow
                                             hover={true}
-                                            role='checkbox'
-                                            aria-checked={isItemSelected}
                                             tabIndex={-1}
                                             key={row.name}
-                                            selected={isItemSelected}
+                                            onClick={rowSelect(row.id)}
                                         >
-                                            <TableCell component='th' scope='row'>
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell align='left'>{row.type}</TableCell>
-                                            <TableCell align='right'>{row.quantity}</TableCell>
-                                            <TableCell align='right'>{row.sideboard}</TableCell>
-                                            <TableCell align='right'>{row.owned}</TableCell>
+                                            <EnhancedTableRow
+                                                xsRow={xsBreak}
+                                                editing={editing}
+                                                update={updateCards}
+                                                data={row}
+                                            />
                                         </TableRow>
                                     );
                                 })}
@@ -236,37 +224,8 @@ export function EnhancedTable(props) {
                     </Table>
                 </div>
             </Paper>
-            <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label='Save Deck'
-            />
-        </div>
+        </Box>
     );
-}
+};
 
-function DefaultGroupedField(props) {
-    const { style } = props;
-    return (
-        <div style={style}>
-            <MaterialTable
-                title='Default Grouped Field Preview'
-                columns={[
-                    { title: 'Name', field: 'name', defaultGroupOrder: 0 },
-                    { title: 'Surname', field: 'surname' },
-                    { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-                    { title: 'Birth Place', field: 'birthCity', type: 'numeric' }
-                ]}
-                data={[
-                    { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-                    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 }
-                ]}
-                options={{
-                    grouping: true,
-                    search: false
-                }}
-            />
-        </div>
-    );
-}
-
-export default DefaultGroupedField;
+export default EnhancedTable;

@@ -1,10 +1,32 @@
 {
   "name": "mtg-react-redux",
   "private": true,
+  "scripts": {
+    "build": "bash scripts/build.sh",
+    "prod": "bash scripts/serve.sh",
+    "watch": "bash scripts/watch.sh"
+  },
   "devDependencies": {
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
+    "husky": "^2.5.0",
     "lerna": "^3.15.0"
   },
-  "dependencies": {
-    "typescript": "^3.4.5"
+  "husky": {
+    "hooks": {
+      "commit-msg": "bash scripts/git-hooks/commit-msg && commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "scope-case": [
+        2,
+        "always",
+        "upper-case"
+      ]
+    }
   }
 }

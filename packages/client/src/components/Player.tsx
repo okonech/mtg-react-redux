@@ -1,12 +1,13 @@
 import { createStyles } from '@material-ui/core';
-import { Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { defaultMemoize } from 'reselect';
 import BattleField from '../containers/BattleField';
 import Hand from '../containers/Hand';
 import { PlayerMappedDispatch, PlayerMappedProps } from '../containers/Player';
 import { getCardSizeVh } from '../util/cardSize';
+import { BaseComponentProps } from '../util/styling';
 import InfoArea from './InfoArea';
 
 const styles = (theme: Theme) => {
@@ -20,7 +21,7 @@ const styles = (theme: Theme) => {
     });
 };
 
-export interface PlayerProps extends WithStyles<typeof styles> {
+export interface PlayerProps extends WithStyles<typeof styles>, BaseComponentProps {
     style?: React.CSSProperties;
 }
 

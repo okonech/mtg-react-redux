@@ -28,3 +28,5 @@ fix material ui imports to specific paths rather than from core
 fix selectable module selectcontext, source-map-explorer has it as over 1mb
 
 make all hocs omit wrapped props. Copy react-redux's connect function
+
+fix actions in new style and use typeof on functions

@@ -12,7 +12,9 @@
     "author": "",
     "license": "MIT",
     "private": true,
-    "dependencies": {},
+    "dependencies": {
+        "scryfall-sdk": "^1.5.1"
+    },
     "devDependencies": {
         "tslint": "^5.16.0",
         "tslint-react": "^4.0.0",

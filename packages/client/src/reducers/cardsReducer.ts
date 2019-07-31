@@ -1,41 +1,41 @@
+import { CardPrimitive } from '@mtg-react-redux/models';
 import produce from 'immer';
 import { CardsAction } from '../actions/cardsActions';
 
-// Normalized cards store as object of {unique card id: Card}
+// Normalized cards store as object of 
+// cards: {unique card id: Card}
+// cardsByName: {card name: card Id}
 // No ids array since full list of cards is never enumerated, only known list of card ids are passed
 
+export type Card = CardPrimitive;
 export interface CardsState {
-  [id: string]: Card;
+  cards: { [id: string]: Card };
+  cardsbyName: { [name: string]: string };
 }
 
-export type Card = CardView & CardLogic;
+const def = {
+  cards: {},
+  cardsbyName: {}
+};
 
-export interface CardView {
-  id: string;
-  name: string;
-  url: {
-    small: string;
-    normal: string;
-  };
-  foil: boolean;
-  tapped: boolean;
-}
-export interface CardLogic {
-  colorIdentity: string[];
-  owner: string;
-  controller: string;
-
-}
-
-export default function cardsReducer(state: CardsState = {}, action: CardsAction): CardsState {
+export default function cardsReducer(state: CardsState = def, action: CardsAction): CardsState {
   return produce(state, (draft) => {
     switch (action.type) {
       case 'ADD_CARDS':
       case 'UPDATE_CARDS':
-        action.payload.items.forEach((card) => draft[card.id] = card);
+        action.payload.items.forEach((card) => {
+          if (card.name && card.id) {
+            draft.cards[card.id] = card;
+            draft.cardsbyName[card.name] = card.id;
+          }
+        });
         break;
       case 'DELETE_CARDS':
-        action.payload.ids.forEach((id) => delete draft[id]);
+        action.payload.ids.forEach((id) => {
+          const name = draft.cards[id].name;
+          delete draft.cardsbyName[name];
+          delete draft.cards[id];
+        });
         break;
       default:
         break;
@@ -44,9 +44,17 @@ export default function cardsReducer(state: CardsState = {}, action: CardsAction
 }
 
 export function singleCardSelector(state: CardsState, id: string): Card {
-  return state[id];
+  return state.cards[id];
 }
 
 export function cardsSelector(state: CardsState, ids: string[]): Card[] {
   return ids.map((id) => singleCardSelector(state, id));
+}
+
+export function singleCardByNameSelector(state: CardsState, name: string): Card {
+  return singleCardSelector(state, state.cardsbyName[name]);
+}
+
+export function cardsByNameSelector(state: CardsState, names: string[]): Card[] {
+  return names.map((name) => singleCardByNameSelector(state, name));
 }

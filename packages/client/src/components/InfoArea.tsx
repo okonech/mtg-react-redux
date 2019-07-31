@@ -1,11 +1,12 @@
 import { createStyles } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Theme } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { moveCards as moveCardsType } from '../actions/zonesActions';
 import ZoneInfoDnd from '../containers/ZoneInfoDnd';
 import { PlayerData } from '../selectors/player';
+import { BaseComponentProps } from '../util/styling';
 import LifeCounter from './LifeCounter';
 import PlayerInfo from './PlayerInfo';
 import RollingEnergySvg from './svg/ExileSvg';
@@ -30,20 +31,24 @@ const styles = (theme: Theme) => {
     });
 };
 
-interface InfoAreaProps extends WithStyles<typeof styles> {
+interface InfoAreaProps extends WithStyles<typeof styles>, BaseComponentProps {
     player: PlayerData;
-    moveCards: moveCardsType;
-    selectCards: selectCardsType;
-    style?: React.CSSProperties;
+    moveCards: typeof moveCardsType;
+    selectCards: typeof selectCardsType;
 }
 
-const InfoArea = (props: InfoAreaProps) => {
+const InfoArea: React.FC<InfoAreaProps> = (props) => {
 
     const { player, moveCards, selectCards, style, classes } = props;
     const { hand, library, graveyard, exile } = player;
     const libCards = library.cards;
-    const drawCard = () => moveCards(library.id, [libCards[libCards.length - 1].id],
-                                     hand.id, hand.cards.length, 0, 0);
+    const drawCard = () => {
+        if (libCards.length === 0) {
+            return null;
+        }
+        return moveCards(library.id, [libCards[libCards.length - 1].id],
+            hand.id, hand.cards.length, 0, 0);
+    };
 
     return (
         <section className={classes.main} style={style}>

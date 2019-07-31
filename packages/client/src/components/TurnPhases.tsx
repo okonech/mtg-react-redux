@@ -55,8 +55,10 @@ const styles = (theme: Theme) => {
 };
 
 function getSteps() {
-    return ['Untap', 'Upkeep', 'Draw', 'Main 1', 'Start Combat', 'Attackers',
-            'Blockers', 'Damage', 'End Combat', 'Main 2', 'End'];
+    return [
+        'Untap', 'Upkeep', 'Draw', 'Main 1', 'Start Combat', 'Attackers',
+        'Blockers', 'Damage', 'End Combat', 'Main 2', 'End'
+    ];
 }
 
 function getStepComponent(idx: number) {
@@ -92,9 +94,8 @@ function StepIconComponent(props) {
     if (props.error) {
         return <StepIcon {...props} />;
     }
-
     return (
-        <SvgIcon {...props}>
+        <SvgIcon>
             {getStepComponent(props.icon)}
         </SvgIcon>
     );

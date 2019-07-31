@@ -2,7 +2,7 @@
 import { createStyles } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import withScrolling from 'frontend-collective-react-dnd-scrollzone';
+import withScrolling from '@neises/pw-react-dnd-scrollzone';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
@@ -12,6 +12,8 @@ import Card from '../components/Card';
 import { Types } from '../Constants';
 import SelectableGroup from '../packages/react-dnd-selectable/SelectableGroup';
 import { CardZone } from '../selectors/player';
+import { placeholderPrimitive } from '../util/card';
+import { BaseComponentProps } from '../util/styling';
 import DraggableCard, { CardDragObject } from './DraggableCard';
 
 const styles = (theme: Theme) => createStyles({
@@ -41,7 +43,7 @@ const styles = (theme: Theme) => createStyles({
   }
 });
 
-const ScrollingComponent = withScrolling('section');
+const ScrollingComponent: any = withScrolling('section' as any);
 
 const handTarget: DropTargetSpec<HandProps> = {
   hover(props: HandProps, monitor: DropTargetMonitor, component: Hand) {
@@ -67,13 +69,12 @@ const handTarget: DropTargetSpec<HandProps> = {
   }
 };
 
-interface HandProps extends WithStyles<typeof styles> {
+interface HandProps extends WithStyles<typeof styles>, BaseComponentProps {
   zone: CardZone;
-  moveCards: moveCardsType;
-  selectCards: selectCardsType;
+  moveCards: typeof moveCardsType;
+  selectCards: typeof selectCardsType;
   selected: string[];
   cardHeight: number;
-  style?: React.CSSProperties;
 }
 
 interface HandTargetCollectedProps {
@@ -173,7 +174,7 @@ class Hand extends React.PureComponent<AllProps, HandState> {
           id={curr.id}
           zoneId={zone.id}
           card={curr}
-          key={'draggable' + curr.id}
+          key={'draggable-' + curr.id}
           selectedCards={selected}
           selectCards={selectCards}
           cardHeight={cardHeight}
@@ -186,24 +187,11 @@ class Hand extends React.PureComponent<AllProps, HandState> {
         shownCount++;
       }
       return acc;
-    },                              []);
+    }, []);
 
     if (isOver && canDrop) {
-      const placeholder = {
-        name: '',
-        id: '',
-        url: {
-          small: '/images/cardback.jpg',
-          normal: '/images/cardback.jpg'
-        },
-        foil: false,
-        tapped: false,
-        colorIdentity: [],
-        owner: '',
-        controller: ''
-      };
       cards.splice(placeholderIndex + indexShift, 0, (
-        <Card key={'handplaceholder'} card={placeholder} opacity={0.2} cardHeight={cardHeight} />
+        <Card key={'handplaceholder'} card={placeholderPrimitive} opacity={0.2} cardHeight={cardHeight} />
       ));
     }
 

@@ -10,14 +10,14 @@ import { moveCards as moveCardsType } from '../actions/zonesActions';
 import ZoneInfo from '../components/ZoneInfo';
 import { Types } from '../Constants';
 import { CardZone } from '../selectors/player';
+import { BaseComponentProps } from '../util/styling';
 import { CardDragObject } from './DraggableCard';
 
-export interface ZoneInfoDndProps {
+export interface ZoneInfoDndProps extends BaseComponentProps {
     zone: CardZone;
     icon: any;
-    style?: React.CSSProperties;
-    moveCards: moveCardsType;
-    selectCards: selectCardsType;
+    moveCards: typeof moveCardsType;
+    selectCards: typeof selectCardsType;
     // temp
     click?: () => void;
 }

@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# Automatically prefix commit messages for feature branches with the appropriate tags
+# branch: feat/WEBAPI-1234 + message: my commit  => feat(WEBAPI-1234): my commit
+# If the branch prefix is not provided, 'chore' is used as a default.
+
+# TODO: check branches
+
+get_clean_message() {
+  egrep -o '^[^#].*' "$1"
+}
+
+
+# Only prepend on non master branches
+if [ "$(git rev-parse --abbrev-ref HEAD | egrep -iom 1 'master' | head -n1 | sed 's/ .$//')" ]
+then
+    echo Skip prepending on master branch
+    exit 0
+fi
+
+# Do not allow empty messages
+if [ -z "$(get_clean_message "$HUSKY_GIT_PARAMS")" ]
+then
+    echo Commit message cannot be empty.
+    exit 1
+fi
+
+# Exit if commit already has header in format xxx(*): ZZZZ
+if [ -n "$(get_clean_message "$HUSKY_GIT_PARAMS" | egrep '\b[a-z]{1,}\(*\):')" ] 
+then
+    echo Commit message has proper header format
+    exit 0
+fi
+
+# Else proceed with auto generation
+
+#commit lint type (or default to chore)
+COMMIT_TYPE="$(git rev-parse --abbrev-ref HEAD | egrep -iom 1 '\b[a-z]{1,}(?!\/).' | head -n1 | sed 's/ .$//')"
+COMMIT_TYPE="${COMMIT_TYPE:-"chore"}"
+
+# Branch id
+BRANCH_ID="$(git rev-parse --abbrev-ref HEAD | head -n1)"
+
+# Prepend commit with header as lowercase type, jira
+echo "Prepending ${COMMIT_TYPE,,}(${BRANCH_ID^^}): header..."
+sed -i -e "1s/^/${COMMIT_TYPE,,}(${BRANCH_ID^^}): /" "$HUSKY_GIT_PARAMS" && exit 0
+
+# Error out if something went wrong
+echo Something went wrong
+exit 1

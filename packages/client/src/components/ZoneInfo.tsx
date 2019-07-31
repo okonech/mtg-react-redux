@@ -3,7 +3,7 @@ import { Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import React from 'react';
-import { noSelect } from '../util/styling';
+import { BaseComponentProps, noSelect } from '../util/styling';
 
 const styles = (theme: Theme) => {
     const { divider } = theme.palette;
@@ -26,10 +26,9 @@ const styles = (theme: Theme) => {
         }) as CSSProperties
     });
 };
-export interface ZoneInfoProps extends WithStyles<typeof styles> {
+export interface ZoneInfoProps extends WithStyles<typeof styles>, BaseComponentProps {
     num: number;
     icon: any;
-    style?: React.CSSProperties;
 }
 
 class ZoneInfo extends React.PureComponent<ZoneInfoProps> {

@@ -5,6 +5,7 @@ import {
 } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import rectIntersect from '../../util/rectanglesIntersect';
+import { BaseComponentProps } from '../../util/styling';
 import { defaultContext, SelectableContext, SelectableProvider } from './SelectableContext';
 
 // draggable card component with id, key, x, y position
@@ -18,9 +19,8 @@ export interface DragSelectable {
     clientBounds: ClientRect | DOMRect;
 }
 
-interface SelectableGroupProps {
+interface SelectableGroupProps extends BaseComponentProps {
     tolerance?: number;
-    style?: React.CSSProperties;
     className?: string;
     groupId: string;
     onSelectionFinish?: (ids: string[]) => void;
