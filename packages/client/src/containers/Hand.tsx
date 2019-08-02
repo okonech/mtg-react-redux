@@ -200,7 +200,6 @@ class Hand extends React.PureComponent<AllProps, HandState> {
         <div className={classes.main} style={style} >
           <SelectableGroup
             groupId={`${zone.id}-selectable-group`}
-            className='selectable'
             onSelectionFinish={this.setSelected}
             onSelectionClear={this.clearSelected}
           >

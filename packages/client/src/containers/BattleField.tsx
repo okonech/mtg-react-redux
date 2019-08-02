@@ -141,7 +141,6 @@ class BattleField extends React.PureComponent<AllProps>  {
                 <div className={classes.main} style={style} ref={this.battleFieldRef}>
                     <SelectableGroup
                         groupId={`${zone.id}-selectable-group`}
-                        className='selectable'
                         onSelectionFinish={this.setSelected}
                         onSelectionClear={this.clearSelected}
                     >

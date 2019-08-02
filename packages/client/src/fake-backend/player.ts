@@ -5,7 +5,6 @@ import { Card } from '../reducers/cardsReducer';
 import { Player } from '../reducers/playersReducer';
 import { Zone } from '../reducers/zonesReducer';
 import shuffle from '../util/shuffle';
-import fakeResponse from './fake-response.json';
 import { Player as RawPlayer, players } from './playerData';
 
 export interface PlayersData {
@@ -49,10 +48,6 @@ function mapRawToPlayer(player: RawPlayer): Player {
         graveyard: uuid(),
         exile: uuid()
     };
-}
-
-export async function mapRawToCardsFake(player: Player, cards: string[]): Promise<Card[]> {
-    return parseCardData(player, fakeResponse[player.name]);
 }
 
 export async function mapRawToCards(player: Player, cards: string[]): Promise<Card[]> {
