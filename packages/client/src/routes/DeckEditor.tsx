@@ -17,6 +17,7 @@ import {
     setTitle as deckEditorSetTitle,
     updateCards as deckEditorUpdateCards
 } from '../actions/deckEditorActions';
+import CardsView from '../components/deck-editor/CardsView';
 import ImagePreview from '../components/deck-editor/ImagePreview';
 import Stats from '../components/deck-editor/Stats';
 import Table from '../components/deck-editor/Table';
@@ -27,19 +28,43 @@ import { AppState } from '../reducers';
 import { Card, CardsState, singleCardSelector } from '../reducers/cardsReducer';
 import { DeckEditorRow, DeckEditorState } from '../reducers/deckEditorReducer';
 
+export const VIEWS = {
+    table: 'Table',
+    cards: 'Cards',
+    links: 'Links'
+};
+
+export const CATEGORIES = {
+    type: 'Card Type',
+    cmc: 'Converted Mana Cost',
+    color: 'Color',
+    colorId: 'Color Identity'
+};
+
+interface DeckEditorProps {
+    addCardByName: typeof deckEditorAddCardByName;
+    setCardsByName: typeof deckEditorSetCardsByName;
+    deleteCards: typeof deckEditorDeleteCards;
+    updateCards: typeof deckEditorUpdateCards;
+    setTitle: typeof deckEditorSetTitle;
+    setEditing: typeof deckEditorSetEditing;
+    cards: CardsState;
+    deck: DeckEditorState;
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
     container: {
         display: 'grid',
         gridTemplateRows: `auto 260px 60px 1fr`,
         gridTemplateColumns: `auto auto 100px 250px`,
-        gridTemplateAreas: "'menu menu menu menu' 'title stats stats image' 'typeAhead typeAhead denseSwitch image' 'table table table table'",
+        gridTemplateAreas: "'menu menu menu menu' 'title stats stats image' 'typeAhead typeAhead denseSwitch image' 'viewEdit viewEdit viewEdit viewEdit'",
         gridGap: '20px',
         height: '100%',
         width: '100%',
         [theme.breakpoints.down('xs')]: {
             gridTemplateRows: `auto auto auto auto 1fr`,
             gridTemplateColumns: `auto`,
-            gridTemplateAreas: "'menu' 'title' 'stats' 'typeAhead' 'table'"
+            gridTemplateAreas: "'menu' 'title' 'stats' 'typeAhead' 'viewEdit'"
         }
     },
     menu: {
@@ -64,21 +89,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     image: {
         gridArea: 'image'
     },
-    table: {
-        gridArea: 'table'
+    viewEdit: {
+        gridArea: 'viewEdit'
     }
 }));
-
-interface DeckEditorProps {
-    addCardByName: typeof deckEditorAddCardByName;
-    setCardsByName: typeof deckEditorSetCardsByName;
-    deleteCards: typeof deckEditorDeleteCards;
-    updateCards: typeof deckEditorUpdateCards;
-    setTitle: typeof deckEditorSetTitle;
-    setEditing: typeof deckEditorSetEditing;
-    cards: CardsState;
-    deck: DeckEditorState;
-}
 
 const DeckEditor: React.SFC<DeckEditorProps> = (props) => {
     const { addCardByName, setCardsByName, setTitle, setEditing, deck, cards, updateCards } = props;
@@ -87,6 +101,8 @@ const DeckEditor: React.SFC<DeckEditorProps> = (props) => {
     const theme = useTheme<Theme>();
     const xsBreak = useMediaQuery(theme.breakpoints.down('xs'));
     const [dense, setDense] = React.useState(false);
+    const [view, setView] = React.useState<keyof typeof VIEWS>('cards');
+    const [category, setCategory] = React.useState<keyof typeof CATEGORIES>('type');
     const [cardHover, setcardHover] = React.useState<Card>(null);
 
     function handleChangeDense(event: React.ChangeEvent<HTMLInputElement>) {
@@ -118,6 +134,45 @@ const DeckEditor: React.SFC<DeckEditorProps> = (props) => {
         </Box>
     );
 
+    let viewEdit;
+
+    if (editing) {
+        viewEdit = (
+            <Table
+                editing={editing}
+                dense={dense}
+                data={deck.cards}
+                select={handleChangeCardHover}
+                updateCards={updateCards}
+            />
+        );
+    } else {
+        switch (view) {
+            case 'cards':
+                viewEdit = (
+                    <CardsView
+                        cardList={deck.cards}
+                        cardData={cards}
+                        category={category}
+                    />
+                );
+                break;
+            case 'table':
+                viewEdit = (
+                    <Table
+                        editing={editing}
+                        dense={dense}
+                        data={deck.cards}
+                        select={handleChangeCardHover}
+                        updateCards={updateCards}
+                    />
+                );
+                break;
+            default:
+                throw new Error(`Unknown view type ${view}`);
+        }
+    }
+
     return (
         <React.Fragment>
             <Navbar />
@@ -127,6 +182,10 @@ const DeckEditor: React.SFC<DeckEditorProps> = (props) => {
                         editing={editing}
                         setEditing={setEditing}
                         setCardsByName={setCardsByName}
+                        view={view}
+                        setView={setView}
+                        category={category}
+                        setCategory={setCategory}
                         setTitle={setTitle}
                         data={deck}
                     />
@@ -137,14 +196,8 @@ const DeckEditor: React.SFC<DeckEditorProps> = (props) => {
                 {typeAhead}
                 {denseSwitch}
                 {image}
-                <Box className={classes.table}>
-                    <Table
-                        editing={editing}
-                        dense={dense}
-                        data={deck.cards}
-                        select={handleChangeCardHover}
-                        updateCards={updateCards}
-                    />
+                <Box className={classes.viewEdit}>
+                    {viewEdit}
                 </Box>
             </Container>
         </React.Fragment>

@@ -10,8 +10,10 @@ import {
     setTitle as deckEditorSetTitle
 } from '../../actions/deckEditorActions';
 import { DeckEditorState } from '../../reducers/deckEditorReducer';
+import { CATEGORIES, VIEWS } from '../../routes/DeckEditor';
 import { BaseComponentProps } from '../../util/styling';
 import ImportDialog from './ImportDialog';
+import ViewDropdown from './ViewDropdown';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1)
     },
     text: {
-        marginTop: theme.spacing(5)
+        marginTop: theme.spacing(3)
     }
 }));
 
@@ -37,10 +39,14 @@ interface TitleProps extends BaseComponentProps {
     data: DeckEditorState;
     editing: boolean;
     setEditing: (editing: boolean) => void;
+    view: keyof typeof VIEWS;
+    setView: React.Dispatch<React.SetStateAction<keyof typeof VIEWS>>;
+    category: keyof typeof CATEGORIES;
+    setCategory: React.Dispatch<React.SetStateAction<keyof typeof CATEGORIES>>;
 }
 
 const Title: React.SFC<TitleProps> = (props) => {
-    const { setCardsByName, data, editing, setEditing, setTitle } = props;
+    const { setCardsByName, data, editing, setEditing, setTitle, view, setView, category, setCategory } = props;
     const classes = useStyles({});
 
     const [openImport, setOpenImport] = React.useState(false);
@@ -66,55 +72,50 @@ const Title: React.SFC<TitleProps> = (props) => {
         setTitle(event.target.value);
     };
 
-    const editButton = (
-        <Button variant='contained' color='primary' className={classes.button} onClick={handleEditing}>
-            Edit
-        </Button>
-    );
-
-    const saveButton = (
-        <Button variant='contained' color='primary' className={classes.button} onClick={handleEditing}>
-            Save
-        </Button>
-    );
-
-    const deleteButton = (
-        <Button variant='contained' color='secondary' className={classes.button}>
-            Delete
-        </Button>
-    );
-
-    const importButton = (
-        <Button variant='outlined' color='secondary' className={classes.button} onClick={handleClickOpenImport}>
-            Import Deck
-        </Button>
-    );
-
-    const titleField = (
-        <TextField
-            id='outlined-title'
-            label='Title'
-            autoFocus={true}
-            value={data.title}
-            onChange={handleTitleChange()}
-            margin='normal'
-            variant='outlined'
-        />
-    );
-
     return (
         <Paper className={classes.root}>
-            {editing ? titleField : <Typography variant='h5' gutterBottom={true} align='center' className={classes.text}>{data.title}</Typography>}
-            {editing ? null : editButton}
-            {!editing ? null : saveButton}
-            {!editing ? null : deleteButton}
-            {!editing ? null : importButton}
-            <ImportDialog
-                isOpen={openImport}
-                handleClose={handleCloseImport}
-                handleSave={handleSaveImport}
-                data={data.cards}
-            />
+            {editing ? (
+                <React.Fragment>
+                    <TextField
+                        id='outlined-title'
+                        label='Title'
+                        autoFocus={true}
+                        value={data.title}
+                        onChange={handleTitleChange()}
+                        margin='normal'
+                        variant='outlined'
+                    />
+                    <Button variant='contained' color='primary' className={classes.button} onClick={handleEditing}>
+                        Save
+                    </Button>
+                    <Button variant='contained' color='secondary' className={classes.button}>
+                        Delete
+                    </Button>
+                    <Button variant='outlined' color='secondary' className={classes.button} onClick={handleClickOpenImport}>
+                        Import Deck
+                    </Button>
+                    <ImportDialog
+                        isOpen={openImport}
+                        handleClose={handleCloseImport}
+                        handleSave={handleSaveImport}
+                        data={data.cards}
+                    />
+                </React.Fragment>
+            ) : (
+                    <React.Fragment>
+                        <Typography variant='h4' gutterBottom={true} align='center' className={classes.text}>{data.title}</Typography>
+                        <Button variant='contained' color='primary' className={classes.button} onClick={handleEditing}>
+                            Edit
+                        </Button>
+                        <ViewDropdown
+                            view={view}
+                            setView={setView}
+                            category={category}
+                            setCategory={setCategory}
+                        />
+                    </React.Fragment>
+                )
+            }
         </Paper>
     );
 };

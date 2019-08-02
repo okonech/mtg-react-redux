@@ -3,4 +3,4 @@
 // dehydrate to same type as in backup-restore
 // export primitive for use in card data everywhere
 
-export { CardModelImpl as CardModel, CardPrimitive } from './card';
+export { CardModelImpl as CardModel, CardPrimitive, TYPES } from './Card';

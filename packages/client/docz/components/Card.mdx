@@ -1,0 +1,86 @@
+---
+name: Card
+---
+
+import { Playground, Props } from 'docz'
+import Card from '../../src/components/Card'
+import HoverCard from '../../src/util/docz-helpers/HoverCard'
+import { examplePrimitive } from '../../src/util/docz-helpers/card'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+# Card
+
+<Props of={Card} />
+
+
+## Basic usage
+
+<Playground>
+  <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+      <CssBaseline />
+      <Card
+            card={examplePrimitive}
+            selected={false}
+            selecting={false}
+            cardHeight={25}
+            isHovered={false}
+        />
+    </MuiThemeProvider>
+</Playground>
+
+## Selected
+
+<Playground>
+  <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+      <CssBaseline />
+      <Card
+            card={examplePrimitive}
+            selected={true}
+            selecting={false}
+            cardHeight={25}
+            isHovered={false}
+        />
+    </MuiThemeProvider>
+</Playground>
+
+## With Hover
+
+<Playground>
+  <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+      <CssBaseline />
+      <HoverCard
+            card={examplePrimitive}
+            selected={false}
+            selecting={false}
+            cardHeight={25}
+        />
+    </MuiThemeProvider>
+</Playground>

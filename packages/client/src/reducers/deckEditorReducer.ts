@@ -24,7 +24,7 @@ export interface DeckEditorState {
 const def = {
     cards: {},
     title: 'New Deck',
-    editing: true
+    editing: false
 };
 
 export default function deckEditorReducer(state: DeckEditorState = def, action: DeckEditorActions): DeckEditorState {

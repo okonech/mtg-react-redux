@@ -98,8 +98,6 @@ interface SelectableProps {
 
 interface HoverProps {
   isHovered?: boolean;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
 }
 
 type AllProps = DraggableCardProps & DraggableCardSourceCollectedProps & SelectableProps & HoverProps;
@@ -121,8 +119,10 @@ class DraggableCard extends React.PureComponent<AllProps> {
   }
 
   public render() {
-    const { card, connectDragSource, selectedCards, selecting, selectableRef,
-      cardHeight, xCoord, yCoord, id, onMouseEnter, onMouseLeave, isHovered } = this.props;
+    const {
+      card, connectDragSource, selectedCards, selecting, selectableRef,
+      cardHeight, xCoord, yCoord, id, isHovered
+    } = this.props;
 
     return (
       connectDragSource(
@@ -130,8 +130,6 @@ class DraggableCard extends React.PureComponent<AllProps> {
           // handles drag transform in non list areas
           style={dragCardStyle(xCoord, yCoord, cardHeight)}
           ref={selectableRef}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
         >
           <Card
             key={'card' + id}

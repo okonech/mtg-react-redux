@@ -26,7 +26,7 @@ then
 fi
 
 # Exit if commit already has header in format xxx(*): ZZZZ
-if [ -n "$(get_clean_message "$HUSKY_GIT_PARAMS" | egrep '\b[a-z]{1,}\(*\):')" ] 
+if [ -n "$(get_clean_message "$HUSKY_GIT_PARAMS" | egrep -iom 1 '^[a-z]{1,}\(.*\):|^[a-z]{1,}:')" ] 
 then
     echo Commit message has proper header format
     exit 0
@@ -35,7 +35,7 @@ fi
 # Else proceed with auto generation
 
 #commit lint type (or default to chore)
-COMMIT_TYPE="$(git rev-parse --abbrev-ref HEAD | egrep -iom 1 '[a-z]{1,}(\/)' | head -n1 | cut -d '/' -f 1)"
+COMMIT_TYPE="$(git rev-parse --abbrev-ref HEAD | egrep -iom 1 '^[a-z]{1,}(\/)' | head -n1 | cut -d '/' -f 1)"
 COMMIT_TYPE="${COMMIT_TYPE:-"chore"}"
 
 # Branch id

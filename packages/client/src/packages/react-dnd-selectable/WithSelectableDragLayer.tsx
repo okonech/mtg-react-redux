@@ -5,8 +5,8 @@ import { Types } from './SelectableGroup';
 
 interface SelectableDragLayerProps {
     context?: SelectableContext;
-    initialClientOffset?: XYCoord;
-    currentClientOffset?: XYCoord;
+    initialClientOffset: XYCoord;
+    currentClientOffset: XYCoord;
     itemType: Identifier;
     isDragging: boolean;
     item: any;
