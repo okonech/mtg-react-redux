@@ -1,0 +1,82 @@
+---
+name: CardList Fixed
+---
+
+import { Playground, Props } from 'docz'
+import Card from '../../src/components/Card'
+import CardList from '../../src/components/CardList'
+import { examplePrimitive } from '../../src/util/docz-helpers/card'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+# CardList Fixed
+Pass pixel size to cardlist, proper transitions
+
+<Props of={CardList} />
+
+
+## Row Fixed
+
+<Playground>
+    <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+        <CssBaseline />
+    <CardList
+        direction='row'
+        cellSize={{height: 234, width: 167}}
+    >
+        {Array.from({length: 7}).map(()=> {
+            return (
+                <Card
+                    card={examplePrimitive}
+                    selected={false}
+                    selecting={false}
+                    cardHeight={25}
+                    isHovered={false}
+                />
+            )
+        })}
+    </CardList>
+    </MuiThemeProvider>
+</Playground>
+
+## Column Fixed
+
+<Playground>
+    <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+        <CssBaseline />
+    <CardList
+        direction='column'
+        cellSize={{height: 234, width: 167}}
+    >
+        {Array.from({length: 7}).map(()=> {
+            return (
+                <Card
+                    card={examplePrimitive}
+                    selected={false}
+                    selecting={false}
+                    cardHeight={25}
+                    isHovered={false}
+                />
+            )
+        })}
+    </CardList>
+    </MuiThemeProvider>
+</Playground>

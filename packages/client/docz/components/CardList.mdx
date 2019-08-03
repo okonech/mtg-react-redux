@@ -1,0 +1,80 @@
+---
+name: CardList
+---
+
+import { Playground, Props } from 'docz'
+import Card from '../../src/components/Card'
+import CardList from '../../src/components/CardList'
+import { examplePrimitive } from '../../src/util/docz-helpers/card'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+# CardList Auto
+No size props here, but weird start transition
+
+<Props of={CardList} />
+
+
+## Row Auto
+
+<Playground>
+    <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+        <CssBaseline />
+    <CardList
+        direction='row'
+    >
+        {Array.from({length: 7}).map(()=> {
+            return (
+                <Card
+                    card={examplePrimitive}
+                    selected={false}
+                    selecting={false}
+                    cardHeight={25}
+                    isHovered={false}
+                />
+            )
+        })}
+    </CardList>
+    </MuiThemeProvider>
+</Playground>
+
+## Column Auto
+
+<Playground>
+    <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+        <CssBaseline />
+    <CardList
+        direction='column'
+    >
+        {Array.from({length: 7}).map(()=> {
+            return (
+                <Card
+                    card={examplePrimitive}
+                    selected={false}
+                    selecting={false}
+                    cardHeight={25}
+                    isHovered={false}
+                />
+            )
+        })}
+    </CardList>
+    </MuiThemeProvider>
+</Playground>

@@ -1,0 +1,36 @@
+---
+name: Cards Masonry View
+---
+
+import { Playground, Props } from 'docz'
+import CardsView from '../../src/components/deck-editor/CardsView'
+import { exampleCardState, exampleCardList } from '../../src/util/docz-helpers/card'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+# CardsView
+
+<Props of={CardsView} />
+
+
+## Always column
+
+<Playground>
+    <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+        <CssBaseline />
+        <CardsView 
+            cardList={exampleCardList()}
+            cardData={exampleCardState()}
+            category={'type'}
+        />
+    </MuiThemeProvider>
+</Playground>

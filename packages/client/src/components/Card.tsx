@@ -6,6 +6,7 @@ import { CardModel } from '@mtg-react-redux/models';
 import React from 'react';
 import { defaultMemoize } from 'reselect';
 import { Card as CardType } from '../reducers/cardsReducer';
+import { getCardSizePx } from '../util/cardSize';
 import { noSelect } from '../util/styling';
 
 const styles = (theme: Theme) => {
@@ -68,20 +69,22 @@ const Card = (props: AllProps) => {
 
   const displayName = (isHovered && !selecting) ? (
     <Typography className={classes.text}>
-      {isHovered ? cardModel.name : ''}
+      {isHovered ? cardModel.name() : ''}
     </Typography>
   ) : <div />;
 
+  const imgUrl = getCardSizePx().height > 205 ? cardModel.imageUrl('medium') : cardModel.imageUrl('small');
+
   return (
     <MuiCard
-      id={cardModel.id}
+      id={cardModel.id()}
       style={cardStyle(props)}
       raised={isHovered}
       className={classes.main}
     >
       <CardMedia
         className={classes.media}
-        image={cardModel.imageUrl('small')}
+        image={imgUrl}
       >
         {displayName}
       </CardMedia>

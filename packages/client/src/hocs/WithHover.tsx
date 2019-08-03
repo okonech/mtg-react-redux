@@ -1,7 +1,7 @@
 import React from 'react';
 
-const WithHover = <P extends object>(Component: React.ComponentType<P>) =>
-    class WithHoverHoc extends React.PureComponent<P> {
+const WithHover = <P extends {}>(Component: React.ComponentType<P>) =>
+    class WithHoverHoc extends React.PureComponent<P & { isHovered?: boolean }> {
         public state = {
             isHovered: false
         };
@@ -29,12 +29,17 @@ const WithHover = <P extends object>(Component: React.ComponentType<P>) =>
         public render() {
             const { ...props } = this.props;
             return (
-                <Component
-                    isHovered={this.state.isHovered}
+                <div
+                    style={{ display: 'inline-block' }}
                     onMouseEnter={this.onMouseEnter}
                     onMouseLeave={this.onMouseLeave}
-                    {...props as P}
-                />
+                >
+                    <Component
+                        isHovered={this.state.isHovered}
+                        {...props as P}
+                    />
+                </div>
+
             );
         }
     };

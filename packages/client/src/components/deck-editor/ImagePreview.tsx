@@ -32,7 +32,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = (props) => {
         const cardModel = new CardModel(data);
         return (
             <Paper className={classes.root}>
-                <img src={cardModel.imageUrl('medium')} alt={cardModel.name} />
+                <img src={cardModel.imageUrl('medium')} alt={cardModel.name()} />
             </Paper>
         );
     }

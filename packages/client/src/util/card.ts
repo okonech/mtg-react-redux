@@ -1,4 +1,5 @@
-import { CardPrimitive } from '@mtg-react-redux/models';
+import { CardModel, CardPrimitive } from '@mtg-react-redux/models';
+import { CATEGORIES } from '../routes/DeckEditor';
 
 export const placeholderPrimitive: CardPrimitive = {
     id: 'placeholder',
@@ -34,3 +35,31 @@ export const placeholderPrimitive: CardPrimitive = {
     colors: [],
     color_identity: []
 };
+
+export function groupCardsByType(cards: CardModel[], type: keyof typeof CATEGORIES) {
+    const res: { [key: string]: CardModel[] } = cards.reduce((acc: { [key: string]: CardModel[] }, card) => {
+        let groupKey: string;
+        switch (type) {
+            case 'type':
+                groupKey = card.types()[0];
+                break;
+            case 'cmc':
+                groupKey = card.cmc().toString();
+                break;
+            case 'color':
+                groupKey = CardModel.colorType(card.colors());
+                break;
+            case 'colorId':
+                groupKey = CardModel.colorType(card.colorIdentity());
+                break;
+            default:
+                throw new Error(`Unkown grouping ${type}`);
+        }
+        if (!acc[groupKey]) {
+            acc[groupKey] = [];
+        }
+        acc[groupKey].push(card);
+        return acc;
+    }, {});
+    return res;
+}
