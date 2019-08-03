@@ -1,5 +1,6 @@
 import Badge from '@material-ui/core/Badge';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import { CardModel } from '@mtg-react-redux/models';
 import * as React from 'react';
 import { defaultMemoize } from 'reselect';
 import Card from '../components/Card';
@@ -67,7 +68,7 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
                     key={`draglayer-${card.id}`}
                 >
                     <Card
-                        card={{ ...card, id: `${card.id}-drag-preview` }}
+                        card={new CardModel({ ...card, id: `${card.id}-drag-preview` })}
                         opacity={.95}
                         cardHeight={cardHeight}
                     />

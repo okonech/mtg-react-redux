@@ -4,10 +4,9 @@ import React from 'react';
 import { CardsState } from '../../reducers/cardsReducer';
 import { DeckEditorState } from '../../reducers/deckEditorReducer';
 import { cardListToGroupedModelsSb, groupQuantitySum, rowQuantity } from '../../util/card';
-import { getCardSizeVh, setCardHeight } from '../../util/cardSize';
 import { BaseComponentProps } from '../../util/styling';
-import Card from '../Card';
-import CardList from '../CardList';
+import CardText from './CardText';
+import CardTextList from './CardTextList';
 import { CATEGORIES } from './DeckEditor';
 import MasonryView from './MasonryView';
 
@@ -21,24 +20,25 @@ const useStyles = makeStyles((theme) => ({
     },
     header: {
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        width: '100%'
     },
     groupName: {
         marginRight: theme.spacing(.5)
     }
+
 }));
 
-interface CardsViewProps extends BaseComponentProps {
+interface LinksViewProps extends BaseComponentProps {
     cardList: DeckEditorState['cards'];
     cardData: CardsState;
     category: keyof typeof CATEGORIES;
 }
 
-const CardsView: React.FC<CardsViewProps> = (props) => {
+const LinksView: React.FC<LinksViewProps> = (props) => {
     const classes = useStyles({});
     const { cardList, cardData, category } = props;
 
-    setCardHeight(32);
     const groupedModels = cardListToGroupedModelsSb(cardList, cardData, category);
 
     const items = Object.keys(groupedModels).map((groupName) => {
@@ -52,20 +52,17 @@ const CardsView: React.FC<CardsViewProps> = (props) => {
                     <Typography className={classes.groupName} variant='subtitle1'>{groupName}</Typography>
                     <Typography variant='subtitle1'>{`(${quantSum})`}</Typography>
                 </Box>
-                <CardList
-                    direction='column'
-                >
+                <CardTextList>
                     {groupedModels[groupName].map((cardModel) => {
                         const quantity = rowQuantity(cardList[cardModel.id], groupName);
                         return (
-                            <Card
+                            <CardText
                                 key={cardModel.id}
                                 card={cardModel}
-                                cardHeight={getCardSizeVh().height}
-                                topLabel={quantity > 1 ? quantity.toString() : null}
+                                quantity={quantity}
                             />);
                     })}
-                </CardList>
+                </CardTextList>
             </Box>
         );
     });
@@ -77,4 +74,4 @@ const CardsView: React.FC<CardsViewProps> = (props) => {
     );
 };
 
-export default CardsView;
+export default LinksView;

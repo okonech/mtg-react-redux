@@ -8,6 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import * as parser from 'mtg-parser';
 import React, { useEffect } from 'react';
 import { DeckEditorSetCardsByNameAction } from '../../actions/deckEditorActions';
+import { cardsSelector, CardsState } from '../../reducers/cardsReducer';
 import { DeckEditorState } from '../../reducers/deckEditorReducer';
 import { getSorting, stableSort } from '../../util/ordering';
 
@@ -25,15 +26,16 @@ interface ImportDialogProps {
     isOpen: boolean;
     handleClose: () => void;
     handleSave: (cards: DeckEditorSetCardsByNameAction['payload']['cards']) => void;
-    data: DeckEditorState['cards'];
+    cardList: DeckEditorState['cards'];
+    cardData: CardsState;
 }
 
 // multiline input for deck import
 
-function formatCardsToText(cards: ImportDialogProps['data']): string {
-    const ordered = stableSort(Object.values(cards), getSorting('asc', 'name'));
-    const main = ordered.filter((card) => card.quantity > 0).map((card) => `${card.quantity} ${card.name}`);
-    const sideBoard = ordered.filter((card) => card.sideboard > 0).map((card) => `${card.sideboard} ${card.name}`);
+function formatCardsToText(cardList: ImportDialogProps['cardList'], cardData: ImportDialogProps['cardData']): string {
+    const ordered = stableSort(cardsSelector(cardData, Object.keys(cardList)), getSorting('asc', 'name'));
+    const main = ordered.filter((card) => cardList[card.id].quantity > 0).map((card) => `${cardList[card.id].quantity} ${card.name}`);
+    const sideBoard = ordered.filter((card) => cardList[card.id].sideboard > 0).map((card) => `${cardList[card.id].sideboard} ${card.name}`);
     return `${main.join('\n')}${sideBoard.length > 0 ? '\nSideboard:\n' : ''}${sideBoard.join('\n')}`;
 }
 
@@ -75,20 +77,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ImportDialog: React.SFC<ImportDialogProps> = (props) => {
-    const { isOpen, handleClose, handleSave, data } = props;
+    const { isOpen, handleClose, handleSave, cardList, cardData } = props;
     const [textData, setTextData] = React.useState<string>();
     const classes = useStyles({});
 
     useEffect(() => {
-        setTextData(formatCardsToText(data));
-    }, [data]);
+        setTextData(formatCardsToText(cardList, cardData));
+    }, [cardList, cardData]);
 
     function handleTextChange(event: React.ChangeEvent<HTMLInputElement>) {
         setTextData(event.target.value);
     }
 
     function wrapClose() {
-        setTextData(formatCardsToText(data));
+        setTextData(formatCardsToText(cardList, cardData));
         handleClose();
     }
 
@@ -104,7 +106,7 @@ const ImportDialog: React.SFC<ImportDialogProps> = (props) => {
             aria-labelledby='scroll-dialog-title'
             maxWidth='xl'
         >
-            <DialogTitle id='scroll-dialog-title'>Import Deck</DialogTitle>
+            <DialogTitle id='scroll-dialog-title'>Edit/Import Deck</DialogTitle>
             <DialogContent >
                 <TextField
                     className={classes.textField}

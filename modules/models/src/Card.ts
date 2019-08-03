@@ -4,8 +4,8 @@ import { deleteEmpty } from './util/objects';
 
 export type CardPrimitive = Pick<Card,
     'id' | 'image_uris' | 'name' | 'layout' | 'mana_cost' | 'cmc' |
-    'type_line' | 'set' | 'set_name' | 'set_search_uri' | 'oracle_text' |
-    'legalities' | 'colors' | 'color_identity' | 'card_faces'
+    'type_line' | 'set' | 'set_name' | 'prints_search_uri' | 'oracle_text' |
+    'legalities' | 'colors' | 'color_identity' | 'card_faces' | 'scryfall_uri' | 'prices'
 >;
 
 type Types = 'Artifact' | 'Conspiracy' | 'Creature' | 'Enchantment' | 'Instant' |
@@ -21,19 +21,22 @@ type ColorType = 'White' | 'Blue' | 'Black' | 'Red' | 'Green' | 'Multicolor' | '
 type ImageSize = 'small' | 'medium' | 'large';
 
 interface CardModel {
-    id(flipped: boolean): CardPrimitive['id'];
+    readonly id: CardPrimitive['id'];
+    readonly set: CardPrimitive['set'];
+    readonly setName: CardPrimitive['set_name'];
+    readonly printsSearchUri: CardPrimitive['prints_search_uri'];
+    readonly legalities: CardPrimitive['legalities'];
+    readonly colorIdentity: CardPrimitive['color_identity'];
+    readonly scryfallUri: CardPrimitive['scryfall_uri'];
+    readonly prices: CardPrimitive['prices'];
+
     name(flipped: boolean): CardPrimitive['name'];
     cmc(flipped: boolean): CardPrimitive['cmc'];
     manaCost(flipped: boolean): CardPrimitive['mana_cost'];
     layout(flipped: boolean): CardPrimitive['layout'];
     typeLine(flipped: boolean): CardPrimitive['type_line'];
-    set(flipped: boolean): CardPrimitive['set'];
-    setName(flipped: boolean): CardPrimitive['set_name'];
-    setSearchUri(flipped: boolean): CardPrimitive['set_search_uri'];
     oracleText(flipped: boolean): CardPrimitive['oracle_text'];
-    legalities(flipped: boolean): CardPrimitive['legalities'];
     colors(flipped: boolean): CardPrimitive['colors'];
-    colorIdentity(flipped: boolean): CardPrimitive['color_identity'];
 
     types(flipped: boolean): Types[];
     // get front by default, flipped side optionally. Falls back to front
@@ -72,24 +75,52 @@ export class CardModelImpl implements CardModel {
 
     }
 
-    public id(flipped = false) {
+    get id() {
         return this._card.id;
     }
 
+    get set() {
+        return this._card.set;
+    }
+
+    get setName() {
+        return this._card.set_name;
+    }
+
+    get printsSearchUri() {
+        return this._card.prints_search_uri;
+    }
+
+    get legalities() {
+        return this._card.legalities;
+    }
+
+    get colorIdentity() {
+        return this._card.color_identity;
+    }
+
+    get scryfallUri() {
+        return this._card.scryfall_uri;
+    }
+
+    get prices() {
+        return this._card.prices;
+    }
+
     public name(flipped = false) {
-        return this._card.name;
+        return this.searchPreferFaces(this._card, flipped, 'name');
     }
 
     public cmc(flipped = false) {
-        return this._card.cmc;
+        return this.searchFaces(this._card, flipped, 'cmc');
     }
 
     public manaCost(flipped = false) {
-        return this._card.mana_cost;
+        return this.searchFaces(this._card, flipped, 'mana_cost');
     }
 
     public layout(flipped = false) {
-        return this._card.layout;
+        return this.searchFaces(this._card, flipped, 'layout');
     }
 
     public types(flipped = false) {
@@ -99,45 +130,38 @@ export class CardModelImpl implements CardModel {
     }
 
     public typeLine(flipped = false) {
-        return this.typeLineGuts(this._card, flipped);
-    }
-
-    private typeLineGuts(card: CardPrimitive | CardPrimitive['card_faces'][number], flipped = false): string {
-        if (card.type_line) {
-            return card.type_line;
-        }
-        if ((card as CardPrimitive).card_faces) {
-            return this.typeLineGuts((card as CardPrimitive).card_faces[flipped ? 1 : 0]);
-        }
-        throw new CardModelError('no type line found');
-    }
-
-    public set(flipped = false) {
-        return this._card.set;
-    }
-
-    public setName(flipped = false) {
-        return this._card.set_name;
-    }
-
-    public setSearchUri(flipped = false) {
-        return this._card.set_search_uri;
+        return this.searchPreferFaces(this._card, flipped, 'type_line');
     }
 
     public oracleText(flipped = false) {
-        return this._card.oracle_text;
-    }
-
-    public legalities(flipped = false) {
-        return this._card.legalities;
+        return this.searchFaces(this._card, flipped, 'oracle_text');
     }
 
     public colors(flipped = false) {
-        return this._card.colors;
+        return this.searchFaces(this._card, flipped, 'colors');
     }
 
-    public colorIdentity(flipped = false) {
-        return this._card.color_identity;
+    private searchFaces(card: CardPrimitive | CardPrimitive['card_faces'][number], flipped = false, prop: keyof CardPrimitive) {
+        // could be 0 so need to check for undefined
+        if (card[prop] !== undefined) {
+            return card[prop];
+        }
+
+        if ((card as CardPrimitive).card_faces) {
+            return this.searchFaces((card as CardPrimitive).card_faces[flipped ? 1 : 0], flipped, prop);
+        }
+        throw new CardModelError(`No ${prop} found`);
+    }
+
+    private searchPreferFaces(card: CardPrimitive | CardPrimitive['card_faces'][number], flipped = false, prop: keyof CardPrimitive) {
+        if ((card as CardPrimitive).card_faces) {
+            return this.searchFaces((card as CardPrimitive).card_faces[flipped ? 1 : 0], flipped, prop);
+        }
+        // could be 0 so need to check for undefined
+        if (card[prop] !== undefined) {
+            return card[prop];
+        }
+        throw new CardModelError(`No ${prop} found`);
     }
 
     public imageUrl(type: ImageSize, flipped = false) {
@@ -162,7 +186,7 @@ export class CardModelImpl implements CardModel {
         }
 
         // locate appropriate face
-        const face = card_faces[flipped ? 0 : 1];
+        const face = card_faces[flipped ? 1 : 0];
 
         // fall back to regular images (split cards, etc)
         if (!face.image_uris) {
@@ -176,8 +200,8 @@ export class CardModelImpl implements CardModel {
     public dehydrate() {
         const {
             id, image_uris, name, layout, mana_cost, cmc,
-            type_line, set, set_name, set_search_uri, oracle_text,
-            legalities, colors, color_identity, card_faces
+            type_line, set, set_name, prints_search_uri, oracle_text,
+            legalities, colors, color_identity, card_faces, scryfall_uri, prices
         } = this._card;
         const primitive = {
             id,
@@ -189,12 +213,14 @@ export class CardModelImpl implements CardModel {
             type_line,
             set,
             set_name,
-            set_search_uri,
+            prints_search_uri,
             oracle_text,
             legalities,
             colors,
             color_identity,
-            card_faces
+            card_faces,
+            scryfall_uri,
+            prices
         };
         deleteEmpty(primitive, true);
         return primitive;

@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
-import { CATEGORIES, VIEWS } from '../../routes/DeckEditor';
+import { CATEGORIES, VIEWS } from './DeckEditor';
 
 interface ViewDropDownProps {
     view: keyof typeof VIEWS;

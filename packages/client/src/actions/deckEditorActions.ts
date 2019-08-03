@@ -1,14 +1,15 @@
-import { DeckEditorRow } from '../reducers/deckEditorReducer';
+import { DeckEditorRow, DeckEditorState } from '../reducers/deckEditorReducer';
 
 export type DeckEditorActions = DeckEditorAddAction | DeckEditorDeleteAction | DeckEditorTitleAction | DeckEditorEditingAction
-    | DeckEditorUpdateAction | DeckEditorEpicActions;
+    | DeckEditorUpdateAction | DeckEditorSetDeckDataAction | DeckEditorEpicActions;
 
-type DeckEditorEpicActions = DeckEditorAddCardByNameAction | DeckEditorSetCardsByNameAction;
+type DeckEditorEpicActions = DeckEditorAddCardByNameAction | DeckEditorSetCardsByNameAction | DeckEditorGetDeckAction
+    | DeckEditorDeleteDeckAction | DeckEditorUpdateDeckAction | DeckEditorCreateDeckAction | DeckEditorErrAction | DeckEditorSuccessAction;
 
 export interface DeckEditorAddAction {
     type: 'DECK_EDITOR_ADD_CARDS';
     payload: {
-        rows: Array<Pick<DeckEditorRow, 'name' | 'id' | 'type' | 'quantity' | 'sideboard'>>
+        rows: Array<Pick<DeckEditorRow, 'id' | 'quantity' | 'sideboard'>>
     };
 }
 
@@ -40,6 +41,13 @@ export interface DeckEditorEditingAction {
     };
 }
 
+export interface DeckEditorSetDeckDataAction {
+    type: 'DECK_EDITOR_SET_DECK_DATA';
+    payload: {
+        state: DeckEditorState
+    };
+}
+
 export interface DeckEditorAddCardByNameAction {
     type: 'DECK_EDITOR_ADD_CARD_BY_NAME';
     payload: {
@@ -52,8 +60,52 @@ export interface DeckEditorAddCardByNameAction {
 export interface DeckEditorSetCardsByNameAction {
     type: 'DECK_EDITOR_SET_CARDS_BY_NAME';
     payload: {
-        cards: Array<Pick<DeckEditorRow, 'name' | 'quantity' | 'sideboard'>>;
+        cards: Array<{
+            name: string;
+            quantity: number;
+            sideboard: number;
+        }>;
     };
+}
+
+export interface DeckEditorGetDeckAction {
+    type: 'DECK_EDITOR_GET_DECK';
+    payload: {
+        id: string
+    };
+}
+
+export interface DeckEditorDeleteDeckAction {
+    type: 'DECK_EDITOR_DELETE_DECK';
+    payload: {
+        id: string
+    };
+}
+
+export interface DeckEditorUpdateDeckAction {
+    type: 'DECK_EDITOR_UPDATE_DECK';
+    payload: {
+        deck: Omit<DeckEditorState, 'editing'>
+    };
+}
+
+export interface DeckEditorCreateDeckAction {
+    type: 'DECK_EDITOR_CREATE_DECK';
+    payload: {
+        deck: Omit<DeckEditorState, 'editing'>
+    };
+}
+
+export interface DeckEditorErrAction {
+    type: 'DECK_EDITOR_ERR';
+    payload: {
+        err: Error
+    };
+}
+
+export interface DeckEditorSuccessAction {
+    type: 'DECK_EDITOR_SUCCESS';
+    payload: {};
 }
 
 export function addCards(rows: DeckEditorAddAction['payload']['rows']): DeckEditorActions {
@@ -110,6 +162,15 @@ export function setEditing(editing: boolean): DeckEditorActions {
     };
 }
 
+export function setDeckData(state: DeckEditorState): DeckEditorActions {
+    return {
+        type: 'DECK_EDITOR_SET_DECK_DATA',
+        payload: {
+            state
+        }
+    };
+}
+
 export function addCardByName(name: string, quantity = 1, sideboard = 0): DeckEditorActions {
     return {
         type: 'DECK_EDITOR_ADD_CARD_BY_NAME',
@@ -127,5 +188,56 @@ export function setCardsByName(cards: DeckEditorSetCardsByNameAction['payload'][
         payload: {
             cards
         }
+    };
+}
+
+export function getDeck(id: string): DeckEditorActions {
+    return {
+        type: 'DECK_EDITOR_GET_DECK',
+        payload: {
+            id
+        }
+    };
+}
+
+export function deleteDeck(id: string): DeckEditorActions {
+    return {
+        type: 'DECK_EDITOR_DELETE_DECK',
+        payload: {
+            id
+        }
+    };
+}
+
+export function updateDeck(deck: DeckEditorUpdateDeckAction['payload']['deck']): DeckEditorActions {
+    return {
+        type: 'DECK_EDITOR_UPDATE_DECK',
+        payload: {
+            deck
+        }
+    };
+}
+
+export function createDeck(deck: DeckEditorCreateDeckAction['payload']['deck']): DeckEditorActions {
+    return {
+        type: 'DECK_EDITOR_CREATE_DECK',
+        payload: {
+            deck
+        }
+    };
+}
+
+export function deckErr(err: Error): DeckEditorActions {
+    return {
+        type: 'DECK_EDITOR_ERR',
+        payload: {
+            err
+        }
+    };
+}
+export function deckSuccess(): DeckEditorActions {
+    return {
+        type: 'DECK_EDITOR_SUCCESS',
+        payload: {}
     };
 }

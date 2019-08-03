@@ -5,15 +5,21 @@ import { AuthAction } from '../actions/authActions';
 
 export interface AuthState {
     authError: string;
+    authLoading: boolean;
 }
 
 const defaultState: AuthState = {
-    authError: null
+    authError: null,
+    authLoading: true
 };
 
 export default function authReducer(state: AuthState = defaultState, action: AuthAction) {
     return produce(state, (draft) => {
         switch (action.type) {
+            case 'LOG_IN':
+            case 'SIGN_UP':
+                draft.authLoading = true;
+                break;
             case 'LOGIN_ERROR':
             case 'SIGNUP_ERROR':
             case 'LOGOUT_ERROR':
@@ -23,6 +29,7 @@ export default function authReducer(state: AuthState = defaultState, action: Aut
             case 'SIGNUP_SUCCESS':
             case 'LOGOUT_SUCCESS':
                 draft.authError = null;
+                draft.authLoading = false;
                 break;
             default:
                 break;

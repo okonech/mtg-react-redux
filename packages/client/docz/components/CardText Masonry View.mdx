@@ -1,16 +1,16 @@
 ---
-name: Cards Masonry View
+name: CardText Masonry View
 ---
 
 import { Playground, Props } from 'docz'
-import CardsView from '../../src/components/deck-editor/CardsView'
+import CardsTextView from '../../src/components/deck-editor/CardsTextView'
 import { exampleCardState, exampleCardList } from '../../src/util/docz-helpers/card'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
 # CardsView
 
-<Props of={CardsView} />
+<Props of={CardsTextView} />
 
 
 <Playground>
@@ -25,7 +25,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
             type: 'dark'
         }})}>
         <CssBaseline />
-        <CardsView 
+        <CardsTextView
             cardList={exampleCardList()}
             cardData={exampleCardState()}
             category={'type'}

@@ -32,6 +32,7 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "^3.0.1",
     "react-selectable-fast": "^2.3.0",
+    "react-vis": "^1.11.7",
     "redux": "^4.0.1",
     "redux-firestore": "^0.8.0",
     "redux-logger": "^3.0.6",

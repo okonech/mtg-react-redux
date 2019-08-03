@@ -12,7 +12,7 @@ interface CardListCellProps extends BaseComponentProps {
 const defCellStyle: React.CSSProperties = {
     display: 'block',
     transform: 'translateZ(0px)',
-    transition: 'all 0.15s ease-in'
+    transition: 'all 0.2s ease-in-out'
 };
 
 const CardListCellAuto: React.SFC<CardListCellProps> = (props) => {

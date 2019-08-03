@@ -3,15 +3,19 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import React from 'react';
+import React, { memo } from 'react';
 import {
     DeckEditorSetCardsByNameAction,
+    deleteDeck as deckEditorDeleteDeck,
     setCardsByName as deckEditorSetCardsByName,
-    setTitle as deckEditorSetTitle
+    setTitle as deckEditorSetTitle,
+    updateDeck as deckEditorUpdateDeck
 } from '../../actions/deckEditorActions';
+import { CardsState } from '../../reducers/cardsReducer';
 import { DeckEditorState } from '../../reducers/deckEditorReducer';
-import { CATEGORIES, VIEWS } from '../../routes/DeckEditor';
 import { BaseComponentProps } from '../../util/styling';
+import ConfirmationDialog from '../ConfirmationDialog';
+import { CATEGORIES, VIEWS } from './DeckEditor';
 import ImportDialog from './ImportDialog';
 import ViewDropdown from './ViewDropdown';
 
@@ -19,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         height: '100%',
         width: '100%',
+        minWidth: '230px',
         padding: theme.spacing(2),
         display: 'flex',
         overflow: 'auto',
@@ -35,19 +40,23 @@ const useStyles = makeStyles((theme) => ({
 
 interface TitleProps extends BaseComponentProps {
     setCardsByName: typeof deckEditorSetCardsByName;
+    deleteDeck: typeof deckEditorDeleteDeck;
     setTitle: typeof deckEditorSetTitle;
     data: DeckEditorState;
-    editing: boolean;
+    cardData: CardsState;
     setEditing: (editing: boolean) => void;
     view: keyof typeof VIEWS;
     setView: React.Dispatch<React.SetStateAction<keyof typeof VIEWS>>;
     category: keyof typeof CATEGORIES;
     setCategory: React.Dispatch<React.SetStateAction<keyof typeof CATEGORIES>>;
+    updateDeck: typeof deckEditorUpdateDeck;
 }
 
 const Title: React.SFC<TitleProps> = (props) => {
-    const { setCardsByName, data, editing, setEditing, setTitle, view, setView, category, setCategory } = props;
+    const { setCardsByName, data, cardData, setEditing, setTitle, view, setView, category, setCategory, deleteDeck, updateDeck } = props;
+    const { editing } = data;
     const classes = useStyles({});
+    const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
 
     const [openImport, setOpenImport] = React.useState(false);
 
@@ -61,6 +70,25 @@ const Title: React.SFC<TitleProps> = (props) => {
 
     function handleEditing() {
         setEditing(!editing);
+    }
+
+    function handleSave() {
+        const { editing: noUse, ...deck } = data;
+        console.log(deck);
+        updateDeck(deck);
+        setEditing(!editing);
+
+    }
+
+    function handleDelete() {
+        setDeleteDialogOpen(true);
+    }
+
+    function handleDeleteConfirm(del: boolean) {
+        if (del) {
+            deleteDeck(data.id);
+        }
+        setDeleteDialogOpen(false);
     }
 
     function handleSaveImport(cards: DeckEditorSetCardsByNameAction['payload']['cards']) {
@@ -85,20 +113,27 @@ const Title: React.SFC<TitleProps> = (props) => {
                         margin='normal'
                         variant='outlined'
                     />
-                    <Button variant='contained' color='primary' className={classes.button} onClick={handleEditing}>
+                    <Button variant='contained' color='primary' className={classes.button} onClick={handleSave}>
                         Save
                     </Button>
-                    <Button variant='contained' color='secondary' className={classes.button}>
+                    <Button variant='contained' color='secondary' className={classes.button} onClick={handleDelete}>
                         Delete
                     </Button>
+                    <ConfirmationDialog
+                        title='Delete Deck'
+                        message={`Are you sure you want to delete ${data.title}? This action is not reversible!`}
+                        open={deleteDialogOpen}
+                        onClose={handleDeleteConfirm}
+                    />
                     <Button variant='outlined' color='secondary' className={classes.button} onClick={handleClickOpenImport}>
-                        Import Deck
+                        Edit/Import Deck
                     </Button>
                     <ImportDialog
                         isOpen={openImport}
                         handleClose={handleCloseImport}
                         handleSave={handleSaveImport}
-                        data={data.cards}
+                        cardList={data.cards}
+                        cardData={cardData}
                     />
                 </React.Fragment>
             ) : (
@@ -120,4 +155,6 @@ const Title: React.SFC<TitleProps> = (props) => {
     );
 };
 
-export default Title;
+export default memo(Title, (prev, next) => {
+    return prev.data === next.data && prev.view === next.view && prev.category === next.category;
+});

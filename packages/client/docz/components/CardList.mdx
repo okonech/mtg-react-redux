@@ -5,7 +5,7 @@ name: CardList
 import { Playground, Props } from 'docz'
 import Card from '../../src/components/Card'
 import CardList from '../../src/components/CardList'
-import { examplePrimitive } from '../../src/util/docz-helpers/card'
+import { exampleCardModel } from '../../src/util/docz-helpers/card'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
@@ -35,10 +35,10 @@ No size props here, but weird start transition
         {Array.from({length: 7}).map(()=> {
             return (
                 <Card
-                    card={examplePrimitive}
+                    card={exampleCardModel()}
                     selected={false}
                     selecting={false}
-                    cardHeight={25}
+                    cardHeight={32}
                     isHovered={false}
                 />
             )
@@ -67,10 +67,10 @@ No size props here, but weird start transition
         {Array.from({length: 7}).map(()=> {
             return (
                 <Card
-                    card={examplePrimitive}
+                    card={exampleCardModel()}
                     selected={false}
                     selecting={false}
-                    cardHeight={25}
+                    cardHeight={32}
                     isHovered={false}
                 />
             )

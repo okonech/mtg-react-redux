@@ -1,0 +1,45 @@
+---
+name: CardText List
+---
+
+import { Playground, Props } from 'docz'
+import CardText from '../../src/components/deck-editor/CardText'
+import CardTextList from '../../src/components/deck-editor/CardTextList'
+import { exampleCardModel } from '../../src/util/docz-helpers/card'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+# CardText List
+
+<Props of={CardTextList} />
+
+## Column Fixed
+
+<Playground>
+    <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+        <CssBaseline />
+    <CardTextList
+        direction='column'
+        cellSize={{height: 234, width: 167}}
+    >
+        {Array.from({length: 15}).map((i,idx)=> {
+            return (
+                <CardText
+                    card={exampleCardModel()}
+                    isHovered={false}
+                    quantity={idx+1}
+                />
+            )
+        })}
+    </CardTextList>
+    </MuiThemeProvider>
+</Playground>
