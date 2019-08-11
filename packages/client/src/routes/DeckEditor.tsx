@@ -1,14 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
-import { Dispatch } from 'redux';
-import { getDeck as deckEditorGetDeck } from '../actions/deckEditorActions';
+import { getDeckAsync } from '../actions/deckEditorActions';
 import DeckEditor from '../containers/deck-editor/DeckEditor';
 import { AppState } from '../reducers';
 
 interface DeckEditorRouteProps extends RouteComponentProps {
     id: string;
-    getDeck: typeof deckEditorGetDeck;
+    getDeck: typeof getDeckAsync.request;
 }
 
 const DeckEditorRoute: React.FC<DeckEditorRouteProps> = (props) => {
@@ -28,10 +27,8 @@ const mapStateToProps = (state: AppState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        getDeck: (id: string) => dispatch(deckEditorGetDeck(id))
-    };
+const mapDispatchToProps = {
+    getDeck: getDeckAsync.request
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeckEditorRoute);

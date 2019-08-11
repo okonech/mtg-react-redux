@@ -1,13 +1,9 @@
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import {
-    addCardByName as deckEditorAddCardByName,
-    deleteCards as deckEditorDeleteCards,
-    updateCards as deckEditorUpdateCards
-} from '../../actions/deckEditorActions';
+import { addCardByNameAsync, removeCards, updateCards } from '../../actions/deckEditorActions';
 import Table from '../../components/deck-editor/Table';
 import { AppState } from '../../reducers';
-import { DeckEditorRow } from '../../reducers/deckEditorReducer';
+import { CardsState } from '../../reducers/cardsReducer';
+import { DeckEditorState } from '../../reducers/deckEditorReducer';
 
 const mapStateToProps = (state: AppState) => {
     return {
@@ -17,12 +13,19 @@ const mapStateToProps = (state: AppState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        addCardByName: (name: string) => dispatch(deckEditorAddCardByName(name)),
-        deleteCards: (ids: string[]) => dispatch(deckEditorDeleteCards(ids)),
-        updateCards: (rows: DeckEditorRow[]) => dispatch(deckEditorUpdateCards(rows))
-    };
+export interface MappedTable {
+    cardList: DeckEditorState['cards'];
+    cardData: CardsState;
+    editing: DeckEditorState['editing'];
+    addCardByName: typeof addCardByNameAsync.request;
+    removeCards: typeof removeCards;
+    updateCards: typeof updateCards;
+}
+
+const mapDispatchToProps = {
+    addCardByName: addCardByNameAsync.request,
+    removeCards,
+    updateCards
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Table);

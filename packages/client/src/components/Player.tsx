@@ -1,31 +1,25 @@
-import { createStyles } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { defaultMemoize } from 'reselect';
 import BattleField from '../containers/BattleField';
 import Hand from '../containers/Hand';
-import { PlayerMappedDispatch, PlayerMappedProps } from '../containers/Player';
+import { MappedPlayer } from '../containers/Player';
 import { getCardSizeVh } from '../util/cardSize';
 import { BaseComponentProps } from '../util/styling';
 import InfoArea from './InfoArea';
 
-const styles = (theme: Theme) => {
-    return createStyles({
-        main: {
-            backgroundColor: theme.palette.background.default,
-            boxSizing: 'border-box',
-            borderBottom: `1px solid ${theme.palette.divider}`,
-            minHeight: '220px'
-        }
-    });
-};
+const useStyles = makeStyles((theme) => ({
+    root: {
+        backgroundColor: theme.palette.background.default,
+        boxSizing: 'border-box',
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        minHeight: '220px'
+    }
+}));
 
-export interface PlayerProps extends WithStyles<typeof styles>, BaseComponentProps {
+export interface PlayerProps extends BaseComponentProps, MappedPlayer {
     style?: React.CSSProperties;
 }
-
-export type AllProps = PlayerProps & PlayerMappedProps & PlayerMappedDispatch;
 
 const grid = defaultMemoize((cardHeight: number, style: React.CSSProperties): React.CSSProperties => ({
     ...style,
@@ -35,14 +29,15 @@ const grid = defaultMemoize((cardHeight: number, style: React.CSSProperties): Re
     gridTemplateAreas: "'info battlefield' 'info hand'"
 }));
 
-const Player = (props: AllProps) => {
-    const { player, moveCards, selectCards, selected, style, classes } = props;
+const Player: React.FC<PlayerProps> = (props) => {
+    const { player, moveCards, selectCards, selected, style } = props;
     const { hand, battlefield, library } = player;
+    const classes = useStyles({});
 
     const { height: cardHeight } = getCardSizeVh();
 
     return (
-        <div className={classes.main} style={grid(cardHeight, style)}>
+        <div className={classes.root} style={grid(cardHeight, style)}>
             <InfoArea
                 style={{ gridArea: 'info' }}
                 player={player}
@@ -72,4 +67,4 @@ const Player = (props: AllProps) => {
     );
 };
 
-export default withStyles(styles)(Player);
+export default Player;

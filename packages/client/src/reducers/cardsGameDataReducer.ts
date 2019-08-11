@@ -1,5 +1,6 @@
 import produce from 'immer';
-import { CardsGameDataAction } from '../actions/cardsGameDataActions';
+import { getType } from 'typesafe-actions';
+import { addCards, CardsGameDataAction, deleteCards } from '../actions/cardsGameDataActions';
 
 // Normalized cards store as object of {unique card id: Card}
 // No ids array since full list of cards is never enumerated, only known list of card ids are passed
@@ -21,17 +22,14 @@ export interface CardLogic {
     controller: string;
 }
 
-export default function cardsGameDataReducer(
-    state: CardsGameDataState = {},
-    action: CardsGameDataAction): CardsGameDataState {
+export default function cardsGameDataReducer(state: CardsGameDataState = {}, action: CardsGameDataAction): CardsGameDataState {
     return produce(state, (draft) => {
         switch (action.type) {
-            case 'ADD_CARDS':
-            case 'UPDATE_CARDS':
-                action.payload.items.forEach((card) => draft[card.id] = card);
+            case getType(addCards):
+                action.payload.forEach((card) => draft[card.id] = card);
                 break;
-            case 'DELETE_CARDS':
-                action.payload.ids.forEach((id) => delete draft[id]);
+            case getType(deleteCards):
+                action.payload.forEach((id) => delete draft[id]);
                 break;
             default:
                 break;

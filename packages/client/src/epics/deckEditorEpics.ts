@@ -1,16 +1,13 @@
 import { CardModel } from '@mtg-react-redux/models';
-import { Epic } from 'redux-observable';
 import { ActionsObservable, combineEpics, StateObservable } from 'redux-observable';
-import { forkJoin, from, of } from 'rxjs';
-import { catchError, concatMap, switchMap } from 'rxjs/operators';
-import { cardsErr } from '../actions/cardsActions';
-import { CardsUpdateAction, getCards } from '../actions/cardsActions';
-import {
-    addCards, DeckEditorAddCardByNameAction,
-    DeckEditorGetDeckAction, DeckEditorSetCardsByNameAction, DeckEditorUpdateDeckAction, deckErr, deckSuccess, setCards, setDeckData
-} from '../actions/deckEditorActions';
+import { Epic } from 'redux-observable';
+import { forkJoin, from, of, pipe } from 'rxjs';
+import { catchError, concatMap, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { isActionOf } from 'typesafe-actions';
+import { cardsAsync } from '../actions/cardsActions';
+import { addCardByNameAsync, CardByName, getDeckAsync, putDeckAsync, setCardsByNameAsync } from '../actions/deckEditorActions';
 import { AppState } from '../reducers';
-import { cardsByNameSelector } from '../reducers/cardsReducer';
+import { Card, cardsByNameSelector } from '../reducers/cardsReducer';
 import { DeckEditorRow, DeckEditorState } from '../reducers/deckEditorReducer';
 import { arrayToObject } from '../util/array';
 import { getCards as getCardsEpic } from './cardEpics';
@@ -21,18 +18,16 @@ const forkEpic = (epicFactory: Epic, $state: StateObservable<AppState>, dependen
     return epicFactory(action$, $state, dependencies);
 };
 
-function assembleDeckRows(cards: DeckEditorSetCardsByNameAction['payload']['cards'],
-    state: AppState, epicResponse: CardsUpdateAction): DeckEditorRow[] {
+function assembleDeckRows(cards: CardByName[], state: AppState, epicResponse: Card[]): DeckEditorRow[] {
     // error
-    if (epicResponse.payload.hasOwnProperty('err')) {
+    if (epicResponse.hasOwnProperty('err')) {
         return [];
     }
 
     const cardsMap = arrayToObject(cards.map((card) => ({ ...card, name: card.name.toLowerCase() })), 'name');
 
     // retrieve items from action that hasn't yet made it to store
-    const uniqueCards = new Set(
-        [...cardsByNameSelector(state.cards, cards.map((c) => c.name)), ...epicResponse.payload.items]);
+    const uniqueCards = new Set([...cardsByNameSelector(state.cards, cards.map((c) => c.name)), ...epicResponse]);
 
     return Array.from(uniqueCards).filter((card) => !!card && card.id && card.name && !!cardsMap[card.name.toLowerCase()]).map((card) => {
         const cardModel = new CardModel(card);
@@ -51,11 +46,11 @@ function assembleDeckRows(cards: DeckEditorSetCardsByNameAction['payload']['card
 // config has getFirebase and getFirestore functions
 const addCardByName: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
     action$
-        .ofType('DECK_EDITOR_ADD_CARD_BY_NAME')
         .pipe(
-            switchMap((action: DeckEditorAddCardByNameAction) =>
+            filter(isActionOf(addCardByNameAsync.request)),
+            switchMap((action) =>
                 forkEpic(
-                    getCardsEpic, $state, config, getCards([action.payload.name], 'name')
+                    getCardsEpic, $state, config, cardsAsync.request({ ids: [action.payload.name], type: 'name' })
                 ).pipe(
                     switchMap((epicResponse) => forkJoin(
                         of(assembleDeckRows([action.payload], $state.value, epicResponse)),
@@ -64,81 +59,72 @@ const addCardByName: Epic<any, any, AppState> = (action$, $state, config: FBConf
                     )),
                     concatMap(([rows, epicResponse]) => [
                         epicResponse,
-                        addCards(rows)
+                        addCardByNameAsync.success(rows[0])
                     ]),
-                    catchError((error) => of(
-                        cardsErr(error)
-                    ))
+                    catchError(pipe(cardsAsync.failure, of))
                 )
             )
         );
 
 const setCardsByName: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
     action$
-        .ofType('DECK_EDITOR_SET_CARDS_BY_NAME')
         .pipe(
+            filter(isActionOf(setCardsByNameAsync.request)),
             // create disposable stream to catch errors but keep observable
-            switchMap((action: DeckEditorSetCardsByNameAction) =>
+            switchMap((action) =>
                 forkEpic(
-                    getCardsEpic, $state, config, getCards(action.payload.cards.map((c) => c.name), 'name')
+                    getCardsEpic, $state, config, cardsAsync.request({ ids: action.payload.map((c) => c.name), type: 'name' })
                 )
                     .pipe(
                         switchMap((epicResponse) => forkJoin(
-                            of(assembleDeckRows(action.payload.cards, $state.value, epicResponse)),
+                            of(assembleDeckRows(action.payload, $state.value, epicResponse)),
                             of(epicResponse)
 
                         )),
                         concatMap(([rows, epicResponse]) => [
                             epicResponse,
-                            setCards(rows)
+                            setCardsByNameAsync.success(rows)
                         ]),
-                        catchError((error) => of(
-                            cardsErr(error)
-                        ))
+                        catchError(pipe(cardsAsync.failure, of))
                     )
             )
         );
 
 const getDeck: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
     action$
-        .ofType('DECK_EDITOR_GET_DECK')
         .pipe(
+            filter(isActionOf(getDeckAsync.request)),
             // create disposable stream to catch errors but keep observable
-            switchMap((action: DeckEditorGetDeckAction) =>
-                from(config.getFirestore().collection('decks').doc(action.payload.id).get())
+            switchMap((action) =>
+                from(config.getFirestore().collection('decks').doc(action.payload).get())
                     .pipe(
                         switchMap((deck) => forkJoin(
                             forkEpic(
-                                getCardsEpic, $state, config, getCards(Object.keys(deck.data().cards), 'id')
+                                getCardsEpic, $state, config, cardsAsync.request({ ids: Object.keys(deck.data().cards), type: 'id' })
                             ),
                             of(deck)
 
                         )),
                         concatMap(([epicResponse, deck]) => [
                             epicResponse,
-                            setDeckData(deck.data() as DeckEditorState)
+                            getDeckAsync.success(deck.data() as DeckEditorState)
                         ]),
-                        catchError((error) => of(
-                            deckErr(error)
-                        ))
+                        catchError(pipe(getDeckAsync.failure, of)),
+                        takeUntil(action$.pipe(filter(isActionOf(getDeckAsync.cancel))))
                     )
             )
         );
 
-const updateDeck: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
+const putDeck: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
     action$
-        .ofType('DECK_EDITOR_UPDATE_DECK')
         .pipe(
+            filter(isActionOf(putDeckAsync.request)),
             // create disposable stream to catch errors but keep observable
-            switchMap((action: DeckEditorUpdateDeckAction) =>
-                from(config.getFirestore().collection('decks').doc(action.payload.deck.id).set(action.payload.deck))
+            switchMap((action) =>
+                from(config.getFirestore().collection('decks').doc(action.payload.id).set(action.payload))
                     .pipe(
-                        switchMap(() => of(
-                            deckSuccess()
-                        )),
-                        catchError((error) => of(
-                            deckErr(error)
-                        ))
+                        map(putDeckAsync.success),
+                        catchError(pipe(putDeckAsync.failure, of))
                     )
             )
         );
@@ -147,7 +133,7 @@ const cardEpics = combineEpics(
     addCardByName,
     setCardsByName,
     getDeck,
-    updateDeck
+    putDeck
 );
 
 export default cardEpics;

@@ -30,7 +30,7 @@ const WithHover = <P extends {}>(Component: React.ComponentType<P>) =>
             const { ...props } = this.props;
             return (
                 <div
-                    style={{ display: 'inline-block' }}
+                    style={{ display: 'initial' }}
                     onMouseEnter={this.onMouseEnter}
                     onMouseLeave={this.onMouseLeave}
                 >

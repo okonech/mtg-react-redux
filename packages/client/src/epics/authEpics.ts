@@ -1,86 +1,74 @@
 import { combineEpics } from 'redux-observable';
 import { Epic } from 'redux-observable';
-import { forkJoin, from, of } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
-import { loginError, loginSuccess, signoutSuccess, signupError, signupSuccess } from '../actions/authActions';
-import { LoginAction, LogoutAction, SignupAction } from '../actions/authActions';
+import { forkJoin, from, of, pipe } from 'rxjs';
+import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { isActionOf } from 'typesafe-actions';
+import { loginAsync, logoutAsync, signupAsync } from '../actions/authActions';
 import { AppState } from '../reducers';
 import { FBConfig } from './index';
 
 // config has getFirebase and getFirestore functions
 const signup: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
     action$
-        .ofType('SIGN_UP')
         .pipe(
+            filter(isActionOf(signupAsync.request)),
             // create disposable stream to catch errors but keep observable
-            switchMap((act: SignupAction) =>
-                of(act)
+            switchMap((action) =>
+                forkJoin(
+                    from(config.getFirebase().auth().createUserWithEmailAndPassword(
+                        action.payload.email,
+                        action.payload.password
+                    )),
+                    of(action)
+                )
                     .pipe(
-                        switchMap((action: SignupAction) =>
-                            forkJoin(
-                                from(config.getFirebase().auth().createUserWithEmailAndPassword(
-                                    action.payload.email,
-                                    action.payload.password
-                                )),
-                                of(action)
-                            )
-                        ),
-                        switchMap(([response, action]) =>
+                        switchMap(([response, act]) =>
                             config.getFirestore().collection('users').doc(response.user.uid).set({
-                                username: action.payload.username
+                                username: act.payload.username
                             })
                         ),
-                        switchMap(() => of(
-                            signupSuccess()
-                        )),
-                        catchError((error) => of(
-                            signupError(error)
-                        ))
+                        map(signupAsync.success),
+                        catchError(pipe(signupAsync.failure, of)),
+                        takeUntil(action$.pipe(filter(isActionOf(signupAsync.cancel))))
                     )
             )
         );
 
 const login: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
     action$
-        .ofType('LOG_IN')
         .pipe(
+            filter(isActionOf(loginAsync.request)),
             // create disposable stream to catch errors but keep observable
-            switchMap((act: LoginAction) =>
+            switchMap((act) =>
                 of(act)
                     .pipe(
-                        switchMap((action: LoginAction) =>
+                        switchMap((action) =>
                             from(config.getFirebase().auth().signInWithEmailAndPassword(
                                 action.payload.email,
                                 action.payload.password
                             ))
                         ),
-                        switchMap(() => of(
-                            loginSuccess()
-                        )),
-                        catchError((error) => of(
-                            loginError(error)
-                        ))
+                        map(loginAsync.success),
+                        catchError(pipe(loginAsync.failure, of)),
+                        takeUntil(action$.pipe(filter(isActionOf(loginAsync.cancel))))
                     )
             )
         );
 
 const logout: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
     action$
-        .ofType('LOG_OUT')
         .pipe(
+            filter(isActionOf(logoutAsync.request)),
             // create disposable stream to catch errors but keep observable
-            switchMap((act: LogoutAction) =>
-                of(act)
+            switchMap((action) =>
+                of(action)
                     .pipe(
-                        switchMap((action: LogoutAction) =>
+                        switchMap(() =>
                             config.getFirebase().auth().signOut()
                         ),
-                        switchMap(() => of(
-                            signoutSuccess()
-                        )),
-                        catchError((error) => of(
-                            loginError(error)
-                        ))
+                        map(logoutAsync.success),
+                        catchError(pipe(logoutAsync.failure, of)),
+                        takeUntil(action$.pipe(filter(isActionOf(logoutAsync.cancel))))
                     )
             )
         );

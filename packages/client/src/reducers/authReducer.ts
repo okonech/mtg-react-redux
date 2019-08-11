@@ -1,35 +1,24 @@
 import produce from 'immer';
-import { AuthAction } from '../actions/authActions';
+import { getType } from 'typesafe-actions';
+import { AuthAction, loginAsync, logoutAsync, signupAsync } from '../actions/authActions';
 
 // Auth actions. State only stores errors, actual auth is in firebase reducer
 
 export interface AuthState {
     authError: string;
-    authLoading: boolean;
 }
 
 const defaultState: AuthState = {
-    authError: null,
-    authLoading: true
+    authError: null
 };
 
 export default function authReducer(state: AuthState = defaultState, action: AuthAction) {
     return produce(state, (draft) => {
         switch (action.type) {
-            case 'LOG_IN':
-            case 'SIGN_UP':
-                draft.authLoading = true;
-                break;
-            case 'LOGIN_ERROR':
-            case 'SIGNUP_ERROR':
-            case 'LOGOUT_ERROR':
-                draft.authError = action.payload.err.message;
-                break;
-            case 'LOGIN_SUCCESS':
-            case 'SIGNUP_SUCCESS':
-            case 'LOGOUT_SUCCESS':
-                draft.authError = null;
-                draft.authLoading = false;
+            case getType(loginAsync.failure):
+            case getType(signupAsync.failure):
+            case getType(logoutAsync.failure):
+                draft.authError = action.payload.message;
                 break;
             default:
                 break;

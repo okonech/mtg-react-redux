@@ -15,18 +15,14 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import useTheme from '@material-ui/styles/useTheme';
 import { CardModel } from '@mtg-react-redux/models';
 import React, { memo } from 'react';
-import {
-    addCardByName as deckEditorAddCardByName,
-    deleteCards as deckEditorDeleteCards,
-    updateCards as deckEditorUpdateCards
-} from '../../actions/deckEditorActions';
+import { MappedTable } from '../../containers/deck-editor/Table';
 import { cardsSelector, CardsState, singleCardSelector } from '../../reducers/cardsReducer';
-import { DeckEditorRow, DeckEditorState } from '../../reducers/deckEditorReducer';
+import { DeckEditorRow } from '../../reducers/deckEditorReducer';
 import { getSorting, stableSort } from '../../util/ordering';
 import { BaseComponentProps } from '../../util/styling';
 import TypeAhead from './TypeAhead';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%'
     },
@@ -121,7 +117,7 @@ interface EnhancedTableToolbarProps {
     dense: boolean;
     setDense: React.Dispatch<React.SetStateAction<boolean>>;
     editing: boolean;
-    addCardByName: typeof deckEditorAddCardByName;
+    addCardByName: TableProps['addCardByName'];
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
@@ -157,7 +153,7 @@ const MemoizedToolbar = memo(EnhancedTableToolbar, (prev, next) => {
 interface EnhancedTableRowProps {
     xsRow: boolean;
     editing: boolean;
-    update: typeof deckEditorUpdateCards;
+    update: TableProps['updateCards'];
     data: DeckEditorRow;
     cards: CardsState;
 }
@@ -239,13 +235,7 @@ const MemoizedRow = memo(EnhancedTableRow, (prev, next) => {
     return prev.data === next.data && prev.editing === next.editing && prev.xsRow === next.xsRow;
 });
 
-interface TableProps extends BaseComponentProps {
-    cardList: DeckEditorState['cards'];
-    cardData: CardsState;
-    editing: boolean;
-    updateCards: typeof deckEditorUpdateCards;
-    addCardByName: typeof deckEditorAddCardByName;
-    deleteCards: typeof deckEditorDeleteCards;
+interface TableProps extends BaseComponentProps, MappedTable {
 }
 
 const EnhancedTable: React.FC<TableProps> = (props) => {
