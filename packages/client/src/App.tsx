@@ -12,6 +12,7 @@ import FourPlayerGame from './routes/FourPlayerGame';
 import FourPlayerGameOther from './routes/FourPlayerGameOther';
 import LoggedInLandingPage from './routes/LoggedInLandingPage';
 import Login from './routes/Login';
+import PrivateRoute from './routes/PrivateRoute';
 import Signup from './routes/Signup';
 import SinglePlayerGame from './routes/SinglePlayerGame';
 import TwoPlayerGame from './routes/TwoPlayerGame';
@@ -50,12 +51,12 @@ class App extends Component {
           <Switch>
             <Route exact={true} path='/login' component={Login} />
             <Route exact={true} path='/signup' component={Signup} />
-            <Route exact={true} path='/' component={LoggedInLandingPage} />
-            <Route path='/deck-editor' component={DeckEditor} />
-            <Route path='/test-game' component={SinglePlayerGame} />
-            <Route path='/test-two-player-game' component={TwoPlayerGame} />
-            <Route path='/test-four-player-game' component={FourPlayerGame} />
-            <Route path='/test-four-player-game-other' component={FourPlayerGameOther} />
+            <PrivateRoute exact={true} path='/' component={LoggedInLandingPage} />
+            <PrivateRoute path='/deck-editor/:id' component={DeckEditor} />
+            <PrivateRoute path='/test-game' component={SinglePlayerGame} />
+            <PrivateRoute path='/test-two-player-game' component={TwoPlayerGame} />
+            <PrivateRoute path='/test-four-player-game' component={FourPlayerGame} />
+            <PrivateRoute path='/test-four-player-game-other' component={FourPlayerGameOther} />
           </Switch>
         </Router>
       </MuiThemeProvider>

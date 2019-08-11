@@ -26,6 +26,10 @@ html, body {
   opacity: .6;
 }
 
+.masonry-grid_column {
+  padding-left: 5px;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

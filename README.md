@@ -20,8 +20,7 @@ deck editor:
 
 Give each player an outline color, so cards on the stack are outlined with that player's color
 
-look into svg sprites for the mana symbols
-already have the sprite sheet
+look into svg sprites for the mana symbols - retrieve from scryfall
 
 fix material ui imports to specific paths rather than from core
 
@@ -29,4 +28,9 @@ fix selectable module selectcontext, source-map-explorer has it as over 1mb
 
 make all hocs omit wrapped props. Copy react-redux's connect function
 
-fix actions in new style and use typeof on functions
+export deck to firebase as just {id, quant, sb, owned}. Id is unique per set
+
+
+calculate proper top height for cards and stop using vh. Then have top level listener (players) listen for window resize and  adjust card size
+
+cards in decks need specific ids to handle multiples. USe card game data for this

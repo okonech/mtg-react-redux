@@ -5,7 +5,7 @@ name: Card
 import { Playground, Props } from 'docz'
 import Card from '../../src/components/Card'
 import HoverCard from '../../src/util/docz-helpers/HoverCard'
-import { examplePrimitive } from '../../src/util/docz-helpers/card'
+import { exampleCardModel } from '../../src/util/docz-helpers/card'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
@@ -29,10 +29,10 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
         }})}>
       <CssBaseline />
       <Card
-            card={examplePrimitive}
+            card={exampleCardModel()}
             selected={false}
             selecting={false}
-            cardHeight={25}
+            cardHeight={32}
             isHovered={false}
         />
     </MuiThemeProvider>
@@ -53,11 +53,35 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
         }})}>
       <CssBaseline />
       <Card
-            card={examplePrimitive}
+            card={exampleCardModel()}
             selected={true}
             selecting={false}
-            cardHeight={25}
+            cardHeight={32}
             isHovered={false}
+        />
+    </MuiThemeProvider>
+</Playground>
+
+## With Top Label
+
+<Playground>
+  <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+      <CssBaseline />
+      <HoverCard
+            card={exampleCardModel()}
+            selected={false}
+            selecting={false}
+            cardHeight={32}
+            topLabel={'Sample Top Label'}
         />
     </MuiThemeProvider>
 </Playground>
@@ -77,10 +101,10 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
         }})}>
       <CssBaseline />
       <HoverCard
-            card={examplePrimitive}
+            card={exampleCardModel()}
             selected={false}
             selecting={false}
-            cardHeight={25}
+            cardHeight={32}
         />
     </MuiThemeProvider>
 </Playground>

@@ -18,24 +18,17 @@ async function getCardsData(ids: string[], type: 'id' | 'name', state: AppState)
 
     let cards: Card[];
 
+    console.log(ids, type);
+
     if (ids.length === 0) {
         return [];
     }
 
-    // single card case
-    if (ids.length === 1) {
-        const id = ids[0];
-        if (type === id) {
-            cards = [await Cards.byId(id)];
-        } else {
-            cards = [await Cards.byName(id)];
-        }
-    } else {
-        // collection
-        const toPost = type === 'id' ? ids.map((id) => CardIdentifier.byId(id)) :
-            ids.map((id) => CardIdentifier.byName(id));
-        cards = await Cards.collection(...toPost).waitForAll();
-    }
+    // collection
+    const toPost = type === 'id' ? ids.map((id) => CardIdentifier.byId(id)) :
+        ids.map((id) => CardIdentifier.byName(id));
+    cards = await Cards.collection(...toPost).waitForAll();
+    console.log(cards);
     // convert to models
     return cards.map((card) => new CardModel(card).dehydrate());
 }

@@ -26,7 +26,7 @@ const signup: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
                             )
                         ),
                         switchMap(([response, action]) =>
-                            config.getFirestore().collection('users').doc((response).user.uid).set({
+                            config.getFirestore().collection('users').doc(response.user.uid).set({
                                 username: action.payload.username
                             })
                         ),

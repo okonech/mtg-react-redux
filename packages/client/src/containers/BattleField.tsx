@@ -1,7 +1,8 @@
 
 import { createStyles } from '@material-ui/core';
-import { Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
+import { CardModel } from '@mtg-react-redux/models';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
@@ -124,7 +125,7 @@ class BattleField extends React.PureComponent<AllProps>  {
                 <DraggableCard
                     id={curr.id}
                     zoneId={zone.id}
-                    card={curr}
+                    card={new CardModel(curr)}
                     key={'draggable' + curr.id}
                     selectedCards={selected}
                     selectCards={selectCards}

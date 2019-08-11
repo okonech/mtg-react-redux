@@ -1,3 +1,4 @@
+import { CardModel } from '@mtg-react-redux/models';
 import * as React from 'react';
 import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceSpec } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
@@ -7,7 +8,6 @@ import Card from '../components/Card';
 import { Types } from '../Constants';
 import WithHover from '../hocs/WithHover';
 import { WithSelectable } from '../packages/react-dnd-selectable';
-import { Card as CardType } from '../reducers/cardsReducer';
 
 // draggable card component with id, key, x, y position
 
@@ -41,10 +41,9 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
   beginDrag(props, monitor, component: DraggableCard): CardDragObject {
 
     const { selectCards, selectedCards, zoneId, card } = props;
-    const { id } = card;
     const cards = [...selectedCards];
-    if (!cards.includes(id)) {
-      cards.push(id);
+    if (!cards.includes(card.id)) {
+      cards.push(card.id);
     }
     selectCards(cards);
 
@@ -73,7 +72,7 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
 
 interface DraggableCardProps {
   id: string;
-  card: CardType;
+  card: CardModel;
   zoneId: string;
   selectedCards: string[];
   selectCards: typeof selectCardsType;

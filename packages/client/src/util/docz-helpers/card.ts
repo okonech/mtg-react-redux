@@ -1,6 +1,6 @@
-import { CardPrimitive, TYPES } from '@mtg-react-redux/models';
+import { CardModel, CardPrimitive, TYPES } from '@mtg-react-redux/models';
 import { CardsState } from '../../reducers/cardsReducer';
-import { DeckEditorState } from '../../reducers/deckEditorReducer';
+import { DeckEditorRow, DeckEditorState } from '../../reducers/deckEditorReducer';
 
 export const examplePrimitive: CardPrimitive = {
     cmc: 5.0,
@@ -36,9 +36,20 @@ export const examplePrimitive: CardPrimitive = {
     oracle_text: 'Reveal the top card of your library and put that card into your hand. You lose life equal to its converted mana cost. You may repeat this process any number of times.',
     set: 'ala',
     set_name: 'Shards of Alara',
-    set_search_uri: 'https://api.scryfall.com/cards/search?order=set&q=e%3Aala&unique=prints',
-    type_line: 'Instant'
+    prints_search_uri: 'https://api.scryfall.com/cards/search?order=released&q=oracleid%3A981b0e21-e5e6-4a1e-bfde-679d56623f7f&unique=prints',
+    type_line: 'Instant',
+    scryfall_uri: 'https://scryfall.com/card/ala/63/ad-nauseam?utm_source=api',
+    prices: {
+        usd: '13.62',
+        usd_foil: '35.57',
+        eur: '5.19',
+        tix: '0.11'
+    }
 };
+
+export function exampleCardModel() {
+    return new CardModel(examplePrimitive);
+}
 
 function randType() {
     return TYPES[Math.floor(Math.random() * (TYPES.length))];
@@ -59,10 +70,8 @@ export function exampleCardState(): CardsState {
     };
 }
 
-const exampleDeckRow = {
+const exampleDeckRow: DeckEditorRow = {
     id: examplePrimitive.id,
-    name: examplePrimitive.name,
-    type: 'Instant',
     quantity: 3,
     sideboard: 1,
     owned: 1
@@ -71,7 +80,7 @@ const exampleDeckRow = {
 export function exampleCardList(): DeckEditorState['cards'] {
     return Array.from({ length: 50 }).reduce((acc: DeckEditorState['cards'], card, idx) => {
         const id = idx.toString();
-        acc[id] = exampleDeckRow;
+        acc[id] = { ...exampleDeckRow, id };
         return acc;
     }, {});
 }

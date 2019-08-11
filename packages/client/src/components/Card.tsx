@@ -5,7 +5,6 @@ import withTheme, { WithTheme } from '@material-ui/styles/withTheme';
 import { CardModel } from '@mtg-react-redux/models';
 import React from 'react';
 import { defaultMemoize } from 'reselect';
-import { Card as CardType } from '../reducers/cardsReducer';
 import { getCardSizePx } from '../util/cardSize';
 import { noSelect } from '../util/styling';
 
@@ -34,10 +33,12 @@ const styles = (theme: Theme) => {
 
 interface CardProps extends WithStyles<typeof styles> {
   opacity?: number;
-  card: CardType;
+  card: CardModel;
   cardHeight: number;
   hidden?: boolean;
   isHovered?: boolean;
+  // optional string to decorate top of card. Will show even without hover
+  topLabel?: string;
 }
 
 interface SelectableProps {
@@ -64,20 +65,19 @@ const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
 
 const Card = (props: AllProps) => {
 
-  const { card, classes, isHovered, selecting } = props;
-  const cardModel = new CardModel(card);
+  const { card, classes, isHovered, selecting, topLabel } = props;
 
-  const displayName = (isHovered && !selecting) ? (
+  const displayName = (topLabel || (isHovered && !selecting)) ? (
     <Typography className={classes.text}>
-      {isHovered ? cardModel.name() : ''}
+      {topLabel || (isHovered ? card.name() : '')}
     </Typography>
   ) : <div />;
 
-  const imgUrl = getCardSizePx().height > 205 ? cardModel.imageUrl('medium') : cardModel.imageUrl('small');
+  const imgUrl = getCardSizePx().height > 205 ? card.imageUrl('medium') : card.imageUrl('small');
 
   return (
     <MuiCard
-      id={cardModel.id()}
+      id={card.id}
       style={cardStyle(props)}
       raised={isHovered}
       className={classes.main}

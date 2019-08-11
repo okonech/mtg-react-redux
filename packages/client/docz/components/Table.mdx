@@ -1,0 +1,62 @@
+---
+name: Table
+---
+
+import { Playground, Props } from 'docz'
+import Table from '../../src/components/deck-editor/Table'
+import { exampleCardState, exampleCardList } from '../../src/util/docz-helpers/card'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+# Table
+
+<Props of={Table} />
+
+
+## Editing
+
+<Playground>
+    <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+        <CssBaseline />
+        <Table
+            editing={true}
+            cardList={exampleCardList()}
+            cardData={exampleCardState()}
+            updateCards={()=> null}
+            addCardByName={()=> null}
+        />
+    </MuiThemeProvider>
+</Playground>
+
+## Viewing
+
+<Playground>
+    <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+        <CssBaseline />
+        <Table
+            editing={false}
+            cardList={exampleCardList()}
+            cardData={exampleCardState()}
+            updateCards={()=> null}
+            addCardByName={()=> null}
+        />
+    </MuiThemeProvider>
+</Playground>

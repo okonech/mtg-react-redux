@@ -1,0 +1,36 @@
+---
+name: CardText
+---
+
+import { Playground, Props } from 'docz'
+import CardText from '../../src/components/deck-editor/CardText'
+import { exampleCardModel } from '../../src/util/docz-helpers/card'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+# CardText
+
+<Props of={CardText} />
+
+
+## Basic usage
+
+<Playground>
+  <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+      <CssBaseline />
+      <CardText
+            card={exampleCardModel()}
+            isHovered={false}
+            quantity={2}
+        />
+    </MuiThemeProvider>
+</Playground>

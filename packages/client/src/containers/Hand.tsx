@@ -1,7 +1,8 @@
 
 import { createStyles } from '@material-ui/core';
-import { Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
+import { CardModel } from '@mtg-react-redux/models';
 import withScrolling from '@neises/pw-react-dnd-scrollzone';
 import React from 'react';
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
@@ -173,7 +174,7 @@ class Hand extends React.PureComponent<AllProps, HandState> {
         <DraggableCard
           id={curr.id}
           zoneId={zone.id}
-          card={curr}
+          card={new CardModel(curr)}
           key={'draggable-' + curr.id}
           selectedCards={selected}
           selectCards={selectCards}
@@ -191,7 +192,7 @@ class Hand extends React.PureComponent<AllProps, HandState> {
 
     if (isOver && canDrop) {
       cards.splice(placeholderIndex + indexShift, 0, (
-        <Card key={'handplaceholder'} card={placeholderPrimitive} opacity={0.2} cardHeight={cardHeight} />
+        <Card key={'handplaceholder'} card={new CardModel(placeholderPrimitive)} opacity={0.2} cardHeight={cardHeight} />
       ));
     }
 

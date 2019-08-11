@@ -22,11 +22,11 @@ const styles = (theme: Theme) => {
     });
 };
 
-interface LoadingPageProps extends WithStyles<typeof styles> {
+interface LoadingSpinnerProps extends WithStyles<typeof styles> {
 
 }
 
-const LoadingPage = (props: LoadingPageProps) => {
+const LoadingSpinner = (props: LoadingSpinnerProps) => {
     const { classes } = props;
 
     return (
@@ -38,4 +38,4 @@ const LoadingPage = (props: LoadingPageProps) => {
     );
 };
 
-export default withStyles(styles)(LoadingPage);
+export default withStyles(styles)(LoadingSpinner);

@@ -6,10 +6,9 @@ import { DeckEditorActions } from '../actions/deckEditorActions';
 // cardsByName: {card name: card Id}
 // No ids array since full list of cards is never enumerated, only known list of card ids are passed
 
+type Format = 'Standard' | 'Commander' | 'Modern' | 'Legacy' | 'Vintage';
 export interface DeckEditorRow {
     id: string;
-    name: string;
-    type: string;
     quantity: number;
     sideboard: number;
     owned: number;
@@ -18,12 +17,18 @@ export interface DeckEditorRow {
 export interface DeckEditorState {
     cards: Record<string, DeckEditorRow>;
     title: string;
+    id: string;
+    owner: string;
+    format: Format;
     editing: boolean;
 }
 
 const def = {
     cards: {},
     title: 'New Deck',
+    id: 'test-id',
+    format: 'Commander' as Format,
+    owner: null,
     editing: false
 };
 
@@ -64,6 +69,15 @@ export default function deckEditorReducer(state: DeckEditorState = def, action: 
                 break;
             case 'DECK_EDITOR_SET_EDITING':
                 draft.editing = action.payload.editing;
+                break;
+            case 'DECK_EDITOR_SET_DECK_DATA':
+                const { title, owner, cards, format } = action.payload.state;
+                draft.title = title;
+                draft.owner = owner;
+                // prevent shadowed var
+                draft.id = action.payload.state.id;
+                draft.format = format;
+                draft.cards = cards;
                 break;
             default:
                 break;
