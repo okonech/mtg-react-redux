@@ -1,5 +1,5 @@
 import Badge from '@material-ui/core/Badge';
-import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
 import { CardModel } from '@mtg-react-redux/models';
 import * as React from 'react';
 import { defaultMemoize } from 'reselect';
@@ -9,13 +9,12 @@ import { DragLayerProps } from '../containers/CardCustomDragLayer';
 import { Card as CardType } from '../reducers/cardsReducer';
 import { getSnapEnabled, snapToGrid } from '../util/snapToGrid';
 
-const styles = (theme: Theme) => {
-    return createStyles({
+const styles = () =>
+    createStyles({
         badge: {
             zIndex: 101
         }
     });
-};
 
 const layerStyle = defaultMemoize((props: DragLayerProps & CardCustomDragLayerProps): React.CSSProperties => {
     const { currentOffset } = props;
@@ -61,8 +60,8 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
 
     public renderCards = defaultMemoize((cardHeight: number, selectedCards: CardType[]): JSX.Element[] => {
         const renderCards = selectedCards.length > 5 ? selectedCards.slice(0, 5) : selectedCards;
-        return renderCards.reverse().map((card, index) => {
-            return (
+        return renderCards.reverse().map((card, index) =>
+            (
                 <div
                     style={cardStyle(cardHeight, index)}
                     key={`draglayer-${card.id}`}
@@ -73,8 +72,7 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
                         cardHeight={cardHeight}
                     />
                 </div >
-            );
-        });
+            ));
     });
 
     public render() {

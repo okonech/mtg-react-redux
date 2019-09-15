@@ -7,8 +7,8 @@ import SendIcon from '@material-ui/icons/Send';
 import React from 'react';
 
 /* ----------------- */
-const styles = (theme: Theme) => {
-    return createStyles({
+const styles = (theme: Theme) =>
+    createStyles({
         root: {
             maxHeight: '100%',
             display: 'flex',
@@ -44,7 +44,6 @@ const styles = (theme: Theme) => {
             marginBottom: '8px'
         }
     });
-};
 
 const ChatRoom = (props) => {
 
@@ -76,8 +75,8 @@ const ChatRoom = (props) => {
     return (
         <Paper className={classes.root} style={style}>
             <div className={classes.chatLog}>
-                {images.map((item, index) => {
-                    return (
+                {images.map((item, index) =>
+                    (
                         <React.Fragment
                             key={index}
                         >
@@ -89,8 +88,7 @@ const ChatRoom = (props) => {
                             </div>
                             <Divider className={classes.divider} />
                         </React.Fragment>
-                    );
-                })}
+                    ))}
 
             </div>
             <div className={classes.composeInput}>

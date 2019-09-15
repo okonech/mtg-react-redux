@@ -12,16 +12,16 @@
     "author": "",
     "license": "MIT",
     "private": false,
-    "dependencies": {},
     "devDependencies": {
+        "@types/react": "^16.9.2",
         "tslint": "^5.16.0",
         "tslint-react": "^4.0.0",
         "typescript": "^3.4.5"
     },
     "peerDependencies": {
         "dnd-core": "^7.4.4",
-        "react-dnd": "^7.4.5",
         "react": "^16.8.6",
+        "react-dnd": "^7.4.5",
         "react-dnd-html5-backend": "^7.4.4"
     },
     "gitHead": "4d317e43b9208d93ae13b409fb5fed4722a4dfff"

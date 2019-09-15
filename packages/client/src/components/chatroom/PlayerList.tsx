@@ -4,8 +4,8 @@ import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import React from 'react';
 
 /* ----------------- */
-const styles = (theme: Theme) => {
-    return createStyles({
+const styles = (theme: Theme) =>
+    createStyles({
         root: {
             maxHeight: '100%',
             maxWidth: '350px',
@@ -39,7 +39,6 @@ const styles = (theme: Theme) => {
             marginBottom: '8px'
         }
     });
-};
 
 const PlayerList = (props) => {
 
@@ -62,8 +61,8 @@ const PlayerList = (props) => {
 
     return (
         <List dense={true} className={classes.root} style={style}>
-            {players.map((item, index) => {
-                return (
+            {players.map((item) =>
+                (
                     <ListItem key={item.name} button={true} className={classes.listItem}>
                         <ListItemAvatar>
                             <Badge color='secondary' variant='dot' className={classes.online}>
@@ -76,8 +75,8 @@ const PlayerList = (props) => {
                             </Typography>
                         </ListItemText>
                     </ListItem>
-                );
-            })}
+                )
+            )}
         </List>
     );
 };

@@ -19,7 +19,7 @@ export interface GameSetCurrentPlayerAction {
     };
 }
 
-export function nextTurn(cards: string[]): GameAction {
+export function nextTurn(): GameAction {
     return {
         type: 'GAME_NEXT_TURN'
     };
