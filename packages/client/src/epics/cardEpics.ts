@@ -1,11 +1,11 @@
 import { CardModel, CardPrimitive } from '@mtg-react-redux/models';
 import { Epic } from 'redux-observable';
 import { combineEpics } from 'redux-observable';
-import { from, of } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { from, of, pipe } from 'rxjs';
+import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { Card, CardIdentifier, Cards } from 'scryfall-sdk';
-import { CardQueryAction } from '../actions/cardsActions';
-import { addCards, cardsErr } from '../actions/cardsActions';
+import { isActionOf } from 'typesafe-actions';
+import { cardsAsync } from '../actions/cardsActions';
 import { AppState } from '../reducers';
 import { singleCardByNameSelector, singleCardSelector } from '../reducers/cardsReducer';
 import { FBConfig } from './index';
@@ -18,8 +18,6 @@ async function getCardsData(ids: string[], type: 'id' | 'name', state: AppState)
 
     let cards: Card[];
 
-    console.log(ids, type);
-
     if (ids.length === 0) {
         return [];
     }
@@ -28,26 +26,22 @@ async function getCardsData(ids: string[], type: 'id' | 'name', state: AppState)
     const toPost = type === 'id' ? ids.map((id) => CardIdentifier.byId(id)) :
         ids.map((id) => CardIdentifier.byName(id));
     cards = await Cards.collection(...toPost).waitForAll();
-    console.log(cards);
-    // convert to models
+    // convert to models to remove unneeded props
     return cards.map((card) => new CardModel(card).dehydrate());
 }
 
 // config has getFirebase and getFirestore functions
 export const getCards: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
     action$
-        .ofType('GET_CARDS')
         .pipe(
+            filter(isActionOf(cardsAsync.request)),
             // create disposable stream to catch errors but keep observable
-            switchMap((action: CardQueryAction) =>
+            switchMap((action) =>
                 from(getCardsData(action.payload.ids, action.payload.type, $state.value))
                     .pipe(
-                        switchMap((response) => of(
-                            addCards(response)
-                        )),
-                        catchError((error) => of(
-                            cardsErr(error)
-                        ))
+                        map(cardsAsync.success),
+                        catchError(pipe(cardsAsync.failure, of)),
+                        takeUntil(action$.pipe(filter(isActionOf(cardsAsync.cancel))))
                     )
             )
         );

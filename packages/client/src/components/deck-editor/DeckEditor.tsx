@@ -49,13 +49,16 @@ const useStyles = makeStyles((theme: Theme) => ({
         }
     },
     menu: {
-        gridArea: 'menu'
+        gridArea: 'menu',
+        maxWidth: '0px'
     },
     header: {
         gridArea: 'header'
     },
     title: {
-        gridArea: 'title'
+        gridArea: 'title',
+        // allow for title truncation
+        minWidth: '0px'
     },
     colors: {
         gridArea: 'colors'

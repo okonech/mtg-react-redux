@@ -1,6 +1,7 @@
 import { CardPrimitive } from '@mtg-react-redux/models';
 import produce from 'immer';
-import { CardsAction } from '../actions/cardsActions';
+import { getType } from 'typesafe-actions';
+import { CardsAction, cardsAsync } from '../actions/cardsActions';
 
 // Normalized cards store as object of 
 // cards: {unique card id: Card}
@@ -21,20 +22,12 @@ const def = {
 export default function cardsReducer(state: CardsState = def, action: CardsAction): CardsState {
   return produce(state, (draft) => {
     switch (action.type) {
-      case 'ADD_CARDS':
-      case 'UPDATE_CARDS':
-        action.payload.items.forEach((card) => {
+      case getType(cardsAsync.success):
+        action.payload.forEach((card) => {
           if (card.name && card.id) {
             draft.cards[card.id] = card;
             draft.cardsbyName[card.name] = card.id;
           }
-        });
-        break;
-      case 'DELETE_CARDS':
-        action.payload.ids.forEach((id) => {
-          const name = draft.cards[id].name;
-          delete draft.cardsbyName[name];
-          delete draft.cards[id];
         });
         break;
       default:

@@ -4,15 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import React, { memo } from 'react';
-import {
-    DeckEditorSetCardsByNameAction,
-    deleteDeck as deckEditorDeleteDeck,
-    setCardsByName as deckEditorSetCardsByName,
-    setTitle as deckEditorSetTitle,
-    updateDeck as deckEditorUpdateDeck
-} from '../../actions/deckEditorActions';
-import { CardsState } from '../../reducers/cardsReducer';
-import { DeckEditorState } from '../../reducers/deckEditorReducer';
+import { CardByName } from '../../actions/deckEditorActions';
+import { MappedTitle } from '../../containers/deck-editor/Title';
 import { BaseComponentProps } from '../../util/styling';
 import ConfirmationDialog from '../ConfirmationDialog';
 import { CATEGORIES, VIEWS } from './DeckEditor';
@@ -38,22 +31,15 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-interface TitleProps extends BaseComponentProps {
-    setCardsByName: typeof deckEditorSetCardsByName;
-    deleteDeck: typeof deckEditorDeleteDeck;
-    setTitle: typeof deckEditorSetTitle;
-    data: DeckEditorState;
-    cardData: CardsState;
-    setEditing: (editing: boolean) => void;
+interface TitleProps extends BaseComponentProps, MappedTitle {
     view: keyof typeof VIEWS;
     setView: React.Dispatch<React.SetStateAction<keyof typeof VIEWS>>;
     category: keyof typeof CATEGORIES;
     setCategory: React.Dispatch<React.SetStateAction<keyof typeof CATEGORIES>>;
-    updateDeck: typeof deckEditorUpdateDeck;
 }
 
 const Title: React.SFC<TitleProps> = (props) => {
-    const { setCardsByName, data, cardData, setEditing, setTitle, view, setView, category, setCategory, deleteDeck, updateDeck } = props;
+    const { setCardsByName, data, cardData, setEditing, setTitle, view, setView, category, setCategory, deleteDeck, putDeck } = props;
     const { editing } = data;
     const classes = useStyles({});
     const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
@@ -75,7 +61,7 @@ const Title: React.SFC<TitleProps> = (props) => {
     function handleSave() {
         const { editing: noUse, ...deck } = data;
         console.log(deck);
-        updateDeck(deck);
+        putDeck(deck);
         setEditing(!editing);
 
     }
@@ -91,7 +77,7 @@ const Title: React.SFC<TitleProps> = (props) => {
         setDeleteDialogOpen(false);
     }
 
-    function handleSaveImport(cards: DeckEditorSetCardsByNameAction['payload']['cards']) {
+    function handleSaveImport(cards: CardByName[]) {
         setOpenImport(false);
         setCardsByName(cards);
     }
@@ -138,7 +124,7 @@ const Title: React.SFC<TitleProps> = (props) => {
                 </React.Fragment>
             ) : (
                     <React.Fragment>
-                        <Typography variant='h4' gutterBottom={true} align='center' className={classes.text}>{data.title}</Typography>
+                        <Typography variant='h4' gutterBottom={true} align='center' noWrap={true} className={classes.text}>{data.title}</Typography>
                         <Button variant='contained' color='primary' className={classes.button} onClick={handleEditing}>
                             Edit
                         </Button>

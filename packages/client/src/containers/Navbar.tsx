@@ -1,8 +1,12 @@
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import { logout } from '../actions/authActions';
+import { logoutAsync } from '../actions/authActions';
 import Navbar from '../components/Navbar';
 import { AppState } from '../reducers';
+
+export interface MappedNavBar {
+    auth: any;
+    logout: typeof logoutAsync.request;
+}
 
 const mapStateToProps = (state: AppState) => {
     return {
@@ -10,10 +14,8 @@ const mapStateToProps = (state: AppState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        logOut: () => dispatch(logout())
-    };
+const mapDispatchToProps = {
+    logout: logoutAsync.request
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

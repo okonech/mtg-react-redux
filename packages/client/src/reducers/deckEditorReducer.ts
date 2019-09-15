@@ -1,5 +1,9 @@
 import produce from 'immer';
-import { DeckEditorActions } from '../actions/deckEditorActions';
+import { getType } from 'typesafe-actions';
+import {
+    addCardByNameAsync, DeckEditorActions, getDeckAsync, removeCards, setCardsByNameAsync,
+    setEditing, setTitle, updateCards
+} from '../actions/deckEditorActions';
 
 // Normalized cards store as object of 
 // cards: {unique card id: Card}
@@ -35,47 +39,46 @@ const def = {
 export default function deckEditorReducer(state: DeckEditorState = def, action: DeckEditorActions): DeckEditorState {
     return produce(state, (draft) => {
         switch (action.type) {
-            case 'DECK_EDITOR_ADD_CARDS':
-                action.payload.rows.forEach((row) => {
-                    // increment quantity if found
-                    if (draft.cards[row.id]) {
-                        draft.cards[row.id].quantity += row.quantity;
-                        draft.cards[row.id].sideboard += row.sideboard;
-                    } else {
-                        draft.cards[row.id] = { ...row, owned: 1 };
-                    }
-                });
+            case getType(addCardByNameAsync.success):
+                const { id: actId, quantity, sideboard } = action.payload;
+                // increment quantity if found
+                if (draft.cards[actId]) {
+                    draft.cards[actId].quantity += quantity;
+                    draft.cards[actId].sideboard += sideboard;
+                } else {
+                    draft.cards[actId] = action.payload;
+                }
                 break;
-            case 'DECK_EDITOR_UPDATE_CARDS':
-                action.payload.rows.forEach((row) => {
+            case getType(updateCards):
+                action.payload.forEach((row) => {
                     draft.cards[row.id] = row;
                 });
                 break;
-            case 'DECK_EDITOR_DELETE_CARDS':
-                action.payload.ids.forEach((id) => {
+            case getType(removeCards):
+                action.payload.forEach((id) => {
                     delete draft.cards[id];
                 });
                 break;
-            case 'DECK_EDITOR_SET_CARDS':
+            case getType(setCardsByNameAsync.success):
                 Object.keys(draft.cards).forEach((id) => {
                     delete draft.cards[id];
                 });
-                action.payload.rows.forEach((row) => {
+                action.payload.forEach((row) => {
                     draft.cards[row.id] = row;
                 });
                 break;
-            case 'DECK_EDITOR_SET_TITLE':
-                draft.title = action.payload.title;
+            case getType(setTitle):
+                draft.title = action.payload;
                 break;
-            case 'DECK_EDITOR_SET_EDITING':
-                draft.editing = action.payload.editing;
+            case getType(setEditing):
+                draft.editing = action.payload;
                 break;
-            case 'DECK_EDITOR_SET_DECK_DATA':
-                const { title, owner, cards, format } = action.payload.state;
+            case getType(getDeckAsync.success):
+                const { title, owner, cards, format } = action.payload;
                 draft.title = title;
                 draft.owner = owner;
                 // prevent shadowed var
-                draft.id = action.payload.state.id;
+                draft.id = action.payload.id;
                 draft.format = format;
                 draft.cards = cards;
                 break;

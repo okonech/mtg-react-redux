@@ -1,243 +1,63 @@
+import { ActionType, createAsyncAction, createStandardAction } from 'typesafe-actions';
 import { DeckEditorRow, DeckEditorState } from '../reducers/deckEditorReducer';
 
-export type DeckEditorActions = DeckEditorAddAction | DeckEditorDeleteAction | DeckEditorTitleAction | DeckEditorEditingAction
-    | DeckEditorUpdateAction | DeckEditorSetDeckDataAction | DeckEditorEpicActions;
+export const updateCards = createStandardAction('deckEditor/UPDATE_CARDS')<DeckEditorRow[]>();
 
-type DeckEditorEpicActions = DeckEditorAddCardByNameAction | DeckEditorSetCardsByNameAction | DeckEditorGetDeckAction
-    | DeckEditorDeleteDeckAction | DeckEditorUpdateDeckAction | DeckEditorCreateDeckAction | DeckEditorErrAction | DeckEditorSuccessAction;
+export const removeCards = createStandardAction('deckEditor/REMOVE_CARDS')<string[]>();
 
-export interface DeckEditorAddAction {
-    type: 'DECK_EDITOR_ADD_CARDS';
-    payload: {
-        rows: Array<Pick<DeckEditorRow, 'id' | 'quantity' | 'sideboard'>>
-    };
+export const setTitle = createStandardAction('deckEditor/SET_TITLE')<string>();
+
+export const setEditing = createStandardAction('deckEditor/SET_EDITING')<boolean>();
+
+export interface CardByName {
+    name: string;
+    quantity: number;
+    sideboard: number;
 }
 
-export interface DeckEditorUpdateAction {
-    type: 'DECK_EDITOR_UPDATE_CARDS' | 'DECK_EDITOR_SET_CARDS';
-    payload: {
-        rows: DeckEditorRow[]
-    };
-}
+export const cancel = createStandardAction('deckEditor/CANCEL')<null>();
 
-export interface DeckEditorDeleteAction {
-    type: 'DECK_EDITOR_DELETE_CARDS';
-    payload: {
-        ids: string[]
-    };
-}
+export const addCardByNameAsync = createAsyncAction(
+    'deckEditor/ADD_CARD_BY_NAME',
+    'deckEditor/STORE_CARDS_BY_NAME',
+    'deckEditor/ADD_CARD_BY_NAME_ERR'
+)<CardByName, DeckEditorRow, Error>();
 
-export interface DeckEditorTitleAction {
-    type: 'DECK_EDITOR_SET_TITLE';
-    payload: {
-        title: string;
-    };
-}
+export const setCardsByNameAsync = createAsyncAction(
+    'deckEditor/SET_CARDS_BY_NAME',
+    'deckEditor/REPLACE_CARDS_BY_NAME',
+    'deckEditor/SET_CARDS_BY_NAME_ERR'
+)<CardByName[], DeckEditorRow[], Error>();
 
-export interface DeckEditorEditingAction {
-    type: 'DECK_EDITOR_SET_EDITING';
-    payload: {
-        editing: boolean;
-    };
-}
+export const getDeckAsync = createAsyncAction(
+    'deckEditor/GET',
+    'deckEditor/SET_STATE',
+    'deckEditor/GET_ERR',
+    'deckEditor/GET_CANCEL'
+)<string, DeckEditorState, Error, string>();
 
-export interface DeckEditorSetDeckDataAction {
-    type: 'DECK_EDITOR_SET_DECK_DATA';
-    payload: {
-        state: DeckEditorState
-    };
-}
+type PUTDECK = Omit<DeckEditorState, 'editing'>;
 
-export interface DeckEditorAddCardByNameAction {
-    type: 'DECK_EDITOR_ADD_CARD_BY_NAME';
-    payload: {
-        name: string;
-        quantity: number;
-        sideboard: number;
-    };
-}
+export const putDeckAsync = createAsyncAction(
+    'deckEditor/PUT',
+    'deckEditor/PUT_SUCCESS',
+    'deckEditor/PUT_ERR'
+)<PUTDECK, null, Error>();
 
-export interface DeckEditorSetCardsByNameAction {
-    type: 'DECK_EDITOR_SET_CARDS_BY_NAME';
-    payload: {
-        cards: Array<{
-            name: string;
-            quantity: number;
-            sideboard: number;
-        }>;
-    };
-}
+export const deleteDeckAsync = createAsyncAction(
+    'deckEditor/DELETE',
+    'deckEditor/DELETE_SUCCESS',
+    'deckEditor/DELETE_ERR'
+)<string, null, Error>();
 
-export interface DeckEditorGetDeckAction {
-    type: 'DECK_EDITOR_GET_DECK';
-    payload: {
-        id: string
-    };
-}
+export const postDeckAsync = createAsyncAction(
+    'deckEditor/POST',
+    'deckEditor/POST_SUCCESS',
+    'deckEditor/POST_ERR'
+)<PUTDECK, null, Error>();
 
-export interface DeckEditorDeleteDeckAction {
-    type: 'DECK_EDITOR_DELETE_DECK';
-    payload: {
-        id: string
-    };
-}
+type DeckEditorEpicActions = ActionType<typeof addCardByNameAsync> | ActionType<typeof setCardsByNameAsync> | ActionType<typeof getDeckAsync>
+    | ActionType<typeof deleteDeckAsync> | ActionType<typeof putDeckAsync> | ActionType<typeof postDeckAsync>;
 
-export interface DeckEditorUpdateDeckAction {
-    type: 'DECK_EDITOR_UPDATE_DECK';
-    payload: {
-        deck: Omit<DeckEditorState, 'editing'>
-    };
-}
-
-export interface DeckEditorCreateDeckAction {
-    type: 'DECK_EDITOR_CREATE_DECK';
-    payload: {
-        deck: Omit<DeckEditorState, 'editing'>
-    };
-}
-
-export interface DeckEditorErrAction {
-    type: 'DECK_EDITOR_ERR';
-    payload: {
-        err: Error
-    };
-}
-
-export interface DeckEditorSuccessAction {
-    type: 'DECK_EDITOR_SUCCESS';
-    payload: {};
-}
-
-export function addCards(rows: DeckEditorAddAction['payload']['rows']): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_ADD_CARDS',
-        payload: {
-            rows
-        }
-    };
-}
-
-export function updateCards(rows: DeckEditorRow[]): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_UPDATE_CARDS',
-        payload: {
-            rows
-        }
-    };
-}
-
-export function deleteCards(ids: string[]): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_DELETE_CARDS',
-        payload: {
-            ids
-        }
-    };
-}
-
-export function setCards(rows: DeckEditorRow[]): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_SET_CARDS',
-        payload: {
-            rows
-        }
-    };
-}
-
-export function setTitle(title: string): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_SET_TITLE',
-        payload: {
-            title
-        }
-    };
-}
-
-export function setEditing(editing: boolean): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_SET_EDITING',
-        payload: {
-            editing
-        }
-    };
-}
-
-export function setDeckData(state: DeckEditorState): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_SET_DECK_DATA',
-        payload: {
-            state
-        }
-    };
-}
-
-export function addCardByName(name: string, quantity = 1, sideboard = 0): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_ADD_CARD_BY_NAME',
-        payload: {
-            name,
-            quantity,
-            sideboard
-        }
-    };
-}
-
-export function setCardsByName(cards: DeckEditorSetCardsByNameAction['payload']['cards']): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_SET_CARDS_BY_NAME',
-        payload: {
-            cards
-        }
-    };
-}
-
-export function getDeck(id: string): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_GET_DECK',
-        payload: {
-            id
-        }
-    };
-}
-
-export function deleteDeck(id: string): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_DELETE_DECK',
-        payload: {
-            id
-        }
-    };
-}
-
-export function updateDeck(deck: DeckEditorUpdateDeckAction['payload']['deck']): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_UPDATE_DECK',
-        payload: {
-            deck
-        }
-    };
-}
-
-export function createDeck(deck: DeckEditorCreateDeckAction['payload']['deck']): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_CREATE_DECK',
-        payload: {
-            deck
-        }
-    };
-}
-
-export function deckErr(err: Error): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_ERR',
-        payload: {
-            err
-        }
-    };
-}
-export function deckSuccess(): DeckEditorActions {
-    return {
-        type: 'DECK_EDITOR_SUCCESS',
-        payload: {}
-    };
-}
+export type DeckEditorActions = ActionType<typeof removeCards> | ActionType<typeof setTitle> | ActionType<typeof setEditing>
+    | ActionType<typeof updateCards> | DeckEditorEpicActions;

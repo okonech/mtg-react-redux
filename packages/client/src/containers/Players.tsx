@@ -4,6 +4,13 @@ import Players from '../components/Players';
 import { AppState } from '../reducers';
 import { GameState } from '../reducers/gameReducer';
 
+export interface MappedPlayers {
+    game: GameState;
+    players: string[];
+    loading: AppState['isLoading'];
+    initPlayers: (game: GameState) => void;
+}
+
 const mapStateToProps = (state: AppState) => ({
     players: state.players.playerIds,
     loading: state.isLoading,

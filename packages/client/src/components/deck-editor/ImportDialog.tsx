@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import * as parser from 'mtg-parser';
 import React, { useEffect } from 'react';
-import { DeckEditorSetCardsByNameAction } from '../../actions/deckEditorActions';
+import { CardByName } from '../../actions/deckEditorActions';
 import { cardsSelector, CardsState } from '../../reducers/cardsReducer';
 import { DeckEditorState } from '../../reducers/deckEditorReducer';
 import { getSorting, stableSort } from '../../util/ordering';
@@ -25,7 +25,7 @@ interface ParsedCards {
 interface ImportDialogProps {
     isOpen: boolean;
     handleClose: () => void;
-    handleSave: (cards: DeckEditorSetCardsByNameAction['payload']['cards']) => void;
+    handleSave: (cards: CardByName[]) => void;
     cardList: DeckEditorState['cards'];
     cardData: CardsState;
 }
@@ -39,7 +39,7 @@ function formatCardsToText(cardList: ImportDialogProps['cardList'], cardData: Im
     return `${main.join('\n')}${sideBoard.length > 0 ? '\nSideboard:\n' : ''}${sideBoard.join('\n')}`;
 }
 
-function formatTextToCards(text: string): DeckEditorSetCardsByNameAction['payload']['cards'] {
+function formatTextToCards(text: string): CardByName[] {
     const parsed: ParsedCards = parser(text, 'mtgo');
     const cards: { [name: string]: { name: string, quantity: number, sideboard: number } } = {};
 

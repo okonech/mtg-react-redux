@@ -7,7 +7,7 @@ import parse from 'autosuggest-highlight/parse';
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import { Cards } from 'scryfall-sdk';
-import { addCardByName as deckEditorAddCardByName } from '../../actions/deckEditorActions';
+import { addCardByNameAsync } from '../../actions/deckEditorActions';
 
 function renderInputComponent(inputProps: any) {
     const { classes, inputRef = () => ({}), ref, ...other } = inputProps;
@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface TypeAheadProps {
-    addCardByName: typeof deckEditorAddCardByName;
+    addCardByName: typeof addCardByNameAsync.request;
 }
 
 const TypeAhead: React.SFC<TypeAheadProps> = (props) => {
@@ -119,7 +119,7 @@ const TypeAhead: React.SFC<TypeAheadProps> = (props) => {
 
     const handleSubmit = () => (event: KeyboardEvent) => {
         if (event.key === 'Enter' && stateSuggestions.length === 0) {
-            addCardByName(state);
+            addCardByName({ name: state, sideboard: 0, quantity: 1 });
             setState('');
         }
     };

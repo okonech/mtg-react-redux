@@ -2,18 +2,14 @@ import React, { useEffect } from 'react';
 import { defaultMemoize } from 'reselect';
 import CardCustomDragLayer from '../containers/CardCustomDragLayer';
 import Player from '../containers/Player';
-import { GameState } from '../reducers/gameReducer';
+import { MappedPlayers } from '../containers/Players';
 import { setCardHeight } from '../util/cardSize';
 import LoadingSpinner from './LoadingSpinner';
 
-interface PlayersProps {
-    game: GameState;
+interface PlayersProps extends MappedPlayers {
     playerRows: number;
     playerCols: number;
     playersNum: number;
-    players: string[];
-    loading: boolean;
-    initPlayers: (game: GameState) => void;
 }
 
 const getPlayersStyle = defaultMemoize((props: PlayersProps): React.CSSProperties => {

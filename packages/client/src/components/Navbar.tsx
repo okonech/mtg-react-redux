@@ -3,15 +3,16 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { MappedNavBar } from '../containers/Navbar';
 import { BaseComponentProps } from '../util/styling';
 
-const styles = {
+const useStyles = makeStyles((theme) => ({
     grow: {
         flexGrow: 1
     },
@@ -19,15 +20,14 @@ const styles = {
         marginLeft: -12,
         marginRight: 10
     }
-};
+}));
 
-interface MenuProps extends WithStyles<typeof styles>, BaseComponentProps {
-    auth: any;
-    logOut: () => void;
+interface NavBarProps extends BaseComponentProps, MappedNavBar {
 }
 
-const Navbar = (props: MenuProps) => {
-    const { classes, style, auth, logOut } = props;
+const Navbar: React.SFC<NavBarProps> = (props) => {
+    const { style, auth, logout } = props;
+    const classes = useStyles({});
     const [anchorEl, updateAnchorEl] = useState<HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClose = () => updateAnchorEl(null);
@@ -76,7 +76,7 @@ const Navbar = (props: MenuProps) => {
                         <MenuItem component={RouterLink} to='/player'>
                             Profile
                         </MenuItem>
-                        <MenuItem component={RouterLink} to='/login' onClick={logOut}>
+                        <MenuItem component={RouterLink} to='/login' onClick={logout}>
                             Logout
                         </MenuItem>
                     </Menu>
@@ -86,4 +86,4 @@ const Navbar = (props: MenuProps) => {
     );
 };
 
-export default withStyles(styles)(Navbar);
+export default Navbar;
