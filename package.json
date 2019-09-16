@@ -9,8 +9,23 @@
   "devDependencies": {
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.2.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.2.0",
+    "@typescript-eslint/parser": "^2.2.0",
+    "@typescript-eslint/typescript-estree": "^2.2.0",
+    "eslint": "^6.4.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-eslint-plugin": "^2.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-standard": "^4.0.1",
     "husky": "^2.5.0",
-    "lerna": "^3.15.0"
+    "lerna": "^3.16.4",
+    "tslint": "^5.20.0",
+    "tslint-react": "^4.0.0",
+    "typescript": "^3.6.3"
   },
   "husky": {
     "hooks": {

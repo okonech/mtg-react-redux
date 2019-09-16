@@ -8,8 +8,8 @@ import { defaultMemoize } from 'reselect';
 import { getCardSizePx } from '../util/cardSize';
 import { noSelect } from '../util/styling';
 
-const styles = (theme: Theme) => {
-  return createStyles({
+const styles = (theme: Theme) =>
+  createStyles({
     main: {
       borderRadius: '5%',
       boxSizing: 'border-box',
@@ -29,7 +29,6 @@ const styles = (theme: Theme) => {
       backgroundColor: theme.palette.getContrastText(theme.palette.text.primary)
     }
   });
-};
 
 interface CardProps extends WithStyles<typeof styles> {
   opacity?: number;

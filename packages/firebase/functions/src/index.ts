@@ -7,5 +7,5 @@ import * as express from 'express';
 
 export const helloWorld = functions.https.onRequest((request, response) => {
     console.log('hello');
-    response.send("Hello from Firebase!");
+    response.send('Hello from Firebase!');
 });

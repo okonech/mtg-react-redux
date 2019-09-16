@@ -13,7 +13,7 @@ interface SelectableDragLayerProps {
 }
 
 const getStyle = (initialOffset: XYCoord, currentOffset: XYCoord,
-                  clientBounds: ClientRect | DOMRect): React.CSSProperties => {
+    clientBounds: ClientRect | DOMRect): React.CSSProperties => {
     const { x: initX, y: initY } = initialOffset;
     const { x: currX, y: currY } = currentOffset;
     const { left: clientLeft, top: clientTop, right: clientRight, bottom: clientBottom } = clientBounds;
@@ -41,9 +41,9 @@ const getStyle = (initialOffset: XYCoord, currentOffset: XYCoord,
 };
 
 // only wrapped components can be selected
-const WithSelectableDragLayer = <P extends object>(Component: React.ComponentType<P>) => {
+const WithSelectableDragLayer = <P extends object>(Component: React.ComponentType<P>) =>
 
-    return (props: P & SelectableDragLayerProps) => {
+    (props: P & SelectableDragLayerProps) => {
         const { isDragging, itemType, item, currentClientOffset, initialClientOffset } = props;
 
         if (!isDragging || !initialClientOffset) {
@@ -65,6 +65,5 @@ const WithSelectableDragLayer = <P extends object>(Component: React.ComponentTyp
             />
         );
     };
-};
 
 export default WithSelectableDragLayer;
