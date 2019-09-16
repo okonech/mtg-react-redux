@@ -5,8 +5,8 @@ import { Types } from './SelectableGroup';
 
 interface SelectableDragLayerProps {
     context?: SelectableContext;
-    initialClientOffset?: XYCoord;
-    currentClientOffset?: XYCoord;
+    initialClientOffset: XYCoord;
+    currentClientOffset: XYCoord;
     itemType: Identifier;
     isDragging: boolean;
     item: any;
@@ -18,12 +18,8 @@ const getStyle = (initialOffset: XYCoord, currentOffset: XYCoord,
     const { x: currX, y: currY } = currentOffset;
     const { left: clientLeft, top: clientTop, right: clientRight, bottom: clientBottom } = clientBounds;
 
-    // adjust selectable bound away from cursor during drag
-    // for anyone reading this, html5 dnd is terrible
-    const adj = (initY < currY) ? 1 : 0;
-
     const left = Math.max(Math.min(initX, currX), clientLeft);
-    const top = Math.max(Math.min(initY, currY) + adj, clientTop);
+    const top = Math.max(Math.min(initY, currY), clientTop);
     const right = Math.min(Math.max(initX, currX), clientRight);
     const bottom = Math.min(Math.max(initY, currY), clientBottom);
 
@@ -31,7 +27,8 @@ const getStyle = (initialOffset: XYCoord, currentOffset: XYCoord,
     const width = Math.abs(left - right);
 
     return {
-        position: 'absolute',
+        position: 'fixed',
+        pointerEvents: 'none',
         top,
         left,
         height: `${height}px`,

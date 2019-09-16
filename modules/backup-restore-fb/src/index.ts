@@ -14,7 +14,6 @@ const firestore = admin.firestore();
 const args = process.argv.slice(2);
 const jsonData = args[0];
 if (jsonData) {
-    // tslint:disable-next-line: no-var-requires
     const json = require(path.resolve(jsonData));
     performBatchWrite(json);
 }
