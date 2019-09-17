@@ -4,8 +4,10 @@ import {
     DragSource, DragSourceSpec, DropTarget, DropTargetSpec, XYCoord
 } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { defaultContext, SelectableContext, SelectableProvider } from './SelectableContext';
 import rectIntersect from './util/rectanglesIntersect';
+import { BaseComponentProps } from './util/styling';
+
+import { defaultContext, SelectableContext, SelectableProvider } from './SelectableContext';
 
 // draggable card component with id, key, x, y position
 
@@ -18,14 +20,17 @@ export interface DragSelectable {
     clientBounds: ClientRect | DOMRect;
 }
 
-interface SelectableGroupProps {
+interface SelectableGroupProps extends BaseComponentProps {
     tolerance?: number;
-    style?: React.CSSProperties;
-    className?: string;
     groupId: string;
     onSelectionFinish?: (ids: string[]) => void;
     onSelectionClear?: (ids: string[]) => void;
 }
+
+const defStyle: React.CSSProperties = {
+    height: '100%',
+    width: '100%'
+};
 
 const cardSource: DragSourceSpec<SelectableGroupProps, DragSelectable> = {
     beginDrag(props, monitor, dropTargetComponent): DragSelectable {
@@ -146,11 +151,11 @@ class SelectableGroup extends React.PureComponent<AllProps, SelectableContext> {
     }
 
     public render() {
-        const { connectDragSource, connectDropTarget, style, children, className } = this.props;
+        const { connectDragSource, connectDropTarget, style, children } = this.props;
         return (
             connectDragSource(
                 connectDropTarget(
-                    <div className={className} style={style} ref={this.selectableRef}>
+                    <div style={{ ...defStyle, ...style }} ref={this.selectableRef}>
                         <SelectableProvider value={this.state}>
                             {children}
                         </SelectableProvider>
@@ -162,11 +167,10 @@ class SelectableGroup extends React.PureComponent<AllProps, SelectableContext> {
 }
 
 export default DragSource<SelectableGroupProps, SelectableGroupSourceCollectedProps>(
-    Types.SELECTABLE, cardSource, (connect, monitor) => ({
+    Types.SELECTABLE, cardSource, (connect) => ({
         connectDragSource: connect.dragSource(),
         connectDragPreview: connect.dragPreview()
-    }))(
-        DropTarget(Types.SELECTABLE, battlefieldTarget, (connect, monitor) => ({
-            connectDropTarget: connect.dropTarget(),
-            offset: monitor.getClientOffset()
-        }))(SelectableGroup));
+    }))(DropTarget(Types.SELECTABLE, battlefieldTarget, (connect, monitor) => ({
+        connectDropTarget: connect.dropTarget(),
+        offset: monitor.getClientOffset()
+    }))(SelectableGroup));

@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import React from 'react';
 
 export interface SelectableContext {
     registry: Map<string, HTMLDivElement>;
@@ -14,7 +14,7 @@ export const defaultContext = () => ({
     selectableRef: document.createElement('div')
 });
 
-const { Provider, Consumer } = createContext<SelectableContext>(defaultContext());
+const { Provider, Consumer } = React.createContext<SelectableContext>(defaultContext());
 
 export const SelectableProvider = Provider;
 

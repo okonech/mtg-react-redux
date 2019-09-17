@@ -169,7 +169,7 @@ class Hand extends React.PureComponent<AllProps, HandState> {
 
     let indexShift = 0;
     let shownCount = 0;
-    const cards = zone.cards.reduce((acc, curr, idx) => {
+    const cards = zone.cards.reduce((acc, curr) => {
       acc.push(
         <DraggableCard
           id={curr.id}

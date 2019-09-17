@@ -166,7 +166,7 @@ class SelectableGroup extends React.PureComponent<AllProps, SelectableContext> {
 }
 
 export default DragSource<SelectableGroupProps, SelectableGroupSourceCollectedProps>(
-    Types.SELECTABLE, cardSource, (connect, monitor) => ({
+    Types.SELECTABLE, cardSource, (connect) => ({
         connectDragSource: connect.dragSource(),
         connectDragPreview: connect.dragPreview()
     }))(DropTarget(Types.SELECTABLE, battlefieldTarget, (connect, monitor) => ({
