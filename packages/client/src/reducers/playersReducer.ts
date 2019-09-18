@@ -1,6 +1,6 @@
-import produce from 'immer';
 import { combineReducers } from 'redux';
 import { PlayersAction } from '../actions/playersActions';
+import produce from 'immer';
 
 export interface PlayersState {
     playersById: PlayersById;
@@ -13,6 +13,7 @@ interface PlayersById {
 
 export interface Player {
     id: string;
+    dbId: string;
     name: string;
     life: number;
     poison: number;

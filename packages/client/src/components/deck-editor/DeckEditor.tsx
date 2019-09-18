@@ -10,6 +10,7 @@ import Colors from '../../containers/deck-editor/Colors';
 import Table from '../../containers/deck-editor/Table';
 import Title from '../../containers/deck-editor/Title';
 import Navbar from '../../containers/Navbar';
+import LoadingSpinner from '../LoadingSpinner';
 
 export const VIEWS = {
     table: 'Table',
@@ -27,6 +28,7 @@ export const CATEGORIES = {
 
 interface DeckEditorProps {
     editing: boolean;
+    loading: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -72,12 +74,18 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const DeckEditor: React.SFC<DeckEditorProps> = (props) => {
-    const { editing } = props;
+    const { editing, loading } = props;
     const classes = useStyles({});
     const theme = useTheme<Theme>();
     const smBreak = useMediaQuery(theme.breakpoints.only('sm'));
     const [view, setView] = React.useState<keyof typeof VIEWS>('links');
     const [category, setCategory] = React.useState<keyof typeof CATEGORIES>('type');
+
+    if (loading) {
+        return (
+            <LoadingSpinner />
+        );
+    }
 
     let viewEdit;
 

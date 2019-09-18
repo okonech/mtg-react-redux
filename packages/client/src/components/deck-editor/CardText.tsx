@@ -1,14 +1,14 @@
-import Link from '@material-ui/core/Link';
+import { BaseComponentProps } from '../../util/styling';
+import { CardModel } from '@mtg-react-redux/models';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import CardDisplay from '../CardDisplay';
+import Link from '@material-ui/core/Link';
+import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { CardModel } from '@mtg-react-redux/models';
-import React from 'react';
 import WithHover from '../../hocs/WithHover';
-import { BaseComponentProps } from '../../util/styling';
-import Card from '../Card';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         display: 'flex',
         whiteSpace: 'nowrap',
@@ -27,7 +27,7 @@ interface CardTextProps extends BaseComponentProps {
     isHovered?: boolean;
 }
 
-const HtmlTooltip = withStyles((theme) => ({
+const HtmlTooltip = withStyles(() => ({
     tooltip: {
         backgroundColor: 'transparent'
     }
@@ -42,12 +42,15 @@ const CardText: React.FC<CardTextProps> = (props) => {
             {<Typography className={classes.quant}>{quantity}</Typography>}
             <HtmlTooltip
                 title={
-                    <Card
+                    <CardDisplay
                         card={card}
+                        id={card.id}
                         selected={false}
                         selecting={false}
                         cardHeight={32}
                         isHovered={false}
+                        tapped={false}
+                        flipped={false}
                     />
                 }
                 placement='right'

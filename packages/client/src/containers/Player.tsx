@@ -1,11 +1,11 @@
-import { connect } from 'react-redux';
-import { updatePlayers } from '../actions/playersActions';
-import { selectCards } from '../actions/selectActions';
-import { moveCards, updateZones } from '../actions/zonesActions';
-import Player from '../components/Player';
 import { AppState } from '../reducers';
+import { connect } from 'react-redux';
+import { moveCards, updateZones } from '../actions/zonesActions';
 import { PlayerData, playerSelector } from '../selectors/player';
+import { selectCards } from '../actions/selectActions';
 import { selectedSelector } from '../selectors/selected';
+import { updatePlayers } from '../actions/playersActions';
+import Player from '../components/Player';
 
 export interface MappedPlayer {
     player?: PlayerData;

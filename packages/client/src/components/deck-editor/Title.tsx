@@ -1,15 +1,15 @@
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
+import { BaseComponentProps } from '../../util/styling';
+import { CardByName } from '../../actions/deckEditorActions';
+import { CATEGORIES, VIEWS } from './DeckEditor';
 import { makeStyles } from '@material-ui/core/styles';
+import { MappedTitle } from '../../containers/deck-editor/Title';
+import Button from '@material-ui/core/Button';
+import ConfirmationDialog from '../ConfirmationDialog';
+import ImportDialog from './ImportDialog';
+import Paper from '@material-ui/core/Paper';
+import React, { memo } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import React, { memo } from 'react';
-import { CardByName } from '../../actions/deckEditorActions';
-import { MappedTitle } from '../../containers/deck-editor/Title';
-import { BaseComponentProps } from '../../util/styling';
-import ConfirmationDialog from '../ConfirmationDialog';
-import { CATEGORIES, VIEWS } from './DeckEditor';
-import ImportDialog from './ImportDialog';
 import ViewDropdown from './ViewDropdown';
 
 const useStyles = makeStyles((theme) => ({
@@ -60,7 +60,6 @@ const Title: React.SFC<TitleProps> = (props) => {
 
     function handleSave() {
         const { editing: noUse, ...deck } = data;
-        console.log(deck);
         putDeck(deck);
         setEditing(!editing);
 
@@ -141,6 +140,4 @@ const Title: React.SFC<TitleProps> = (props) => {
     );
 };
 
-export default memo(Title, (prev, next) => {
-    return prev.data === next.data && prev.view === next.view && prev.category === next.category;
-});
+export default memo(Title, (prev, next) => prev.data === next.data && prev.view === next.view && prev.category === next.category);

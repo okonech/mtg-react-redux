@@ -1,7 +1,14 @@
+import { BaseComponentProps } from '../../util/styling';
+import { cardModelsMap } from '@mtg-react-redux/models';
+import { cardsSelector, CardsState, singleCardSelector } from '../../reducers/cardsReducer';
+import { DeckEditorRow } from '../../reducers/deckEditorReducer';
+import { getSorting, stableSort } from '../../util/ordering';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import { MappedTable } from '../../containers/deck-editor/Table';
 import Box from '@material-ui/core/Box';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import React, { memo } from 'react';
 import Switch from '@material-ui/core/Switch';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,16 +18,9 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
+import TypeAhead from './TypeAhead';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import useTheme from '@material-ui/styles/useTheme';
-import { CardModel } from '@mtg-react-redux/models';
-import React, { memo } from 'react';
-import { MappedTable } from '../../containers/deck-editor/Table';
-import { cardsSelector, CardsState, singleCardSelector } from '../../reducers/cardsReducer';
-import { DeckEditorRow } from '../../reducers/deckEditorReducer';
-import { getSorting, stableSort } from '../../util/ordering';
-import { BaseComponentProps } from '../../util/styling';
-import TypeAhead from './TypeAhead';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -109,9 +109,9 @@ const EnhancedTableHead: React.FC<TableHeadProps> = (props) => {
     );
 };
 
-const MemoizedHeader = memo(EnhancedTableHead, (prev, next) => {
-    return prev.order === next.order && prev.orderBy === next.orderBy;
-});
+const MemoizedHeader = memo(EnhancedTableHead, (prev, next) =>
+    prev.order === next.order && prev.orderBy === next.orderBy
+);
 
 interface EnhancedTableToolbarProps {
     dense: boolean;
@@ -146,9 +146,9 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     );
 };
 
-const MemoizedToolbar = memo(EnhancedTableToolbar, (prev, next) => {
-    return prev.dense === next.dense && prev.editing === next.editing;
-});
+const MemoizedToolbar = memo(EnhancedTableToolbar, (prev, next) =>
+    prev.dense === next.dense && prev.editing === next.editing
+);
 
 interface EnhancedTableRowProps {
     xsRow: boolean;
@@ -169,7 +169,7 @@ const EnhancedTableRow: React.FC<EnhancedTableRowProps> = (props) => {
         }
     };
 
-    const cardModel = new CardModel(singleCardSelector(cards, data.id));
+    const cardModel = cardModelsMap.getModel(singleCardSelector(cards, data.id));
 
     if (editing) {
         return (
@@ -231,9 +231,9 @@ const EnhancedTableRow: React.FC<EnhancedTableRowProps> = (props) => {
     );
 };
 
-const MemoizedRow = memo(EnhancedTableRow, (prev, next) => {
-    return prev.data === next.data && prev.editing === next.editing && prev.xsRow === next.xsRow;
-});
+const MemoizedRow = memo(EnhancedTableRow, (prev, next) =>
+    prev.data === next.data && prev.editing === next.editing && prev.xsRow === next.xsRow
+);
 
 interface TableProps extends BaseComponentProps, MappedTable {
 }
@@ -254,7 +254,7 @@ const EnhancedTable: React.FC<TableProps> = (props) => {
     }
 
     const tableCards: TableRow[] = cardsSelector(cardData, Object.keys(cardList)).map((card) => {
-        const model = new CardModel(card);
+        const model = cardModelsMap.getModel(card);
         return {
             id: model.id,
             name: model.name(),
@@ -289,8 +289,8 @@ const EnhancedTable: React.FC<TableProps> = (props) => {
                         />
                         <TableBody>
                             {stableSort(tableCards, getSorting(order, orderBy))
-                                .map((row) => {
-                                    return (
+                                .map((row) =>
+                                    (
                                         <TableRow
                                             hover={true}
                                             tabIndex={-1}
@@ -304,8 +304,8 @@ const EnhancedTable: React.FC<TableProps> = (props) => {
                                                 cards={cardData}
                                             />
                                         </TableRow>
-                                    );
-                                })}
+                                    )
+                                )}
                         </TableBody>
                     </Table>
                 </div>

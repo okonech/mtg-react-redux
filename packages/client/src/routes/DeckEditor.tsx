@@ -1,19 +1,18 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
-import { getDeckAsync } from '../actions/deckEditorActions';
-import DeckEditor from '../containers/deck-editor/DeckEditor';
 import { AppState } from '../reducers';
+import { connect } from 'react-redux';
+import { getDeckLoadCardsAsync } from '../actions/deckEditorActions';
+import { RouteComponentProps } from 'react-router';
+import DeckEditor from '../containers/deck-editor/DeckEditor';
+import React from 'react';
 
 interface DeckEditorRouteProps extends RouteComponentProps {
     id: string;
-    getDeck: typeof getDeckAsync.request;
+    getDeck: typeof getDeckLoadCardsAsync.request;
 }
 
 const DeckEditorRoute: React.FC<DeckEditorRouteProps> = (props) => {
     const { id, match, getDeck } = props;
     if (id !== (match.params as any).id) {
-        console.log('dispatch');
         getDeck((match.params as any).id);
     }
     return (
@@ -21,14 +20,13 @@ const DeckEditorRoute: React.FC<DeckEditorRouteProps> = (props) => {
     );
 };
 
-const mapStateToProps = (state: AppState) => {
-    return {
+const mapStateToProps = (state: AppState) =>
+    ({
         id: state.deckEditor.id
-    };
-};
+    });
 
 const mapDispatchToProps = {
-    getDeck: getDeckAsync.request
+    getDeck: getDeckLoadCardsAsync.request
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeckEditorRoute);

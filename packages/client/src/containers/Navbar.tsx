@@ -8,11 +8,10 @@ export interface MappedNavBar {
     logout: typeof logoutAsync.request;
 }
 
-const mapStateToProps = (state: AppState) => {
-    return {
+const mapStateToProps = (state: AppState) =>
+    ({
         auth: state.firebase.auth
-    };
-};
+    });
 
 const mapDispatchToProps = {
     logout: logoutAsync.request

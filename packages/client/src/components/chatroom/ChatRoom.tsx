@@ -1,10 +1,11 @@
-import { IconButton, TextField } from '@material-ui/core';
+import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
-import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
-import SendIcon from '@material-ui/icons/Send';
 import React from 'react';
+import SendIcon from '@material-ui/icons/Send';
+import TextField from '@material-ui/core/TextField';
 
 /* ----------------- */
 const styles = (theme: Theme) =>

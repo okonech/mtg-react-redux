@@ -1,17 +1,15 @@
-import { connect } from 'react-redux';
 import { addCardByNameAsync, removeCards, updateCards } from '../../actions/deckEditorActions';
-import Table from '../../components/deck-editor/Table';
 import { AppState } from '../../reducers';
 import { CardsState } from '../../reducers/cardsReducer';
+import { connect } from 'react-redux';
 import { DeckEditorState } from '../../reducers/deckEditorReducer';
+import Table from '../../components/deck-editor/Table';
 
-const mapStateToProps = (state: AppState) => {
-    return {
+const mapStateToProps = (state: AppState) => ({
         cardList: state.deckEditor.cards,
         cardData: state.cards,
         editing: state.deckEditor.editing
-    };
-};
+    });
 
 export interface MappedTable {
     cardList: DeckEditorState['cards'];

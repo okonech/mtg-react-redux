@@ -1,19 +1,19 @@
-import { createSelector } from 'reselect';
 import { AppState } from '../reducers';
-import { Card, CardsState } from '../reducers/cardsReducer';
-import { singleCardSelector } from '../reducers/cardsReducer';
-import { CardsSettings, CardsSettingsState } from '../reducers/cardsSettingsStateReducer';
+import { CardPrimitive, GameCardPrimitive } from '@mtg-react-redux/models';
+import { CardsState, singleCardSelector } from '../reducers/cardsReducer';
+import { createSelector } from 'reselect';
+import { GameCardsState, singleGameCardSelector } from '../reducers/gameCardsReducer';
 import { singlePlayerSelector } from '../reducers/playersReducer';
 import { Zone } from '../reducers/zonesReducer';
 
-export interface CardZone {
+export interface GameCardZone {
     id: string;
-    cards: Card[];
+    cards: GameCardData[];
 }
 
-export interface CardCoordZone {
-    id: string;
-    cards: Array<Card & CardsSettings>;
+interface GameCardData {
+    card: CardPrimitive;
+    gameCard: GameCardPrimitive;
 }
 
 export interface PlayerData {
@@ -21,17 +21,17 @@ export interface PlayerData {
     name: string;
     life: number;
     poison: number;
-    library: CardZone;
-    hand: CardZone;
-    battlefield: CardCoordZone;
-    graveyard: CardZone;
-    exile: CardZone;
+    library: GameCardZone;
+    hand: GameCardZone;
+    battlefield: GameCardZone;
+    graveyard: GameCardZone;
+    exile: GameCardZone;
 }
 
 const getZones = (state: AppState) => state.zones;
 const getCards = (state: AppState) => state.cards;
+const getGameCards = (state: AppState) => state.gameCards;
 const getPlayer = (state: AppState, playerId: string) => singlePlayerSelector(state.players, playerId);
-const getCardsSettings = (state: AppState) => state.cardsSettingsState;
 
 const getPlayerZones = createSelector(
     [getPlayer, getZones],
@@ -45,25 +45,29 @@ const getPlayerZones = createSelector(
     })
 );
 
-const mapZoneToCards = (zone: Zone, cardState: CardsState): CardZone => ({
+const mapZoneToCards = (zone: Zone, cardsState: CardsState, gameCardsState: GameCardsState): GameCardZone => ({
     id: zone.id,
-    cards: zone.cards.map((cardId) => singleCardSelector(cardState, cardId))
+    cards: mapIdsToGameCardData(zone.cards, cardsState, gameCardsState)
 });
 
-const mapZoneToCoordCards = (zone: Zone, cardState: CardsState,
-    cardsSettingsState: CardsSettingsState): CardCoordZone => ({
-        id: zone.id,
-        cards: zone.cards.map((cardId) => ({ ...singleCardSelector(cardState, cardId), ...cardsSettingsState[cardId] }))
+export const mapIdsToGameCardData = (ids: string[], cardsState: CardsState, gameCardsState: GameCardsState): GameCardData[] =>
+    ids.map((cardId) => {
+        const gameCard = singleGameCardSelector(gameCardsState, cardId);
+        const card = singleCardSelector(cardsState, gameCard.dbId);
+        return {
+            card,
+            gameCard
+        };
     });
 
 export const playerSelector = createSelector(
-    [getPlayerZones, getCards, getCardsSettings],
-    (player, cards, cardsSettings): PlayerData => ({
+    [getPlayerZones, getCards, getGameCards],
+    (player, cards, gameCards): PlayerData => ({
         ...player,
-        library: mapZoneToCards(player.library, cards),
-        hand: mapZoneToCards(player.hand, cards),
-        battlefield: mapZoneToCoordCards(player.battlefield, cards, cardsSettings),
-        graveyard: mapZoneToCards(player.graveyard, cards),
-        exile: mapZoneToCards(player.exile, cards)
+        library: mapZoneToCards(player.library, cards, gameCards),
+        hand: mapZoneToCards(player.hand, cards, gameCards),
+        battlefield: mapZoneToCards(player.battlefield, cards, gameCards),
+        graveyard: mapZoneToCards(player.graveyard, cards, gameCards),
+        exile: mapZoneToCards(player.exile, cards, gameCards)
     })
 );

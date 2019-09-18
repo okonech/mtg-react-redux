@@ -1,7 +1,7 @@
 import { CardPrimitive } from '@mtg-react-redux/models';
-import produce from 'immer';
-import { getType } from 'typesafe-actions';
 import { CardsAction, cardsAsync } from '../actions/cardsActions';
+import { getType } from 'typesafe-actions';
+import produce from 'immer';
 
 // Normalized cards store as object of 
 // cards: {unique card id: Card}

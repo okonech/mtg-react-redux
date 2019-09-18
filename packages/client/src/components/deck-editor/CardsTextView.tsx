@@ -1,14 +1,14 @@
-import { Box, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { CardsState } from '../../reducers/cardsReducer';
-import { DeckEditorState } from '../../reducers/deckEditorReducer';
-import { cardListToGroupedModelsSb, groupQuantitySum, rowQuantity } from '../../util/card';
 import { BaseComponentProps } from '../../util/styling';
+import { Box, Typography } from '@material-ui/core';
+import { cardListToGroupedModelsSb, groupQuantitySum, rowQuantity } from '../../util/card';
+import { CardsState } from '../../reducers/cardsReducer';
+import { CATEGORIES } from './DeckEditor';
+import { DeckEditorState } from '../../reducers/deckEditorReducer';
+import { makeStyles } from '@material-ui/core/styles';
 import CardText from './CardText';
 import CardTextList from './CardTextList';
-import { CATEGORIES } from './DeckEditor';
 import MasonryView from './MasonryView';
+import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
     group: {
@@ -35,13 +35,13 @@ interface LinksViewProps extends BaseComponentProps {
     category: keyof typeof CATEGORIES;
 }
 
-const LinksView: React.FC<LinksViewProps> = (props) => {
+const CardsTextView: React.FC<LinksViewProps> = (props) => {
     const classes = useStyles({});
     const { cardList, cardData, category } = props;
 
     const groupedModels = cardListToGroupedModelsSb(cardList, cardData, category);
 
-    const items = Object.keys(groupedModels).map((groupName) => {
+    const items = Object.keys(groupedModels).sort().map((groupName) => {
         const quantSum = groupQuantitySum(groupedModels[groupName].map((cardModel) => cardList[cardModel.id]), groupName);
         return (
             <Box
@@ -53,7 +53,7 @@ const LinksView: React.FC<LinksViewProps> = (props) => {
                     <Typography variant='subtitle1'>{`(${quantSum})`}</Typography>
                 </Box>
                 <CardTextList>
-                    {groupedModels[groupName].map((cardModel) => {
+                    {groupedModels[groupName].sort((a, b) => a.name().localeCompare(b.name())).map((cardModel) => {
                         const quantity = rowQuantity(cardList[cardModel.id], groupName);
                         return (
                             <CardText
@@ -74,4 +74,4 @@ const LinksView: React.FC<LinksViewProps> = (props) => {
     );
 };
 
-export default LinksView;
+export default CardsTextView;

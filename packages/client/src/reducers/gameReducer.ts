@@ -1,5 +1,5 @@
-import produce from 'immer';
 import { GameAction } from '../actions/gameActions';
+import produce from 'immer';
 
 export interface GameState {
     id: string;

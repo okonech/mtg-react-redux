@@ -2,10 +2,7 @@ import {
     createStyles, StepButton, StepConnector, StepIcon, StepLabel,
     SvgIcon, withStyles, WithStyles
 } from '@material-ui/core';
-import Step from '@material-ui/core/Step';
-import Stepper from '@material-ui/core/Stepper';
 import { Theme } from '@material-ui/core/styles';
-import React from 'react';
 import AttackSvg from './svg/AttackSvg';
 import BlockSvg from './svg/BlockSvg';
 import DamageSvg from './svg/DamageSvg';
@@ -13,12 +10,14 @@ import DrawSvg from './svg/DrawSvg';
 import EndCombatSvg from './svg/EndCombatSvg';
 import EndSvg from './svg/EndSvg';
 import MainSvg from './svg/MainSvg';
+import React from 'react';
 import StartCombatSvg from './svg/StartCombatSvg';
+import Step from '@material-ui/core/Step';
+import Stepper from '@material-ui/core/Stepper';
 import UntapSvg from './svg/UntapSvg';
 import UpkeepSvg from './svg/UpkeepSvg';
 
-const styles = (theme: Theme) => {
-    return createStyles({
+const styles = (theme: Theme) => createStyles({
         main: {
             height: '100%',
             paddingLeft: '12px'
@@ -52,7 +51,6 @@ const styles = (theme: Theme) => {
             minHeight: '0px'
         }
     });
-};
 
 function getSteps() {
     return [
@@ -135,9 +133,7 @@ const TurnPhases = (props: TurnPhasesProps) => {
         }
     };
 
-    const turnSteps = steps.map((label, index) => {
-
-        return (
+    const turnSteps = steps.map((label, index) => (
             <Step key={label}>
                 <StepButton
                     onClick={handleStep(index)}
@@ -155,8 +151,7 @@ const TurnPhases = (props: TurnPhasesProps) => {
                     </StepLabel>
                 </StepButton>
             </Step>
-        );
-    });
+        ));
 
     return (
         <Stepper

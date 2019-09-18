@@ -18,13 +18,19 @@
     },
     "plugins": [
         "eslint-plugin",
+        "sort-imports-es6-autofix",
         "@typescript-eslint",
         "@typescript-eslint/tslint",
         "import"
     ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
-        "@typescript-eslint/array-type": "error",
+        "@typescript-eslint/array-type": [
+            "error",
+            {
+                "default": "array-simple"
+            }
+        ],
         "@typescript-eslint/ban-types": "error",
         "@typescript-eslint/camelcase": "off",
         "@typescript-eslint/class-name-casing": "error",
@@ -50,6 +56,7 @@
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
+        "@typescript-eslint/require-await": "off",
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/unified-signatures": "error",
         "arrow-body-style": "error",
@@ -70,6 +77,7 @@
         "new-parens": "error",
         "no-bitwise": "error",
         "no-caller": "error",
+        "no-case-declarations": "off",
         "no-cond-assign": "error",
         "no-console": "off",
         "no-debugger": "error",
@@ -92,6 +100,19 @@
         "radix": "error",
         "react/display-name": "off",
         "react/prop-types": "off",
+        "sort-imports-es6-autofix/sort-imports-es6": [
+            2,
+            {
+                "ignoreCase": true,
+                "ignoreMemberSort": false,
+                "memberSyntaxSortOrder": [
+                    "none",
+                    "all",
+                    "multiple",
+                    "single"
+                ]
+            }
+        ],
         "use-isnan": "error",
         "valid-typeof": "off",
         "@typescript-eslint/tslint/config": [
@@ -151,14 +172,6 @@
                     "only-arrow-functions": [
                         true,
                         "allow-declarations"
-                    ],
-                    "ordered-imports": [
-                        true,
-                        {
-                            "import-sources-order": "case-insensitive",
-                            "module-source-path": "full",
-                            "named-imports-order": "case-insensitive"
-                        }
                     ],
                     "quotemark": [
                         true,

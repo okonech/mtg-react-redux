@@ -7,6 +7,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import MultiBackend, { TouchTransition } from 'react-dnd-multi-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import DecksList from './components/deck-editor/DecksList';
 import DeckEditor from './routes/DeckEditor';
 import FourPlayerGame from './routes/FourPlayerGame';
 import FourPlayerGameOther from './routes/FourPlayerGameOther';
@@ -52,6 +53,7 @@ class App extends Component {
             <Route exact={true} path='/login' component={Login} />
             <Route exact={true} path='/signup' component={Signup} />
             <PrivateRoute exact={true} path='/' component={LoggedInLandingPage} />
+            <PrivateRoute exact={true} path='/deck-editor' component={DecksList} />
             <PrivateRoute path='/deck-editor/:id' component={DeckEditor} />
             <PrivateRoute path='/test-game' component={SinglePlayerGame} />
             <PrivateRoute path='/test-two-player-game' component={TwoPlayerGame} />

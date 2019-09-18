@@ -5,7 +5,8 @@
     "scripts": {
         "build": "npm run compile",
         "lint": "tslint -c tslint.json src/**/*",
-        "compile": "tsc"
+        "compile": "tsc",
+        "watch": "tsc -w"
     },
     "main": "./dist/index",
     "types": "./dist/index",

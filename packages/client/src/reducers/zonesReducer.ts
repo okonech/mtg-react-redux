@@ -1,5 +1,5 @@
-import produce from 'immer';
 import { MoveCardsAction, ZonesAction } from '../actions/zonesActions';
+import produce from 'immer';
 
 // Normalized zone store as object of {unique zone id: array of card ids}
 // No allIds since full list of zones is never enumerated, only known list of zone ids are passed
@@ -26,15 +26,15 @@ export default function zonesReducer(state: ZonesState = {}, action: ZoneActions
                 action.payload.ids.forEach((id) => delete draft[id]);
                 break;
             case 'MOVE_CARDS':
-                const { fromZone, cards, toIdx, toZone } = action.payload;
+                const { fromZone, ids, toIdx, toZone } = action.payload;
                 const delCards = draft[fromZone].cards;
-                cards.forEach((card) => {
-                    const idx = delCards.indexOf(card);
+                ids.forEach((cardId) => {
+                    const idx = delCards.indexOf(cardId);
                     if (idx > -1) {
                         delCards.splice(idx, 1);
                     }
                 });
-                draft[toZone].cards.splice(toIdx, 0, ...cards.filter((card) => !(draft[toZone].cards.includes(card))));
+                draft[toZone].cards.splice(toIdx, 0, ...ids.filter((card) => !(draft[toZone].cards.includes(card))));
                 break;
             default:
                 break;

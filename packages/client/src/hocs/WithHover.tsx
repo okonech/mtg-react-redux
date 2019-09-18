@@ -1,6 +1,6 @@
 import React from 'react';
 
-const WithHover = <P extends {}>(Component: React.ComponentType<P>) =>
+const WithHover = <P extends Omit<{}, 'isHovered'>>(Component: React.ComponentType<P>) =>
     class WithHoverHoc extends React.PureComponent<P & { isHovered?: boolean }> {
         public state = {
             isHovered: false

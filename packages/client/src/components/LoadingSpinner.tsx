@@ -1,32 +1,26 @@
-import { CircularProgress, createStyles } from '@material-ui/core';
+import { createStyles, Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Theme } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import React from 'react';
 
-const styles = (theme: Theme) => {
-    return createStyles({
-        main: {
-            display: 'grid',
-            gridTemplateRows: `1fr`,
-            height: '100%',
-            width: '100%'
-        },
-        container: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            width: '100%',
-            backgroundColor: theme.palette.background.default
-        }
-    });
-};
+const styles = (theme: Theme) => createStyles({
+    main: {
+        display: 'grid',
+        gridTemplateRows: `1fr`,
+        height: '100%',
+        width: '100%'
+    },
+    container: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        width: '100%',
+        backgroundColor: theme.palette.background.default
+    }
+});
 
-interface LoadingSpinnerProps extends WithStyles<typeof styles> {
-
-}
-
-const LoadingSpinner = (props: LoadingSpinnerProps) => {
+const LoadingSpinner = (props: WithStyles<typeof styles>) => {
     const { classes } = props;
 
     return (

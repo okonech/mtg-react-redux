@@ -1,13 +1,13 @@
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import { CardModelImpl } from '@mtg-react-redux/models/dist/Card';
-import React, { memo, useState } from 'react';
-import { Hint, RadialChart } from 'react-vis';
+import { BaseComponentProps, MTG_COLORS } from '../../util/styling';
+import { CardModel } from '@mtg-react-redux/models';
 import { CardsState } from '../../reducers/cardsReducer';
 import { DeckEditorState } from '../../reducers/deckEditorReducer';
 import { getModelsForCards, groupCardsByCategory, groupQuantitySum } from '../../util/card';
-import { BaseComponentProps, MTG_COLORS } from '../../util/styling';
+import { Hint, RadialChart } from 'react-vis';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import React, { memo, useState } from 'react';
+import Typography from '@material-ui/core/Typography';
 
 interface StatsProps extends BaseComponentProps {
     cardList: DeckEditorState['cards'];
@@ -69,7 +69,7 @@ const ColorRadial: React.SFC<StatsProps> = (props) => {
     const nonLandModels = Object.keys(nonland).reduce((acc, curr) => {
         acc.splice(acc.length, 0, ...nonland[curr]);
         return acc;
-    }, new Array<CardModelImpl>());
+    }, new Array<CardModel>());
     const colorModels = { ...groupCardsByCategory(nonLandModels, 'color'), Land };
     const colorsCounts = Object.keys(colorModels).reduce((acc, curr) => {
         acc[curr] = groupQuantitySum(colorModels[curr].map((cardModel) => cardList[cardModel.id]), curr);
@@ -121,6 +121,6 @@ const Colors: React.FC<StatsProps> = (props) => {
     );
 };
 
-export default memo(Colors, (prev, next) => {
-    return prev.cardList === next.cardList && prev.cardData === next.cardData;
-});
+export default memo(Colors, (prev, next) =>
+    prev.cardList === next.cardList && prev.cardData === next.cardData
+);

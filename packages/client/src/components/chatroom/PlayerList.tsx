@@ -1,6 +1,6 @@
 import { Badge, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
 import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
 import React from 'react';
 
 /* ----------------- */

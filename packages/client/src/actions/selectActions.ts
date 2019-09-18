@@ -2,7 +2,7 @@
 export interface SelectCardsAction {
     type: 'SELECT_CARDS';
     payload: {
-        cards: string[]
+        cards: string[];
     };
 }
 

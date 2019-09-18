@@ -24,13 +24,17 @@ look into svg sprites for the mana symbols - retrieve from scryfall
 
 fix material ui imports to specific paths rather than from core
 
-fix selectable module selectcontext, source-map-explorer has it as over 1mb
-
 make all hocs omit wrapped props. Copy react-redux's connect function
-
-export deck to firebase as just {id, quant, sb, owned}. Id is unique per set
 
 
 calculate proper top height for cards and stop using vh. Then have top level listener (players) listen for window resize and  adjust card size
 
-cards in decks need specific ids to handle multiples. USe card game data for this
+cards in decks need specific ids to handle multiples. Use card game data for this
+
+Profile
+let users edit username on profile page. Signup with google should set displayname as username.
+preferences:
+    Let users choose preferred layout for 3 and 4 player games
+
+Game state: must have local option for loading entire replay.
+See about saving off firebase cloud messages for proper replay stuff- it allows for player only or judge style replays

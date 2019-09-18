@@ -12,7 +12,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { MappedNavBar } from '../containers/Navbar';
 import { BaseComponentProps } from '../util/styling';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     grow: {
         flexGrow: 1
     },

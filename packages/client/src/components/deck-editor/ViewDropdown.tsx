@@ -1,7 +1,7 @@
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import React from 'react';
 import { CATEGORIES, VIEWS } from './DeckEditor';
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
 
 interface ViewDropDownProps {
     view: keyof typeof VIEWS;
@@ -10,7 +10,7 @@ interface ViewDropDownProps {
     setCategory: React.Dispatch<React.SetStateAction<keyof typeof CATEGORIES>>;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     menu: {
         width: 200
     }
