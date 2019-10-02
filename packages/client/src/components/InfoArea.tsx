@@ -1,6 +1,6 @@
 import { BaseComponentProps } from '../util/styling';
 import { createStyles } from '@material-ui/core';
-import { moveCards as moveCardsType } from '../actions/zonesActions';
+import { moveCards as moveCardsType } from '../actions/gameCardsActions';
 import { PlayerData } from '../selectors/player';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { Theme } from '@material-ui/core/styles';

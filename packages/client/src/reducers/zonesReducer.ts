@@ -1,4 +1,6 @@
-import { MoveCardsAction, ZonesAction } from '../actions/zonesActions';
+import { ActionType, getType } from 'typesafe-actions';
+import { addZones, deleteZones, updateZones, ZonesAction } from '../actions/zonesActions';
+import { moveCards } from '../actions/gameCardsActions';
 import produce from 'immer';
 
 // Normalized zone store as object of {unique zone id: array of card ids}
@@ -13,19 +15,19 @@ export interface Zone {
     cards: string[];
 }
 
-type ZoneActions = ZonesAction | MoveCardsAction;
+type ZoneActions = ZonesAction | ActionType<typeof moveCards>;
 
 export default function zonesReducer(state: ZonesState = {}, action: ZoneActions) {
     return produce(state, (draft) => {
         switch (action.type) {
-            case 'ADD_ZONES':
-            case 'UPDATE_ZONES':
-                action.payload.items.forEach((zone) => draft[zone.id] = zone);
+            case getType(addZones):
+            case getType(updateZones):
+                action.payload.forEach((zone) => draft[zone.id] = zone);
                 break;
-            case 'DELETE_ZONES':
-                action.payload.ids.forEach((id) => delete draft[id]);
+            case getType(deleteZones):
+                action.payload.forEach((id) => delete draft[id]);
                 break;
-            case 'MOVE_CARDS':
+            case getType(moveCards):
                 const { fromZone, ids, toIdx, toZone } = action.payload;
                 const delCards = draft[fromZone].cards;
                 ids.forEach((cardId) => {

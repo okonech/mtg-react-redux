@@ -1,12 +1,12 @@
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import { BaseComponentProps } from '../util/styling';
 import { defaultMemoize } from 'reselect';
+import { getCardSizeVh } from '../util/cardSize';
+import { makeStyles } from '@material-ui/core/styles';
+import { MappedPlayer } from '../containers/Player';
 import BattleField from '../containers/BattleField';
 import Hand from '../containers/Hand';
-import { MappedPlayer } from '../containers/Player';
-import { getCardSizeVh } from '../util/cardSize';
-import { BaseComponentProps } from '../util/styling';
 import InfoArea from './InfoArea';
+import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,7 +30,7 @@ const grid = defaultMemoize((cardHeight: number, style: React.CSSProperties): Re
 }));
 
 const Player: React.FC<PlayerProps> = (props) => {
-    const { player, moveCards, selectCards, selected, style } = props;
+    const { player, moveCards, selectCards, flipCards, tapCards, selected, style } = props;
     const { hand, battlefield, library } = player;
     const classes = useStyles({});
 
@@ -50,6 +50,8 @@ const Player: React.FC<PlayerProps> = (props) => {
                 zone={battlefield}
                 moveCards={moveCards}
                 selectCards={selectCards}
+                flipCards={flipCards}
+                tapCards={tapCards}
                 key={battlefield.id}
                 selected={selected}
                 cardHeight={cardHeight}

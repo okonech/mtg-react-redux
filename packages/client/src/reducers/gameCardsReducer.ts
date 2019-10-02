@@ -1,7 +1,6 @@
-import { addCards, deleteCards, GameCardsAction, updateCards } from '../actions/gameCardsActions';
+import { addCards, deleteCards, flipCards, GameCardsAction, moveCards, tapCards, updateCards } from '../actions/gameCardsActions';
 import { GameCardPrimitive } from '@mtg-react-redux/models';
 import { getType } from 'typesafe-actions';
-import { MoveCardsAction } from '../actions/zonesActions';
 import produce from 'immer';
 
 // Normalized cards store as object of 
@@ -14,7 +13,7 @@ export interface GameCardsState {
 
 const def = {};
 
-export default function gameCardsReducer(state: GameCardsState = def, action: GameCardsAction | MoveCardsAction): GameCardsState {
+export default function gameCardsReducer(state: GameCardsState = def, action: GameCardsAction): GameCardsState {
     return produce(state, (draft) => {
         switch (action.type) {
             case getType(addCards):
@@ -24,12 +23,18 @@ export default function gameCardsReducer(state: GameCardsState = def, action: Ga
             case getType(deleteCards):
                 action.payload.forEach((card) => delete draft[card.id]);
                 break;
-            case 'MOVE_CARDS':
+            case getType(moveCards):
                 const { ids, xCoord, yCoord } = action.payload;
                 ids.reverse().forEach((cardId, idx) => {
                     draft[cardId].x = xCoord + idx * 10;
                     draft[cardId].y = yCoord + idx * 10;
                 });
+                break;
+            case getType(tapCards):
+                action.payload.forEach((id) => draft[id].tappped = !draft[id].tappped);
+                break;
+            case getType(flipCards):
+                action.payload.forEach((id) => draft[id].flipped = !draft[id].flipped);
                 break;
             default:
                 break;

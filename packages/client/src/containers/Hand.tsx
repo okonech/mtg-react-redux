@@ -5,7 +5,7 @@ import { createStyles } from '@material-ui/core/styles';
 import { findDOMNode } from 'react-dom';
 import { gameCardModelsMap } from '@mtg-react-redux/models';
 import { GameCardZone } from '../selectors/player';
-import { moveCards as moveCardsType } from '../actions/zonesActions';
+import { moveCards as moveCardsType } from '../actions/gameCardsActions';
 import { placeholderPrimitive } from '../util/card';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { Theme } from '@material-ui/core/styles';

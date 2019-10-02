@@ -1,12 +1,12 @@
 import * as React from 'react';
+import { BaseComponentProps } from '../../util/styling';
 import {
     ConnectDragPreview, ConnectDragSource, ConnectDropTarget,
     DragSource, DragSourceSpec, DropTarget, DropTargetSpec, XYCoord
 } from 'react-dnd';
+import { defaultContext, SelectableContext, SelectableProvider } from './SelectableContext';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import rectIntersect from '../../util/rectanglesIntersect';
-import { BaseComponentProps } from '../../util/styling';
-import { defaultContext, SelectableContext, SelectableProvider } from './SelectableContext';
 
 // draggable card component with id, key, x, y position
 

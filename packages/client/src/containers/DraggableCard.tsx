@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceSpec } from 'react-dnd';
 import { defaultMemoize } from 'reselect';
+import { flipCards as flipCardsType, tapCards as tapCardsType } from '../actions/gameCardsActions';
 import { GameCardModel } from '@mtg-react-redux/models';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { selectCards as selectCardsType } from '../actions/selectActions';
@@ -76,6 +77,8 @@ interface DraggableCardProps {
   zoneId: string;
   selectedCards: string[];
   selectCards: typeof selectCardsType;
+  flipCards?: typeof flipCardsType;
+  tapCards?: typeof tapCardsType;
   cardHeight: number;
   xCoord?: number;
   yCoord?: number;
@@ -120,21 +123,27 @@ class DraggableCard extends React.PureComponent<AllProps> {
   public render() {
     const {
       card, connectDragSource, selectedCards, selecting, selectableRef,
-      cardHeight, xCoord, yCoord, id, isHovered
+      cardHeight, xCoord, yCoord, id, isHovered, tapCards, flipCards
     } = this.props;
+    const selected = selectedCards.includes(id);
+
+    const doubleClick = tapCards ? () => tapCards(selected ? selectedCards : [card.id]) : null;
+    const rightClick = flipCards ? () => flipCards(selected ? selectedCards : [card.id]) : null;
 
     return (
       connectDragSource(
         <div
           // handles drag transform in non list areas
           style={dragCardStyle(xCoord, yCoord, cardHeight)}
+          onDoubleClick={doubleClick}
+          onContextMenu={rightClick}
           ref={selectableRef}
         >
           <Card
             key={'card' + id}
             card={card}
             // this can cause chrome to not drag
-            selected={selectedCards.includes(id)}
+            selected={selected}
             selecting={selecting}
             cardHeight={cardHeight}
             isHovered={isHovered}
