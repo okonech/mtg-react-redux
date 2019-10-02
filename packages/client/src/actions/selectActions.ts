@@ -1,16 +1,5 @@
+import { ActionType, createStandardAction } from 'typesafe-actions';
 
-export interface SelectCardsAction {
-    type: 'SELECT_CARDS';
-    payload: {
-        cards: string[];
-    };
-}
+export const selectCards = createStandardAction('select/SELECT_CARDS')<string[]>();
 
-export function selectCards(cards: string[]): SelectCardsAction {
-    return {
-        type: 'SELECT_CARDS',
-        payload: {
-            cards
-        }
-    };
-}
+export type SelectAction = ActionType<typeof selectCards>;

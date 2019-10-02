@@ -1,7 +1,7 @@
-import deepFreeze from 'deep-freeze';
 import { addPlayers, deletePlayers, updatePlayers } from '../../actions/playersActions';
-import playersReducer from '../../reducers/playersReducer';
 import { allPlayersSelector, Player, PlayersState, singlePlayerSelector } from '../../reducers/playersReducer';
+import deepFreeze from 'deep-freeze';
+import playersReducer from '../../reducers/playersReducer';
 
 let state: PlayersState = {
     playerIds: [],
@@ -10,6 +10,7 @@ let state: PlayersState = {
 let players: Player[] = [
     {
         id: '1',
+        dbId: '1111',
         name: 'Player 1',
         life: 40,
         poison: 0,
@@ -21,6 +22,7 @@ let players: Player[] = [
     },
     {
         id: '2',
+        dbId: '2222',
         name: 'Player 2',
         life: 40,
         poison: 0,
@@ -56,18 +58,20 @@ it('adds players', () => {
 });
 
 it('updates players', () => {
-    players = [{
-        id: '1',
-        name: 'Player 3',
-        life: 20,
-        poison: 0,
-        library: 'lib-id',
-        hand: 'hand-id',
-        battlefield: 'battlefield-id',
-        graveyard: 'graveyard-id',
-        exile: 'exile-id'
-    },
-               players[1]
+    players = [
+        {
+            id: '1',
+            dbId: '1111',
+            name: 'Player 3',
+            life: 20,
+            poison: 0,
+            library: 'lib-id',
+            hand: 'hand-id',
+            battlefield: 'battlefield-id',
+            graveyard: 'graveyard-id',
+            exile: 'exile-id'
+        },
+        players[1]
     ];
     const upd = updatePlayers([players[0]]);
     const oldState = { ...state };

@@ -1,53 +1,34 @@
-import deepFreeze from 'deep-freeze';
-import { addCards, deleteCards, updateCards } from '../../actions/cardsActions';
+import { cardsAsync } from '../../actions/cardsActions';
+import { examplePrimitive } from '../../util/docz-helpers/card';
 import cardsReducer, { Card, cardsSelector, CardsState, singleCardSelector } from '../../reducers/cardsReducer';
+import deepFreeze from 'deep-freeze';
 
-let state: CardsState = {};
-let cards: Card[] = [
-    {
-        id: '1',
-        name: 'Black Lotus',
-        url: 'path.png'
-    },
-    {
-        id: '2',
-        name: 'Timetwister',
-        url: 'path.png'
-    }
+let state: CardsState = { cards: {}, cardsbyName: {} };
+const cards: Card[] = [
+    { ...examplePrimitive, id: '1', name: 'Black Lotus' },
+    { ...examplePrimitive, id: '2', name: 'Blacker Lotus' }
 ];
 
 it('initial state', () => {
-    expect(cardsReducer(undefined, {} as any)).toEqual({});
+    expect(cardsReducer(undefined, {} as any)).toEqual({ cards: {}, cardsbyName: {} });
 });
 
 it('adds cards', () => {
-    const action = addCards(cards);
+    const action = cardsAsync.success(cards);
     const oldState = { ...state };
     deepFreeze(oldState);
     deepFreeze(action);
     state = cardsReducer(oldState, action);
     expect(state).toEqual({
-        1: cards[0],
-        2: cards[1]
-    });
-});
+        cards: {
+            1: cards[0],
+            2: cards[1]
+        },
+        cardsbyName: {
+            [cards[0].name]: cards[0].id,
+            [cards[1].name]: cards[1].id
+        }
 
-it('updates cards', () => {
-    cards = [{
-        id: '1',
-        name: 'Blacker Lotus',
-        url: 'path.png'
-    },
-             cards[1]
-    ];
-    const action = updateCards(cards);
-    const oldState = { ...state };
-    deepFreeze(oldState);
-    deepFreeze(action);
-    state = cardsReducer(oldState, action);
-    expect(state).toEqual({
-        1: cards[0],
-        2: cards[1]
     });
 });
 
@@ -64,13 +45,4 @@ it('select cards', () => {
         cards[0],
         cards[1]
     ]);
-});
-
-it('deletes cards', () => {
-    const action = deleteCards(['1', '2']);
-    const oldState = { ...state };
-    deepFreeze(oldState);
-    deepFreeze(action);
-    state = cardsReducer(oldState, action);
-    expect(state).toEqual({});
 });

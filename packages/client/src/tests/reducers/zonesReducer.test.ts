@@ -1,6 +1,7 @@
-import deepFreeze from 'deep-freeze';
-import { addZones, deleteZones, moveCards } from '../../actions/zonesActions';
+import { addZones, deleteZones } from '../../actions/zonesActions';
+import { moveCards } from '../../actions/gameCardsActions';
 import { updateZones } from '../../actions/zonesActions';
+import deepFreeze from 'deep-freeze';
 import zonesReducer, { singleZoneSelector, Zone, zonesSelector, ZonesState } from '../../reducers/zonesReducer';
 
 let state: ZonesState = {};
@@ -40,15 +41,16 @@ it('adds zones', () => {
 });
 
 it('updates zones', () => {
-    zones = [{
-        id: '1',
-        cards: [
-            '30',
-            '31',
-            '32'
-        ]
-    },
-             zones[1]
+    zones = [
+        {
+            id: '1',
+            cards: [
+                '30',
+                '31',
+                '32'
+            ]
+        },
+        zones[1]
     ];
     const action = updateZones(zones);
     const oldState = { ...state };

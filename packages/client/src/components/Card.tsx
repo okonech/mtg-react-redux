@@ -29,7 +29,7 @@ const Card: React.FC<AllProps> = (props) => {
       {...restProps}
       card={card.cardData}
       id={card.id}
-      tapped={card.tappped}
+      tapped={card.tapped}
       flipped={card.flipped}
     />
   );

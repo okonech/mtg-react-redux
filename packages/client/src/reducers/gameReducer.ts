@@ -1,4 +1,5 @@
-import { GameAction } from '../actions/gameActions';
+import { GameAction, nextTurn, setCurrentPlayer, setId } from '../actions/gameActions';
+import { getType } from 'typesafe-actions';
 import produce from 'immer';
 
 export interface GameState {
@@ -17,14 +18,14 @@ export default function gameReducer(state: GameState = initialState, action: Gam
 
     return produce(state, (draft) => {
         switch (action.type) {
-            case 'GAME_NEXT_TURN':
+            case getType(nextTurn):
                 draft.turn++;
                 break;
-            case 'GAME_SET_ID':
-                draft.id = action.payload.id;
+            case getType(setId):
+                draft.id = action.payload;
                 break;
-            case 'GAME_SET_CURRENT_PLAYER':
-                draft.currentPlayer = action.payload.id;
+            case getType(setCurrentPlayer):
+                draft.currentPlayer = action.payload;
                 break;
             default:
                 break;

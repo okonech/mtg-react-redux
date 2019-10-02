@@ -4,7 +4,7 @@ import { InstanceMemoizerImpl } from './InstanceMaps';
 export interface GameCardPrimitive {
     id: string;
     dbId: string;
-    tappped: boolean;
+    tapped: boolean;
     flipped: boolean;
     controller: string;
     owner: string;
@@ -24,7 +24,7 @@ interface GameCardModel {
      */
     readonly dbId: string;
 
-    readonly tappped: boolean;
+    readonly tapped: boolean;
     readonly flipped: boolean;
 
     readonly controller: string;
@@ -64,8 +64,8 @@ export class GameCardModelImpl implements GameCardModel {
         return this._gameCard.dbId;
     }
 
-    get tappped() {
-        return this._gameCard.tappped;
+    get tapped() {
+        return this._gameCard.tapped;
     }
 
     get flipped() {

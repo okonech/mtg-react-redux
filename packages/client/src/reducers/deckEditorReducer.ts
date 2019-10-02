@@ -1,9 +1,9 @@
-import produce from 'immer';
-import { getType } from 'typesafe-actions';
 import {
     addCardByNameAsync, DeckEditorActions, getDeckAsync, removeCards, setCardsByNameAsync,
     setEditing, setTitle, updateCards
 } from '../actions/deckEditorActions';
+import { getType } from 'typesafe-actions';
+import produce from 'immer';
 
 // Normalized cards store as object of 
 // cards: {unique card id: Card}
@@ -27,7 +27,7 @@ export interface DeckEditorState {
     editing: boolean;
 }
 
-const def = {
+const def: DeckEditorState = {
     cards: {},
     title: 'New Deck',
     id: 'test-id',

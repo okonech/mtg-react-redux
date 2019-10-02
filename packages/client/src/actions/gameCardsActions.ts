@@ -3,7 +3,7 @@ import { GameCardPrimitive } from '@mtg-react-redux/models';
 
 export const addCards = createStandardAction('gameCards/ADD')<GameCardPrimitive[]>();
 export const updateCards = createStandardAction('gameCards/UPDATE')<GameCardPrimitive[]>();
-export const deleteCards = createStandardAction('gameCards/DELETE')<GameCardPrimitive[]>();
+export const deleteCards = createStandardAction('gameCards/DELETE')<string[]>();
 
 export const tapCards = createStandardAction('gameCards/TAP')<string[]>();
 export const flipCards = createStandardAction('gameCards/FLIP')<string[]>();
