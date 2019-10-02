@@ -50,8 +50,9 @@ interface SelectableProps {
 type AllProps = CardDisplayProps & SelectableProps & WithTheme<any>;
 
 const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
-    const { opacity, selected, selecting, cardHeight, theme, isHovered, hidden } = props;
+    const { opacity, selected, selecting, cardHeight, theme, isHovered, hidden, tapped } = props;
     const { secondary, primary } = theme.palette;
+    const transform = `${tapped ? 'rotate(90deg)' : ''} ${(isHovered && !selecting) ? 'scale(1.025)' : ''}`.trim() || 'none';
     return noSelect({
         opacity: opacity || 1,
         // primary selecting, secondary selected,  black default
@@ -59,21 +60,21 @@ const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
         height: `${cardHeight}vh`,
         width: `${cardHeight * 0.716}vh`,
         display: hidden ? 'none' : 'block',
-        transform: (isHovered && !selecting) ? 'scale(1.025)' : 'none'
+        transform
     });
 });
 
 const CardDisplay = (props: AllProps) => {
 
-    const { card, id, classes, isHovered, selecting, topLabel } = props;
+    const { card, id, classes, isHovered, selecting, topLabel, flipped } = props;
 
     const displayName = (topLabel || (isHovered && !selecting)) ? (
         <Typography className={classes.text}>
-            {topLabel || (isHovered ? card.name() : '')}
+            {topLabel || (isHovered ? card.name(flipped) : '')}
         </Typography>
     ) : '';
 
-    const imgUrl = getCardSizePx().height > 205 ? card.imageUrl('medium') : card.imageUrl('small');
+    const imgUrl = getCardSizePx().height > 205 ? card.imageUrl('medium', flipped) : card.imageUrl('small', flipped);
 
     return (
         <MuiCard

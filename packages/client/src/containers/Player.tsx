@@ -1,10 +1,11 @@
 import { AppState } from '../reducers';
 import { connect } from 'react-redux';
-import { moveCards, updateZones } from '../actions/zonesActions';
+import { flipCards, moveCards, tapCards } from '../actions/gameCardsActions';
 import { PlayerData, playerSelector } from '../selectors/player';
 import { selectCards } from '../actions/selectActions';
 import { selectedSelector } from '../selectors/selected';
 import { updatePlayers } from '../actions/playersActions';
+import { updateZones } from '../actions/zonesActions';
 import Player from '../components/Player';
 
 export interface MappedPlayer {
@@ -15,6 +16,8 @@ export interface MappedPlayer {
     updateZones: typeof updateZones;
     moveCards: typeof moveCards;
     selectCards: typeof selectCards;
+    flipCards: typeof flipCards;
+    tapCards: typeof tapCards;
 }
 
 const mapStateToProps = (state: AppState, ownProps: { id: string }) => ({
@@ -26,7 +29,9 @@ const mapDispatchToProps = {
     updatePlayers,
     updateZones,
     moveCards,
-    selectCards
+    selectCards,
+    flipCards,
+    tapCards
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Player);

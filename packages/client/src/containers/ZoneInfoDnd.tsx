@@ -7,7 +7,7 @@ import {
 } from 'react-dnd';
 import { GameCardZone } from '../selectors/player';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { moveCards as moveCardsType } from '../actions/zonesActions';
+import { moveCards as moveCardsType } from '../actions/gameCardsActions';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { Types } from '../Constants';
 import React from 'react';

@@ -1,72 +1,9 @@
+import { ActionType, createStandardAction } from 'typesafe-actions';
 import { Zone } from '../reducers/zonesReducer';
 
-export type ZonesAction = ZonesUpdateAction | ZonesDeleteAction;
+export const addZones = createStandardAction('zones/ADD')<Zone[]>();
+export const updateZones = createStandardAction('zones/UPDATE')<Zone[]>();
+export const deleteZones = createStandardAction('zones/DELETE')<string[]>();
 
-export interface ZonesUpdateAction {
-    type: 'ADD_ZONES' | 'UPDATE_ZONES';
-    payload: {
-        items?: Zone[];
-        ids?: string[];
-    };
-}
+export type ZonesAction = ActionType<typeof addZones> | ActionType<typeof updateZones> | ActionType<typeof deleteZones>;
 
-export interface ZonesDeleteAction {
-    type: 'DELETE_ZONES';
-    payload: {
-        ids: string[];
-    };
-}
-
-export interface MoveCardsAction {
-    type: 'MOVE_CARDS';
-    payload: {
-        fromZone: string;
-        toZone: string;
-        ids: string[];
-        toIdx: number;
-        xCoord: number;
-        yCoord: number;
-    };
-}
-
-export function addZones(zones: Zone[]): ZonesAction {
-    return {
-        type: 'ADD_ZONES',
-        payload: {
-            items: zones
-        }
-    };
-}
-
-export function updateZones(zones: Zone[]): ZonesAction {
-    return {
-        type: 'UPDATE_ZONES',
-        payload: {
-            items: zones
-        }
-    };
-}
-
-export function deleteZones(ids: string[]): ZonesAction {
-    return {
-        type: 'DELETE_ZONES',
-        payload: {
-            ids
-        }
-    };
-}
-
-export function moveCards(fromZone: string, ids: string[], toZone: string,
-    toIdx: number, xCoord: number, yCoord: number): MoveCardsAction {
-    return {
-        type: 'MOVE_CARDS',
-        payload: {
-            fromZone,
-            toZone,
-            ids,
-            toIdx,
-            xCoord,
-            yCoord
-        }
-    };
-}
