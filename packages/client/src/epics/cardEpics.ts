@@ -3,20 +3,17 @@ import { Epic } from 'redux-observable';
 import { combineEpics } from 'redux-observable';
 import { from, of, pipe } from 'rxjs';
 import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
-import { Card, CardIdentifier, Cards } from 'scryfall-sdk';
+import { CardIdentifier, Cards } from 'scryfall-sdk';
 import { isActionOf } from 'typesafe-actions';
 import { cardsAsync } from '../actions/cardsActions';
 import { AppState } from '../reducers';
 import { singleCardByNameSelector, singleCardSelector } from '../reducers/cardsReducer';
-import { FBConfig } from './index';
 
 async function getCardsData(ids: string[], type: 'id' | 'name', state: AppState): Promise<CardPrimitive[]> {
 
     // filter existing
     const filterFunc = type === 'id' ? singleCardSelector : singleCardByNameSelector;
     ids = ids.filter((id) => !filterFunc(state.cards, id));
-
-    let cards: Card[];
 
     if (ids.length === 0) {
         return [];
@@ -25,13 +22,12 @@ async function getCardsData(ids: string[], type: 'id' | 'name', state: AppState)
     // collection
     const toPost = type === 'id' ? ids.map((id) => CardIdentifier.byId(id)) :
         ids.map((id) => CardIdentifier.byName(id));
-    cards = await Cards.collection(...toPost).waitForAll();
+    const cards = await Cards.collection(...toPost).waitForAll();
     // convert to models to remove unneeded props
     return cards.map((card) => new CardModel(card).dehydrate());
 }
 
-// config has getFirebase and getFirestore functions
-export const getCards: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>
+const getCards: Epic<any, any, AppState> = (action$, $state) =>
     action$
         .pipe(
             filter(isActionOf(cardsAsync.request)),

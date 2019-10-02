@@ -41,7 +41,7 @@ function formatCardsToText(cardList: ImportDialogProps['cardList'], cardData: Im
 
 function formatTextToCards(text: string): CardByName[] {
     const parsed: ParsedCards = parser(text, 'mtgo');
-    const cards: { [name: string]: { name: string, quantity: number, sideboard: number } } = {};
+    const cards: { [name: string]: { name: string; quantity: number; sideboard: number } } = {};
 
     parsed.cards.forEach((card) => {
         const { name, number: quant } = card;
@@ -69,7 +69,7 @@ function formatTextToCards(text: string): CardByName[] {
     return Object.values(cards);
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     textField: {
         minWidth: '25vw',
         maxWidth: '500px'

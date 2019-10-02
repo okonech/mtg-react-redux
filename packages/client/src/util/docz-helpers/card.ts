@@ -1,4 +1,4 @@
-import { CardModel, CardPrimitive, TYPES } from '@mtg-react-redux/models';
+import { cardModelsMap, CardPrimitive, TYPES } from '@mtg-react-redux/models';
 import { CardsState } from '../../reducers/cardsReducer';
 import { DeckEditorRow, DeckEditorState } from '../../reducers/deckEditorReducer';
 
@@ -48,7 +48,7 @@ export const examplePrimitive: CardPrimitive = {
 };
 
 export function exampleCardModel() {
-    return new CardModel(examplePrimitive);
+    return cardModelsMap.getModel(examplePrimitive);
 }
 
 function randType() {

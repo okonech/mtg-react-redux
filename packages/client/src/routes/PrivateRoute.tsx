@@ -39,11 +39,10 @@ const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
     );
 };
 
-const mapStateToProps = (state: AppState) => {
-    return {
+const mapStateToProps = (state: AppState) =>
+    ({
         auth: state.firebase.auth,
         authState: state.auth
-    };
-};
+    });
 
 export default connect(mapStateToProps, {})(PrivateRoute);

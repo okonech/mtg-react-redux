@@ -1,6 +1,7 @@
 import { Card } from 'scryfall-sdk';
-import CardModelError from './CardModelError';
 import { deleteEmpty } from './util/objects';
+import { InstanceMemoizerImpl } from './InstanceMaps';
+import CardModelError from './CardModelError';
 
 export type CardPrimitive = Pick<Card,
     'id' | 'image_uris' | 'name' | 'layout' | 'mana_cost' | 'cmc' |
@@ -39,10 +40,12 @@ interface CardModel {
     colors(flipped: boolean): CardPrimitive['colors'];
 
     types(flipped: boolean): Types[];
-    // get front by default, flipped side optionally. Falls back to front
+
+    /**
+     * Get front by default, flipped side optionally. Falls back to front
+     */
     imageUrl(type: ImageSize, flipped?: boolean): string;
 
-    // return primitive
     dehydrate(): CardPrimitive;
 }
 
@@ -107,19 +110,19 @@ export class CardModelImpl implements CardModel {
         return this._card.prices;
     }
 
-    public name(flipped = false) {
+    public name(flipped = false): CardPrimitive['name'] {
         return this.searchPreferFaces(this._card, flipped, 'name');
     }
 
-    public cmc(flipped = false) {
+    public cmc(flipped = false): CardPrimitive['cmc'] {
         return this.searchFaces(this._card, flipped, 'cmc');
     }
 
-    public manaCost(flipped = false) {
+    public manaCost(flipped = false): CardPrimitive['mana_cost'] {
         return this.searchFaces(this._card, flipped, 'mana_cost');
     }
 
-    public layout(flipped = false) {
+    public layout(flipped = false): CardPrimitive['layout'] {
         return this.searchFaces(this._card, flipped, 'layout');
     }
 
@@ -129,15 +132,15 @@ export class CardModelImpl implements CardModel {
         return TYPES.filter((searchType) => type.includes(searchType));
     }
 
-    public typeLine(flipped = false) {
+    public typeLine(flipped = false): CardPrimitive['type_line'] {
         return this.searchPreferFaces(this._card, flipped, 'type_line');
     }
 
-    public oracleText(flipped = false) {
+    public oracleText(flipped = false): CardPrimitive['oracle_text'] {
         return this.searchFaces(this._card, flipped, 'oracle_text');
     }
 
-    public colors(flipped = false) {
+    public colors(flipped = false): CardPrimitive['colors'] {
         return this.searchFaces(this._card, flipped, 'colors');
     }
 
@@ -227,3 +230,5 @@ export class CardModelImpl implements CardModel {
     }
 
 }
+
+export const cardModelsMap = new InstanceMemoizerImpl<CardPrimitive, CardModelImpl>(CardModelImpl);

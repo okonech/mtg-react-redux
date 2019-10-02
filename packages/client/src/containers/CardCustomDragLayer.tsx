@@ -1,12 +1,12 @@
 
-import { Identifier } from 'dnd-core';
-import { DragLayer, XYCoord } from 'react-dnd';
-import { connect } from 'react-redux';
-import CardCustomDragLayer, { CardCustomDragLayerProps } from '../components/CardCustomDragLayer';
-import { WithSelectableDragLayer } from '../packages/react-dnd-selectable';
 import { AppState } from '../reducers';
-import { cardsSelector } from '../reducers/cardsReducer';
 import { CardDragObject } from './DraggableCard';
+import { connect } from 'react-redux';
+import { DragLayer, XYCoord } from 'react-dnd';
+import { Identifier } from 'dnd-core';
+import { mapIdsToGameCardData } from '../selectors/player';
+import { WithSelectableDragLayer } from '../packages/react-dnd-selectable';
+import CardCustomDragLayer, { CardCustomDragLayerProps } from '../components/CardCustomDragLayer';
 
 export interface DragLayerProps {
     item?: CardDragObject;
@@ -18,7 +18,7 @@ export interface DragLayerProps {
 }
 
 const mapStateToProps = (state: AppState) => ({
-    selectedCards: cardsSelector(state.cards, state.select.selected)
+    selectedCards: mapIdsToGameCardData(state.select.selected, state.cards, state.gameCards)
 });
 
 export default connect(mapStateToProps)(

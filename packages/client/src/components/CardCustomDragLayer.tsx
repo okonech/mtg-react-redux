@@ -1,13 +1,13 @@
-import Badge from '@material-ui/core/Badge';
-import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
-import { CardModel } from '@mtg-react-redux/models';
 import * as React from 'react';
+import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
 import { defaultMemoize } from 'reselect';
-import Card from '../components/Card';
-import { Types } from '../Constants';
 import { DragLayerProps } from '../containers/CardCustomDragLayer';
-import { Card as CardType } from '../reducers/cardsReducer';
+import { gameCardModelsMap } from '@mtg-react-redux/models';
 import { getSnapEnabled, snapToGrid } from '../util/snapToGrid';
+import { mapIdsToGameCardData } from '../selectors/player';
+import { Types } from '../Constants';
+import Badge from '@material-ui/core/Badge';
+import Card from '../components/Card';
 
 const styles = () =>
     createStyles({
@@ -53,27 +53,28 @@ const cardStyle = defaultMemoize((cardHeight: number, index: number): React.CSSP
 
 export interface CardCustomDragLayerProps extends WithStyles<typeof styles> {
     cardHeight: number;
-    selectedCards: CardType[];
+    selectedCards: ReturnType<typeof mapIdsToGameCardData>;
 }
 
 class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCustomDragLayerProps> {
 
-    public renderCards = defaultMemoize((cardHeight: number, selectedCards: CardType[]): JSX.Element[] => {
-        const renderCards = selectedCards.length > 5 ? selectedCards.slice(0, 5) : selectedCards;
-        return renderCards.reverse().map((card, index) =>
-            (
-                <div
-                    style={cardStyle(cardHeight, index)}
-                    key={`draglayer-${card.id}`}
-                >
-                    <Card
-                        card={new CardModel({ ...card, id: `${card.id}-drag-preview` })}
-                        opacity={.95}
-                        cardHeight={cardHeight}
-                    />
-                </div >
-            ));
-    });
+    public renderCards = defaultMemoize(
+        (cardHeight: CardCustomDragLayerProps['cardHeight'], selectedCards: CardCustomDragLayerProps['selectedCards']): JSX.Element[] => {
+            const renderCards = selectedCards.length > 5 ? selectedCards.slice(0, 5) : selectedCards;
+            return renderCards.reverse().map((card, index) =>
+                (
+                    <div
+                        style={cardStyle(cardHeight, index)}
+                        key={`draglayer-${card.gameCard.id}`}
+                    >
+                        <Card
+                            card={gameCardModelsMap.getModel(card)}
+                            opacity={.95}
+                            cardHeight={cardHeight}
+                        />
+                    </div >
+                ));
+        });
 
     public render() {
         const { itemType, isDragging, cardHeight, classes, selectedCards } = this.props;

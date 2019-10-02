@@ -1,6 +1,6 @@
+import { BaseComponentProps } from '../util/styling';
 import React, { useCallback, useState } from 'react';
 import WithHover from '../hocs/WithHover';
-import { BaseComponentProps } from '../util/styling';
 
 interface CardListCellProps extends BaseComponentProps {
     isHovered?: boolean;
@@ -62,7 +62,7 @@ const CardListCellFixed: React.SFC<CardListCellFixedProps> = (props) => {
 interface CardListProps extends BaseComponentProps {
     direction: 'row' | 'column';
     children: React.ReactNode;
-    cellSize?: { height: number, width: number };
+    cellSize?: { height: number; width: number };
 }
 
 const HoverCardListCellFixed = WithHover(CardListCellFixed);

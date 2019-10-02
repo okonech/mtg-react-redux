@@ -1,13 +1,13 @@
-import Box from '@material-ui/core/Box';
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
 import { BaseComponentProps } from '../../util/styling';
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import React from 'react';
 
 interface CardTextListProps extends BaseComponentProps {
     children: React.ReactNode;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         display: 'flex',
         flexDirection: 'column',

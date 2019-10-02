@@ -1,6 +1,6 @@
-import produce from 'immer';
-import { getType } from 'typesafe-actions';
 import { addCards, CardsGameDataAction, deleteCards } from '../actions/cardsGameDataActions';
+import { getType } from 'typesafe-actions';
+import produce from 'immer';
 
 // Normalized cards store as object of {unique card id: Card}
 // No ids array since full list of cards is never enumerated, only known list of card ids are passed

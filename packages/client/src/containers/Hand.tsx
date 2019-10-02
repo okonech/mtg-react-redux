@@ -1,21 +1,21 @@
 
-import { createStyles } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Theme } from '@material-ui/core/styles';
-import { CardModel } from '@mtg-react-redux/models';
-import withScrolling from '@neises/pw-react-dnd-scrollzone';
-import React from 'react';
-import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
-import { findDOMNode } from 'react-dom';
-import { selectCards as selectCardsType } from '../actions/selectActions';
-import { moveCards as moveCardsType } from '../actions/zonesActions';
-import Card from '../components/Card';
-import { Types } from '../Constants';
-import SelectableGroup from '../packages/react-dnd-selectable/SelectableGroup';
-import { CardZone } from '../selectors/player';
-import { placeholderPrimitive } from '../util/card';
 import { BaseComponentProps } from '../util/styling';
+import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
+import { createStyles } from '@material-ui/core/styles';
+import { findDOMNode } from 'react-dom';
+import { gameCardModelsMap } from '@mtg-react-redux/models';
+import { GameCardZone } from '../selectors/player';
+import { moveCards as moveCardsType } from '../actions/zonesActions';
+import { placeholderPrimitive } from '../util/card';
+import { selectCards as selectCardsType } from '../actions/selectActions';
+import { Theme } from '@material-ui/core/styles';
+import { Types } from '../Constants';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
+import Card from '../components/Card';
 import DraggableCard, { CardDragObject } from './DraggableCard';
+import React from 'react';
+import SelectableGroup from '../packages/react-dnd-selectable/SelectableGroup';
+import withScrolling from '@neises/pw-react-dnd-scrollzone';
 
 const styles = (theme: Theme) => createStyles({
   main: {
@@ -71,7 +71,7 @@ const handTarget: DropTargetSpec<HandProps> = {
 };
 
 interface HandProps extends WithStyles<typeof styles>, BaseComponentProps {
-  zone: CardZone;
+  zone: GameCardZone;
   moveCards: typeof moveCardsType;
   selectCards: typeof selectCardsType;
   selected: string[];
@@ -89,7 +89,7 @@ interface HandState {
   placeholderIndex: number;
 }
 
-function getPlaceholderIndex(zone: CardZone, monitor: DropTargetMonitor, handElement: Element) {
+function getPlaceholderIndex(zone: GameCardZone, monitor: DropTargetMonitor, handElement: Element) {
 
   if (zone.cards.length === 0) {
     return 0;
@@ -170,19 +170,20 @@ class Hand extends React.PureComponent<AllProps, HandState> {
     let indexShift = 0;
     let shownCount = 0;
     const cards = zone.cards.reduce((acc, curr) => {
+      const gameCard = gameCardModelsMap.getModel(curr);
       acc.push(
         <DraggableCard
-          id={curr.id}
+          id={gameCard.id}
           zoneId={zone.id}
-          card={new CardModel(curr)}
-          key={'draggable-' + curr.id}
+          card={gameCard}
+          key={'draggable-' + gameCard.id}
           selectedCards={selected}
           selectCards={selectCards}
           cardHeight={cardHeight}
         />
       );
       // add to placeholder index for every hidden element up to desired index
-      if (selected.includes(curr.id) && shownCount <= placeholderIndex) {
+      if (selected.includes(gameCard.id) && shownCount <= placeholderIndex) {
         indexShift++;
       } else {
         shownCount++;
@@ -192,7 +193,7 @@ class Hand extends React.PureComponent<AllProps, HandState> {
 
     if (isOver && canDrop) {
       cards.splice(placeholderIndex + indexShift, 0, (
-        <Card key={'handplaceholder'} card={new CardModel(placeholderPrimitive)} opacity={0.2} cardHeight={cardHeight} />
+        <Card key={'handplaceholder'} card={gameCardModelsMap.getModel(placeholderPrimitive)} opacity={0.2} cardHeight={cardHeight} />
       ));
     }
 

@@ -1,10 +1,8 @@
-import { Theme } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import { useTheme } from '@material-ui/styles';
-import { CardModelImpl } from '@mtg-react-redux/models/dist/Card';
-import React, { memo, useState } from 'react';
+import { BaseComponentProps, MTG_COLORS } from '../../util/styling';
+import { CardModel } from '@mtg-react-redux/models';
+import { CardsState } from '../../reducers/cardsReducer';
+import { DeckEditorState } from '../../reducers/deckEditorReducer';
+import { getModelsForCards, groupCardsByCategory, groupQuantitySum } from '../../util/card';
 import {
     Hint,
     VerticalBarSeries,
@@ -12,10 +10,12 @@ import {
     XYPlot,
     YAxis
 } from 'react-vis';
-import { CardsState } from '../../reducers/cardsReducer';
-import { DeckEditorState } from '../../reducers/deckEditorReducer';
-import { getModelsForCards, groupCardsByCategory, groupQuantitySum } from '../../util/card';
-import { BaseComponentProps, MTG_COLORS } from '../../util/styling';
+import { makeStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core';
+import { useTheme } from '@material-ui/styles';
+import Paper from '@material-ui/core/Paper';
+import React, { memo, useState } from 'react';
+import Typography from '@material-ui/core/Typography';
 
 interface StatsProps extends BaseComponentProps {
     cardList: DeckEditorState['cards'];
@@ -72,7 +72,7 @@ const CmcBarGraph: React.SFC<StatsProps> = (props) => {
     const nonLandModels = Object.keys(nonland).reduce((acc, curr) => {
         acc.splice(acc.length, 0, ...nonland[curr]);
         return acc;
-    }, new Array<CardModelImpl>());
+    }, new Array<CardModel>());
     const colorModelsMap = groupCardsByCategory(nonLandModels, 'color');
     const cmcCounts = Object.keys(groupCardsByCategory(nonLandModels, 'cmc'));
 
@@ -156,6 +156,4 @@ const CMCBar: React.FC<StatsProps> = (props) => {
     );
 };
 
-export default memo(CMCBar, (prev, next) => {
-    return prev.cardList === next.cardList && prev.cardData === next.cardData;
-});
+export default memo(CMCBar, (prev, next) => prev.cardList === next.cardList && prev.cardData === next.cardData);

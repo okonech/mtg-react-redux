@@ -5,25 +5,25 @@ export type ZonesAction = ZonesUpdateAction | ZonesDeleteAction;
 export interface ZonesUpdateAction {
     type: 'ADD_ZONES' | 'UPDATE_ZONES';
     payload: {
-        items?: Zone[],
-        ids?: string[]
+        items?: Zone[];
+        ids?: string[];
     };
 }
 
 export interface ZonesDeleteAction {
     type: 'DELETE_ZONES';
     payload: {
-        ids: string[]
+        ids: string[];
     };
 }
 
 export interface MoveCardsAction {
     type: 'MOVE_CARDS';
     payload: {
-        fromZone: string,
-        toZone: string,
-        cards: string[],
-        toIdx: number
+        fromZone: string;
+        toZone: string;
+        ids: string[];
+        toIdx: number;
         xCoord: number;
         yCoord: number;
     };
@@ -56,14 +56,14 @@ export function deleteZones(ids: string[]): ZonesAction {
     };
 }
 
-export function moveCards(fromZone: string, cards: string[], toZone: string,
+export function moveCards(fromZone: string, ids: string[], toZone: string,
     toIdx: number, xCoord: number, yCoord: number): MoveCardsAction {
     return {
         type: 'MOVE_CARDS',
         payload: {
             fromZone,
             toZone,
-            cards,
+            ids,
             toIdx,
             xCoord,
             yCoord

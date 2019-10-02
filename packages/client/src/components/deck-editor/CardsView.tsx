@@ -1,15 +1,15 @@
-import { Box, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { CardsState } from '../../reducers/cardsReducer';
-import { DeckEditorState } from '../../reducers/deckEditorReducer';
-import { cardListToGroupedModelsSb, groupQuantitySum, rowQuantity } from '../../util/card';
-import { getCardSizeVh, setCardHeight } from '../../util/cardSize';
 import { BaseComponentProps } from '../../util/styling';
-import Card from '../Card';
-import CardList from '../CardList';
+import { Box, Typography } from '@material-ui/core';
+import { cardListToGroupedModelsSb, groupQuantitySum, rowQuantity } from '../../util/card';
+import { CardsState } from '../../reducers/cardsReducer';
 import { CATEGORIES } from './DeckEditor';
+import { DeckEditorState } from '../../reducers/deckEditorReducer';
+import { getCardSizeVh, setCardHeight } from '../../util/cardSize';
+import { makeStyles } from '@material-ui/core/styles';
+import CardDisplay from '../CardDisplay';
+import CardList from '../CardList';
 import MasonryView from './MasonryView';
+import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
     group: {
@@ -41,7 +41,7 @@ const CardsView: React.FC<CardsViewProps> = (props) => {
     setCardHeight(32);
     const groupedModels = cardListToGroupedModelsSb(cardList, cardData, category);
 
-    const items = Object.keys(groupedModels).map((groupName) => {
+    const items = Object.keys(groupedModels).sort().map((groupName) => {
         const quantSum = groupQuantitySum(groupedModels[groupName].map((cardModel) => cardList[cardModel.id]), groupName);
         return (
             <Box
@@ -55,14 +55,17 @@ const CardsView: React.FC<CardsViewProps> = (props) => {
                 <CardList
                     direction='column'
                 >
-                    {groupedModels[groupName].map((cardModel) => {
+                    {groupedModels[groupName].sort((a, b) => a.name().localeCompare(b.name())).map((cardModel) => {
                         const quantity = rowQuantity(cardList[cardModel.id], groupName);
                         return (
-                            <Card
+                            <CardDisplay
                                 key={cardModel.id}
                                 card={cardModel}
+                                id={cardModel.id}
                                 cardHeight={getCardSizeVh().height}
                                 topLabel={quantity > 1 ? quantity.toString() : null}
+                                tapped={false}
+                                flipped={false}
                             />);
                     })}
                 </CardList>

@@ -1,19 +1,19 @@
+import { BaseComponentProps } from '../util/styling';
 import { createStyles } from '@material-ui/core';
+import { moveCards as moveCardsType } from '../actions/zonesActions';
+import { PlayerData } from '../selectors/player';
+import { selectCards as selectCardsType } from '../actions/selectActions';
 import { Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { selectCards as selectCardsType } from '../actions/selectActions';
-import { moveCards as moveCardsType } from '../actions/zonesActions';
-import ZoneInfoDnd from '../containers/ZoneInfoDnd';
-import { PlayerData } from '../selectors/player';
-import { BaseComponentProps } from '../util/styling';
+import BookPileSvg from './svg/LibrarySvg';
+import HeartSvg from './svg/HeartSvg';
 import LifeCounter from './LifeCounter';
 import PlayerInfo from './PlayerInfo';
+import PokerHandSvg from './svg/HandSvg';
+import React from 'react';
 import RollingEnergySvg from './svg/ExileSvg';
 import TombstoneSvg from './svg/GraveyardSvg';
-import PokerHandSvg from './svg/HandSvg';
-import HeartSvg from './svg/HeartSvg';
-import BookPileSvg from './svg/LibrarySvg';
+import ZoneInfoDnd from '../containers/ZoneInfoDnd';
 
 const styles = (theme: Theme) => {
     const { background, divider } = theme.palette;
@@ -46,7 +46,7 @@ const InfoArea: React.FC<InfoAreaProps> = (props) => {
         if (libCards.length === 0) {
             return null;
         }
-        return moveCards(library.id, [libCards[libCards.length - 1].id],
+        return moveCards(library.id, [libCards[libCards.length - 1].gameCard.id],
             hand.id, hand.cards.length, 0, 0);
     };
 

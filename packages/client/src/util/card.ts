@@ -1,21 +1,33 @@
-import { CardModel, CardPrimitive } from '@mtg-react-redux/models';
-import { CATEGORIES } from '../components/deck-editor/DeckEditor';
+import { CardModel, cardModelsMap, CardPrimitive, GameCardPrimitive } from '@mtg-react-redux/models';
 import { cardsSelector, CardsState } from '../reducers/cardsReducer';
+import { CATEGORIES } from '../components/deck-editor/DeckEditor';
 import { DeckEditorRow, DeckEditorState } from '../reducers/deckEditorReducer';
 
 export const placeholderPrimitive = {
-    id: 'placeholder',
-    image_uris: {
-        small: '/images/cardback.jpg',
-        normal: '/images/cardback.jpg',
-        large: '/images/cardback.jpg',
-        png: '/images / cardback.jpg',
-        art_crop: '/images / cardback.jpg',
-        border_crop: '/images/cardback.jpg'
-    },
-    name: '',
-    layout: 'normal'
-} as CardPrimitive;
+    card: {
+        id: 'placeholder-data',
+        image_uris: {
+            small: '/images/cardback.jpg',
+            normal: '/images/cardback.jpg',
+            large: '/images/cardback.jpg',
+            png: '/images / cardback.jpg',
+            art_crop: '/images / cardback.jpg',
+            border_crop: '/images/cardback.jpg'
+        },
+        name: '',
+        layout: 'normal'
+    } as CardPrimitive,
+    gameCard: {
+        id: 'placeholder',
+        dbId: 'placeholder-data',
+        tappped: false,
+        flipped: false,
+        controller: 'curr-player',
+        owner: 'curr-player',
+        x: 0,
+        y: 0
+    } as GameCardPrimitive
+};
 
 export function getModelsForCards(cardList: DeckEditorState['cards'], cardData: CardsState, board: 'sideboard' | 'main' | 'both' = 'both') {
     return cardsSelector(cardData, Object.keys(cardList).filter((id) => {
@@ -29,7 +41,7 @@ export function getModelsForCards(cardList: DeckEditorState['cards'], cardData: 
             default:
                 throw new Error(`Unknown board type ${board}`);
         }
-    })).map((card) => new CardModel(card));
+    })).map((card) => cardModelsMap.getModel(card));
 }
 
 export function groupCardsByCategory(cards: CardModel[], category: keyof typeof CATEGORIES) {
@@ -71,7 +83,7 @@ export function cardListToGroupedModels(cardList: DeckEditorState['cards'], card
         return acc;
     }, []);
 
-    const models = cardsSelector(cardData, main).map((card) => new CardModel(card));
+    const models = cardsSelector(cardData, main).map((card) => cardModelsMap.getModel(card));
     return groupCardsByCategory(models, category);
 }
 
@@ -82,7 +94,7 @@ export function cardListToGroupedModelsSb(cardList: DeckEditorState['cards'], ca
         }
         return acc;
     }, []);
-    const sbModels = cardsSelector(cardData, sideboard).map((card) => new CardModel(card));
+    const sbModels = cardsSelector(cardData, sideboard).map((card) => cardModelsMap.getModel(card));
     const groups = cardListToGroupedModels(cardList, cardData, category);
     return sbModels.length > 0 ? {
         ...groups,

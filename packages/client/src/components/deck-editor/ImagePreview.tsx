@@ -1,11 +1,11 @@
 
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import { CardModel } from '@mtg-react-redux/models';
-import React from 'react';
-import { Card } from '../../reducers/cardsReducer';
 import { BaseComponentProps } from '../../util/styling';
+import { Card } from '../../reducers/cardsReducer';
+import { cardModelsMap } from '@mtg-react-redux/models';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,8 +28,8 @@ interface ImagePreviewProps extends BaseComponentProps {
 const ImagePreview: React.FC<ImagePreviewProps> = (props) => {
     const classes = useStyles({});
     const { data } = props;
-    if (!!data) {
-        const cardModel = new CardModel(data);
+    if (data) {
+        const cardModel = cardModelsMap.getModel(data);
         return (
             <Paper className={classes.root}>
                 <img src={cardModel.imageUrl('medium')} alt={cardModel.name()} />

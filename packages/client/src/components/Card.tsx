@@ -1,38 +1,10 @@
-import { Card as MuiCard, CardMedia, createStyles, Typography } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Theme } from '@material-ui/core/styles';
-import withTheme, { WithTheme } from '@material-ui/styles/withTheme';
-import { CardModel } from '@mtg-react-redux/models';
+import { GameCardModel } from '@mtg-react-redux/models';
+import CardDisplay from './CardDisplay';
 import React from 'react';
-import { defaultMemoize } from 'reselect';
-import { getCardSizePx } from '../util/cardSize';
-import { noSelect } from '../util/styling';
 
-const styles = (theme: Theme) =>
-  createStyles({
-    main: {
-      borderRadius: '5%',
-      boxSizing: 'border-box',
-      flexShrink: 0
-      // '&:hover': {
-      //   transform: 'scale(1.04)'
-      // }
-    },
-    media: {
-      height: '100%'
-    },
-    text: {
-      padding: 5,
-      wordWrap: 'break-word',
-      display: 'inline',
-      fontSize: '.8rem',
-      backgroundColor: theme.palette.getContrastText(theme.palette.text.primary)
-    }
-  });
-
-interface CardProps extends WithStyles<typeof styles> {
+export interface CardProps {
   opacity?: number;
-  card: CardModel;
+  card: GameCardModel;
   cardHeight: number;
   hidden?: boolean;
   isHovered?: boolean;
@@ -46,49 +18,21 @@ interface SelectableProps {
   selecting?: boolean;
 }
 
-type AllProps = CardProps & SelectableProps & WithTheme<any>;
+type AllProps = CardProps & SelectableProps;
 
-const cardStyle = defaultMemoize((props: AllProps): React.CSSProperties => {
-  const { opacity, selected, selecting, cardHeight, theme, isHovered, hidden } = props;
-  const { secondary, primary } = theme.palette;
-  return noSelect({
-    opacity: opacity || 1,
-    // primary selecting, secondary selected,  black default
-    border: selected ? `1px solid ${secondary.main}` : selecting ? `1px solid ${primary.main}` : `1px solid black`,
-    height: `${cardHeight}vh`,
-    width: `${cardHeight * 0.716}vh`,
-    display: hidden ? 'none' : 'block',
-    transform: (isHovered && !selecting) ? 'scale(1.025)' : 'none'
-  });
-});
+const Card: React.FC<AllProps> = (props) => {
 
-const Card = (props: AllProps) => {
-
-  const { card, classes, isHovered, selecting, topLabel } = props;
-
-  const displayName = (topLabel || (isHovered && !selecting)) ? (
-    <Typography className={classes.text}>
-      {topLabel || (isHovered ? card.name() : '')}
-    </Typography>
-  ) : <div />;
-
-  const imgUrl = getCardSizePx().height > 205 ? card.imageUrl('medium') : card.imageUrl('small');
+  const { card, ...restProps } = props;
 
   return (
-    <MuiCard
+    <CardDisplay
+      {...restProps}
+      card={card.cardData}
       id={card.id}
-      style={cardStyle(props)}
-      raised={isHovered}
-      className={classes.main}
-    >
-      <CardMedia
-        className={classes.media}
-        image={imgUrl}
-      >
-        {displayName}
-      </CardMedia>
-    </MuiCard>
+      tapped={card.tappped}
+      flipped={card.flipped}
+    />
   );
 };
 
-export default withTheme((withStyles(styles)(Card)));
+export default Card;

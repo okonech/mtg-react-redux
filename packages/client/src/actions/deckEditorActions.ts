@@ -29,12 +29,24 @@ export const setCardsByNameAsync = createAsyncAction(
     'deckEditor/SET_CARDS_BY_NAME_ERR'
 )<CardByName[], DeckEditorRow[], Error>();
 
+/**
+ * Only gets the deck data without loading card
+ */
 export const getDeckAsync = createAsyncAction(
     'deckEditor/GET',
     'deckEditor/SET_STATE',
     'deckEditor/GET_ERR',
     'deckEditor/GET_CANCEL'
 )<string, DeckEditorState, Error, string>();
+
+/**
+ * Use to get a single deck + loading status
+ */
+export const getDeckLoadCardsAsync = createAsyncAction(
+    'deckEditor/GET_LOAD_CARDS',
+    'deckEditor/GET_LOAD_CARDS_SUCCESS',
+    'deckEditor/GET_LOAD_CARDS_ERR'
+)<string, null, Error>();
 
 type PUTDECK = Omit<DeckEditorState, 'editing'>;
 

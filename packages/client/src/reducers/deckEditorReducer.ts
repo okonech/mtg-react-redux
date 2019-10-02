@@ -60,9 +60,7 @@ export default function deckEditorReducer(state: DeckEditorState = def, action: 
                 });
                 break;
             case getType(setCardsByNameAsync.success):
-                Object.keys(draft.cards).forEach((id) => {
-                    delete draft.cards[id];
-                });
+                draft.cards = {};
                 action.payload.forEach((row) => {
                     draft.cards[row.id] = row;
                 });

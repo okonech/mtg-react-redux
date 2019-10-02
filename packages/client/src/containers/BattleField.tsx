@@ -1,22 +1,22 @@
 
-import { createStyles } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Theme } from '@material-ui/core/styles';
-import { CardModel } from '@mtg-react-redux/models';
-import React from 'react';
-import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
-import { findDOMNode } from 'react-dom';
-import { selectCards as selectCardsType } from '../actions/selectActions';
-import { moveCards as moveCardsType } from '../actions/zonesActions';
-import { Types } from '../Constants';
-import { SelectableGroup } from '../packages/react-dnd-selectable';
-import { CardCoordZone } from '../selectors/player';
-import { setSnapEnabled, setSnapOverNode, snapToGrid } from '../util/snapToGrid';
 import { BaseComponentProps } from '../util/styling';
+import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
+import { createStyles } from '@material-ui/core';
+import { findDOMNode } from 'react-dom';
+import { gameCardModelsMap } from '@mtg-react-redux/models';
+import { GameCardZone } from '../selectors/player';
+import { moveCards as moveCardsType } from '../actions/zonesActions';
+import { SelectableGroup } from '../packages/react-dnd-selectable';
+import { selectCards as selectCardsType } from '../actions/selectActions';
+import { setSnapEnabled, setSnapOverNode, snapToGrid } from '../util/snapToGrid';
+import { Theme } from '@material-ui/core/styles';
+import { Types } from '../Constants';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import DraggableCard, { CardDragObject } from './DraggableCard';
+import React from 'react';
 
-const styles = (theme: Theme) => {
-    return createStyles({
+const styles = (theme: Theme) =>
+    createStyles({
         main: {
             width: '100%',
             height: '100%',
@@ -26,7 +26,6 @@ const styles = (theme: Theme) => {
 
         }
     });
-};
 
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
     drop(props: BattleFieldProps, monitor, component: BattleField) {
@@ -54,7 +53,7 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
     }
 };
 interface BattleFieldProps extends WithStyles<typeof styles>, BaseComponentProps {
-    zone: CardCoordZone;
+    zone: GameCardZone;
     moveCards: typeof moveCardsType;
     selectCards: typeof selectCardsType;
     selected: string[];
@@ -120,18 +119,18 @@ class BattleField extends React.PureComponent<AllProps>  {
     public render() {
         const { zone, connectDropTarget, selected, cardHeight, selectCards, style, classes } = this.props;
         const cards = zone.cards.reduce((acc, curr) => {
-
+            const gameCard = gameCardModelsMap.getModel(curr);
             acc.push(
                 <DraggableCard
-                    id={curr.id}
+                    id={gameCard.id}
                     zoneId={zone.id}
-                    card={new CardModel(curr)}
-                    key={'draggable' + curr.id}
+                    card={gameCard}
+                    key={'draggable - ' + gameCard.id}
                     selectedCards={selected}
                     selectCards={selectCards}
                     cardHeight={cardHeight}
-                    xCoord={curr.xCoord}
-                    yCoord={curr.yCoord}
+                    xCoord={gameCard.x}
+                    yCoord={gameCard.y}
                 />
             );
             return acc;

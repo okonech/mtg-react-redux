@@ -1,13 +1,13 @@
-import { CardModel } from '@mtg-react-redux/models';
 import * as React from 'react';
 import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceSpec } from 'react-dnd';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 import { defaultMemoize } from 'reselect';
+import { GameCardModel } from '@mtg-react-redux/models';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 import { selectCards as selectCardsType } from '../actions/selectActions';
-import Card from '../components/Card';
 import { Types } from '../Constants';
-import WithHover from '../hocs/WithHover';
 import { WithSelectable } from '../packages/react-dnd-selectable';
+import Card from '../components/Card';
+import WithHover from '../hocs/WithHover';
 
 // draggable card component with id, key, x, y position
 
@@ -38,7 +38,7 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
     return monitor.getItem().cards.includes(props.card.id);
   },
 
-  beginDrag(props, monitor, component: DraggableCard): CardDragObject {
+  beginDrag(props): CardDragObject {
 
     const { selectCards, selectedCards, zoneId, card } = props;
     const cards = [...selectedCards];
@@ -52,7 +52,7 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
       zoneId
     };
   },
-  endDrag(props, monitor, component: DraggableCard) {
+  endDrag(props, monitor) {
     if (!monitor.didDrop()) {
       // if invalid drop and drop not handled, show items again
       const { cards } = monitor.getItem() as CardDragObject;
@@ -72,7 +72,7 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
 
 interface DraggableCardProps {
   id: string;
-  card: CardModel;
+  card: GameCardModel;
   zoneId: string;
   selectedCards: string[];
   selectCards: typeof selectCardsType;

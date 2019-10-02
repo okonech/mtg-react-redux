@@ -1,11 +1,11 @@
+import { AppState } from '../reducers';
+import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { combineEpics } from 'redux-observable';
 import { Epic } from 'redux-observable';
+import { FBConfig } from './index';
 import { forkJoin, from, of, pipe } from 'rxjs';
-import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { isActionOf } from 'typesafe-actions';
 import { loginAsync, logoutAsync, signupAsync } from '../actions/authActions';
-import { AppState } from '../reducers';
-import { FBConfig } from './index';
 
 // config has getFirebase and getFirestore functions
 const signup: Epic<any, any, AppState> = (action$, $state, config: FBConfig) =>

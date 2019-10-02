@@ -1,20 +1,20 @@
+import { AppState } from '../reducers';
+import { connect } from 'react-redux';
+import { Field, Form } from 'react-final-form';
+import { LinkProps, Redirect, Link as RouterLink } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import { Omit } from '../util/propsHelper';
+import { signupAsync } from '../actions/authActions';
+import { TextField } from '../packages/final-form-material-ui';
+import { ValidateEmail } from '../util/validators';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React from 'react';
-import { Field, Form } from 'react-final-form';
-import { connect } from 'react-redux';
-import { Link as RouterLink, LinkProps, Redirect } from 'react-router-dom';
-import { signupAsync } from '../actions/authActions';
-import { TextField } from '../packages/final-form-material-ui';
-import { AppState } from '../reducers';
-import { Omit } from '../util/propsHelper';
-import { ValidateEmail } from '../util/validators';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -194,12 +194,10 @@ function SignUp(props: SignUpProps) {
     );
 }
 
-const mapStateToProps = (state: AppState) => {
-    return {
-        auth: state.firebase.auth,
-        authError: state.auth.authError
-    };
-};
+const mapStateToProps = (state: AppState) => ({
+    auth: state.firebase.auth,
+    authError: state.auth.authError
+});
 
 const mapDispatchToProps = {
     signUp: signupAsync.request
