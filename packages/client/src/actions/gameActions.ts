@@ -1,44 +1,8 @@
+import { ActionType, createStandardAction } from 'typesafe-actions';
 
-export type GameAction = GameNextTurnAction | GameSetIdAction | GameSetCurrentPlayerAction;
+export const setId = createStandardAction('game/SET_ID')<string>();
+export const nextTurn = createStandardAction('game/NEXT_TURN')();
+export const setCurrentPlayer = createStandardAction('zones/SET_CURRENT_PLAYER')<string>();
 
-export interface GameNextTurnAction {
-    type: 'GAME_NEXT_TURN';
-}
+export type GameAction = ActionType<typeof setId> | ActionType<typeof nextTurn> | ActionType<typeof setCurrentPlayer>;
 
-export interface GameSetIdAction {
-    type: 'GAME_SET_ID';
-    payload: {
-        id: string;
-    };
-}
-
-export interface GameSetCurrentPlayerAction {
-    type: 'GAME_SET_CURRENT_PLAYER';
-    payload: {
-        id: string;
-    };
-}
-
-export function nextTurn(): GameAction {
-    return {
-        type: 'GAME_NEXT_TURN'
-    };
-}
-
-export function setId(id: string): GameAction {
-    return {
-        type: 'GAME_SET_ID',
-        payload: {
-            id
-        }
-    };
-}
-
-export function setCurrentPlayer(player: string): GameAction {
-    return {
-        type: 'GAME_SET_CURRENT_PLAYER',
-        payload: {
-            id: player
-        }
-    };
-}

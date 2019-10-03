@@ -20,7 +20,7 @@ export const placeholderPrimitive = {
     gameCard: {
         id: 'placeholder',
         dbId: 'placeholder-data',
-        tappped: false,
+        tapped: false,
         flipped: false,
         controller: 'curr-player',
         owner: 'curr-player',

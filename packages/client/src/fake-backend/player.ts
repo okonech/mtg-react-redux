@@ -65,7 +65,7 @@ export function mapToGameCards(player: Player, cards: CardPrimitive[]) {
         const gameCard: GameCardPrimitive = {
             id: uuid(),
             dbId: card.id,
-            tappped: false,
+            tapped: false,
             flipped: false,
             controller: player.id,
             owner: player.id,

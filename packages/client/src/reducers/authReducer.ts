@@ -1,6 +1,6 @@
-import produce from 'immer';
-import { getType } from 'typesafe-actions';
 import { AuthAction, loginAsync, logoutAsync, signupAsync } from '../actions/authActions';
+import { getType } from 'typesafe-actions';
+import produce from 'immer';
 
 // Auth actions. State only stores errors, actual auth is in firebase reducer
 

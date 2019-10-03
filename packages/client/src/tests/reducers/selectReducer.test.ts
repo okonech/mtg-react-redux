@@ -1,5 +1,5 @@
-import deepFreeze from 'deep-freeze';
 import { selectCards } from '../../actions/selectActions';
+import deepFreeze from 'deep-freeze';
 import selectReducer, { selectedSelector, SelectState } from '../../reducers/selectReducer';
 
 let state: SelectState = {

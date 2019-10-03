@@ -21,7 +21,7 @@ export default function gameCardsReducer(state: GameCardsState = def, action: Ga
                 action.payload.forEach((card) => draft[card.id] = card);
                 break;
             case getType(deleteCards):
-                action.payload.forEach((card) => delete draft[card.id]);
+                action.payload.forEach((id) => delete draft[id]);
                 break;
             case getType(moveCards):
                 const { ids, xCoord, yCoord } = action.payload;
@@ -31,7 +31,7 @@ export default function gameCardsReducer(state: GameCardsState = def, action: Ga
                 });
                 break;
             case getType(tapCards):
-                action.payload.forEach((id) => draft[id].tappped = !draft[id].tappped);
+                action.payload.forEach((id) => draft[id].tapped = !draft[id].tapped);
                 break;
             case getType(flipCards):
                 action.payload.forEach((id) => draft[id].flipped = !draft[id].flipped);

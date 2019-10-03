@@ -1,5 +1,6 @@
+import { addPlayers, deletePlayers, PlayersAction, updatePlayers } from '../actions/playersActions';
 import { combineReducers } from 'redux';
-import { PlayersAction } from '../actions/playersActions';
+import { getType } from 'typesafe-actions';
 import produce from 'immer';
 
 export interface PlayersState {
@@ -27,12 +28,12 @@ export interface Player {
 function playersById(state: PlayersById = {}, action: PlayersAction) {
     return produce(state, (draft) => {
         switch (action.type) {
-            case 'ADD_PLAYERS':
-            case 'UPDATE_PLAYERS':
-                action.payload.items.forEach((player) => draft[player.id] = player);
+            case getType(addPlayers):
+            case getType(updatePlayers):
+                action.payload.forEach((player) => draft[player.id] = player);
                 break;
-            case 'DELETE_PLAYERS':
-                action.payload.ids.forEach((id) => delete draft[id]);
+            case getType(deletePlayers):
+                action.payload.forEach((id) => delete draft[id]);
                 break;
             default:
                 break;
@@ -43,11 +44,11 @@ function playersById(state: PlayersById = {}, action: PlayersAction) {
 function playerIds(state: string[] = [], action: PlayersAction) {
     return produce(state, (draft) => {
         switch (action.type) {
-            case 'ADD_PLAYERS':
-                action.payload.items.forEach((player) => draft.push(player.id));
+            case getType(addPlayers):
+                action.payload.forEach((player) => draft.push(player.id));
                 break;
-            case 'DELETE_PLAYERS':
-                const toDelete = action.payload.ids;
+            case getType(deletePlayers):
+                const toDelete = action.payload;
                 toDelete.forEach((delId) => draft.splice(draft.findIndex((id) => id === delId), 1));
                 break;
             default:

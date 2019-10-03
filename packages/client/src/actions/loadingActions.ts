@@ -1,16 +1,6 @@
+import { ActionType, createStandardAction } from 'typesafe-actions';
 
-export interface LoadingAction {
-    type: 'LOADING' | 'LOADED';
-}
+export const loading = createStandardAction('loading/SET_LOADING')();
+export const loaded = createStandardAction('loading/SET_LOADED')();
 
-export function loading(): LoadingAction {
-    return {
-        type: 'LOADING'
-    };
-}
-
-export function loaded(): LoadingAction {
-    return {
-        type: 'LOADED'
-    };
-}
+export type LoadingAction = ActionType<typeof loading> | ActionType<typeof loaded>;
