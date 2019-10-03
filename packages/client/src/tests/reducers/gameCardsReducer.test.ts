@@ -1,7 +1,7 @@
-import gameCardsReducer, { GameCardsState, singleGameCardSelector, gameCardsSelector } from '../../reducers/gameCardsReducer';
-import deepFreeze from 'deep-freeze';
+import { addCards, deleteCards, moveCards, setCardsFlipped, setCardsTapped, updateCards } from '../../actions/gameCardsActions';
 import { GameCardPrimitive } from '@mtg-react-redux/models';
-import { addCards, updateCards, deleteCards, moveCards, tapCards, flipCards } from '../../actions/gameCardsActions';
+import deepFreeze from 'deep-freeze';
+import gameCardsReducer, { gameCardsSelector, GameCardsState, singleGameCardSelector } from '../../reducers/gameCardsReducer';
 
 let state: GameCardsState = {};
 let cards: GameCardPrimitive[] = [
@@ -108,7 +108,7 @@ it('moves cards', () => {
 
 it('taps cards', () => {
     cards[0] = { ...cards[0], tapped: !cards[0].tapped };
-    const action = tapCards([cards[0].id]);
+    const action = setCardsTapped([cards[0].id], cards[0].tapped);
     const oldState = { ...state };
     deepFreeze(oldState);
     deepFreeze(action);
@@ -122,7 +122,7 @@ it('taps cards', () => {
 
 it('flips cards', () => {
     cards[1] = { ...cards[1], flipped: !cards[1].flipped };
-    const action = flipCards([cards[1].id]);
+    const action = setCardsFlipped([cards[1].id], cards[1].flipped);
     const oldState = { ...state };
     deepFreeze(oldState);
     deepFreeze(action);

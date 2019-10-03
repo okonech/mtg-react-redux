@@ -3,7 +3,7 @@ import { BaseComponentProps } from '../util/styling';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
 import { createStyles } from '@material-ui/core';
 import { findDOMNode } from 'react-dom';
-import { flipCards as flipCardsType, moveCards as moveCardsType, tapCards as tapCardsType } from '../actions/gameCardsActions';
+import { setCardsFlipped as flipCardsType, moveCards as moveCardsType, setCardsTapped as tapCardsType } from '../actions/gameCardsActions';
 import { gameCardModelsMap } from '@mtg-react-redux/models';
 import { GameCardZone } from '../selectors/player';
 import { SelectableGroup } from '../packages/react-dnd-selectable';
@@ -29,7 +29,7 @@ const styles = (theme: Theme) =>
 
 const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
     drop(props: BattleFieldProps, monitor, component: BattleField) {
-        const { moveCards, selectCards, zone } = props;
+        const { moveCards, zone } = props;
         const { zoneId, cards } = monitor.getItem() as CardDragObject;
 
         cards.forEach((id) => {
@@ -49,15 +49,14 @@ const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
         const yCoord = snapY - bounds.top;
 
         moveCards(zoneId, cards, zone.id, zone.cards.length, xCoord, yCoord);
-        selectCards([]);
     }
 };
 interface BattleFieldProps extends WithStyles<typeof styles>, BaseComponentProps {
     zone: GameCardZone;
     moveCards: typeof moveCardsType;
     selectCards: typeof selectCardsType;
-    flipCards: typeof flipCardsType;
-    tapCards: typeof tapCardsType;
+    setCardsFlipped: typeof flipCardsType;
+    setCardsTapped: typeof tapCardsType;
     selected: string[];
     cardHeight: number;
 }
@@ -119,7 +118,7 @@ class BattleField extends React.PureComponent<AllProps>  {
     }
 
     public render() {
-        const { zone, connectDropTarget, selected, cardHeight, selectCards, flipCards, tapCards, style, classes } = this.props;
+        const { zone, connectDropTarget, selected, cardHeight, selectCards, setCardsFlipped, setCardsTapped, style, classes } = this.props;
         const cards = zone.cards.reduce((acc, curr) => {
             const gameCard = gameCardModelsMap.getModel(curr);
             acc.push(
@@ -130,8 +129,8 @@ class BattleField extends React.PureComponent<AllProps>  {
                     key={'draggable - ' + gameCard.id}
                     selectedCards={selected}
                     selectCards={selectCards}
-                    flipCards={flipCards}
-                    tapCards={tapCards}
+                    setCardsFlipped={setCardsFlipped}
+                    setCardsTapped={setCardsTapped}
                     cardHeight={cardHeight}
                     xCoord={gameCard.x}
                     yCoord={gameCard.y}

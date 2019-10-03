@@ -1,4 +1,4 @@
-import { addCards, deleteCards, flipCards, GameCardsAction, moveCards, tapCards, updateCards } from '../actions/gameCardsActions';
+import { addCards, deleteCards, GameCardsAction, moveCards, setCardsFlipped, setCardsTapped, updateCards } from '../actions/gameCardsActions';
 import { GameCardPrimitive } from '@mtg-react-redux/models';
 import { getType } from 'typesafe-actions';
 import produce from 'immer';
@@ -30,11 +30,11 @@ export default function gameCardsReducer(state: GameCardsState = def, action: Ga
                     draft[cardId].y = yCoord + idx * 10;
                 });
                 break;
-            case getType(tapCards):
-                action.payload.forEach((id) => draft[id].tapped = !draft[id].tapped);
+            case getType(setCardsTapped):
+                action.payload.cards.forEach((id) => draft[id].tapped = action.payload.tapped);
                 break;
-            case getType(flipCards):
-                action.payload.forEach((id) => draft[id].flipped = !draft[id].flipped);
+            case getType(setCardsFlipped):
+                action.payload.cards.forEach((id) => draft[id].flipped = action.payload.flipped);
                 break;
             default:
                 break;

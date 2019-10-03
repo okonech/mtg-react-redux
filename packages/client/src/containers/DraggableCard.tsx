@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ConnectDragPreview, ConnectDragSource, DragSource, DragSourceSpec } from 'react-dnd';
 import { defaultMemoize } from 'reselect';
-import { flipCards as flipCardsType, tapCards as tapCardsType } from '../actions/gameCardsActions';
+import { setCardsFlipped as flipCardsType, setCardsTapped as tapCardsType } from '../actions/gameCardsActions';
 import { GameCardModel } from '@mtg-react-redux/models';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { selectCards as selectCardsType } from '../actions/selectActions';
@@ -77,8 +77,8 @@ interface DraggableCardProps {
   zoneId: string;
   selectedCards: string[];
   selectCards: typeof selectCardsType;
-  flipCards?: typeof flipCardsType;
-  tapCards?: typeof tapCardsType;
+  setCardsFlipped?: typeof flipCardsType;
+  setCardsTapped?: typeof tapCardsType;
   cardHeight: number;
   xCoord?: number;
   yCoord?: number;
@@ -123,12 +123,12 @@ class DraggableCard extends React.PureComponent<AllProps> {
   public render() {
     const {
       card, connectDragSource, selectedCards, selecting, selectableRef,
-      cardHeight, xCoord, yCoord, id, isHovered, tapCards, flipCards
+      cardHeight, xCoord, yCoord, id, isHovered, setCardsFlipped, setCardsTapped
     } = this.props;
     const selected = selectedCards.includes(id);
 
-    const doubleClick = tapCards ? () => tapCards(selected ? selectedCards : [card.id]) : null;
-    const rightClick = flipCards ? () => flipCards(selected ? selectedCards : [card.id]) : null;
+    const doubleClick = setCardsTapped ? () => setCardsTapped(selected ? selectedCards : [card.id], !card.tapped) : null;
+    const rightClick = setCardsFlipped ? () => setCardsFlipped(selected ? selectedCards : [card.id], !card.flipped) : null;
 
     return (
       connectDragSource(

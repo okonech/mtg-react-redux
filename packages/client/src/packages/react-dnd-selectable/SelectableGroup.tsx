@@ -56,7 +56,7 @@ const cardSource: DragSourceSpec<SelectableGroupProps, DragSelectable> = {
     }
 };
 
-const battlefieldTarget: DropTargetSpec<SelectableGroupProps> = {
+const dropTarget: DropTargetSpec<SelectableGroupProps> = {
     drop(props, monitor, component: SelectableGroup) {
         const { onSelectionFinish } = props;
         const { selecting } = component.state;
@@ -169,7 +169,7 @@ export default DragSource<SelectableGroupProps, SelectableGroupSourceCollectedPr
     Types.SELECTABLE, cardSource, (connect) => ({
         connectDragSource: connect.dragSource(),
         connectDragPreview: connect.dragPreview()
-    }))(DropTarget(Types.SELECTABLE, battlefieldTarget, (connect, monitor) => ({
+    }))(DropTarget(Types.SELECTABLE, dropTarget, (connect, monitor) => ({
         connectDropTarget: connect.dropTarget(),
         offset: monitor.getClientOffset()
     }))(SelectableGroup));
