@@ -23,11 +23,25 @@ export async function initPlayers(game: string): Promise<PlayersData> {
     await Promise.all(players.map(async (rawPlayer) => {
 
         const player = mapRawToPlayer(rawPlayer);
-        const cards = await mapRawToCards(rawPlayer.library);
-        const gameCards = shuffle(mapToGameCards(player, cards));
-        const zones = mapDataToZones(player, gameCards);
+        const rawCommanders = rawPlayer.commanders;
+        const cards = await mapRawToCards([...rawPlayer.library, ...rawCommanders]);
+        const { lib, commanders } = cards.reduce((acc, curr) => {
+            if (rawCommanders.includes(cardModelsMap.getModel(curr).name())) {
+                acc.commanders.push(curr);
+            } else {
+                acc.lib.push(curr);
+            }
+            return acc;
+        }, { lib: [], commanders: [] } as { lib: CardPrimitive[]; commanders: CardPrimitive[] });
+        const [gameCardCommanders, gameCards] = [
+            // always sort commanders alphabetically
+            mapToGameCards(player, commanders.sort((a, b) => cardModelsMap.getModel(a).name().localeCompare(cardModelsMap.getModel(b).name()))),
+            mapToGameCards(player, lib)
+        ];
+        const zones = mapDataToZones(player, shuffle(gameCards), gameCardCommanders);
+        player.commanders = gameCardCommanders.map(card => card.id);
         allCards.push(...cards);
-        allGameCards.push(...gameCards);
+        allGameCards.push(...gameCards, ...gameCardCommanders);
         allPlayers.push(player);
         allZones.push(...zones);
     }));
@@ -51,7 +65,9 @@ function mapRawToPlayer(player: RawPlayer): Player {
         hand: uuid(),
         battlefield: uuid(),
         graveyard: uuid(),
-        exile: uuid()
+        exile: uuid(),
+        command: uuid(),
+        commanders: []
     };
 }
 
@@ -84,7 +100,7 @@ function parseCardData(cards: ScryfallCard[]): CardPrimitive[] {
     );
 }
 
-function mapDataToZones(player: Player, cards: GameCardPrimitive[]): Zone[] {
+function mapDataToZones(player: Player, cards: GameCardPrimitive[], commanders: GameCardPrimitive[]): Zone[] {
     const idToZone = (id: string, cardIds: string[] = []) => ({
         id,
         cards: cardIds,
@@ -92,11 +108,11 @@ function mapDataToZones(player: Player, cards: GameCardPrimitive[]): Zone[] {
     });
 
     return [
-        idToZone(player.library, cards.slice(0, 93).map((card) => card.id)),
-        // idToZone(player.battlefield, cards.slice(90, 93).map((card) => card.id)),
+        idToZone(player.library, cards.slice(7, 100).map((card) => card.id)),
         idToZone(player.battlefield),
-        idToZone(player.hand, cards.slice(93).map((card) => card.id)),
+        idToZone(player.hand, cards.slice(0, 7).map((card) => card.id)),
         idToZone(player.graveyard),
-        idToZone(player.exile)
+        idToZone(player.exile),
+        idToZone(player.command, commanders.map(card => card.id))
     ];
 }

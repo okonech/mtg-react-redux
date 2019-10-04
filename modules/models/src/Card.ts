@@ -19,7 +19,7 @@ export const TYPES: Types[] = [
 
 type ColorType = 'White' | 'Blue' | 'Black' | 'Red' | 'Green' | 'Multicolor' | 'Colorless';
 
-type ImageSize = 'small' | 'medium' | 'large';
+type ImageSize = 'small' | 'medium' | 'large' | 'artCrop';
 
 interface CardModel {
     readonly id: CardPrimitive['id'];
@@ -178,6 +178,9 @@ export class CardModelImpl implements CardModel {
                 break;
             case 'medium':
                 normalizedType = 'normal';
+                break;
+            case 'artCrop':
+                normalizedType = 'art_crop';
                 break;
             default:
                 normalizedType = 'small';

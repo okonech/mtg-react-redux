@@ -1,9 +1,9 @@
+import { BaseComponentProps, noSelect } from '../util/styling';
 import { createStyles, SvgIcon, Typography } from '@material-ui/core';
+import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import { Theme } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import React from 'react';
-import { BaseComponentProps, noSelect } from '../util/styling';
 
 const styles = (theme: Theme) => {
     const { divider } = theme.palette;

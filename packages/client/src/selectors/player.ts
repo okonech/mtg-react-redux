@@ -11,7 +11,7 @@ export interface GameCardZone {
     cards: GameCardData[];
 }
 
-interface GameCardData {
+export interface GameCardData {
     card: CardPrimitive;
     gameCard: GameCardPrimitive;
 }
@@ -26,6 +26,8 @@ export interface PlayerData {
     battlefield: GameCardZone;
     graveyard: GameCardZone;
     exile: GameCardZone;
+    command: GameCardZone;
+    commanders: GameCardData[];
 }
 
 const getZones = (state: AppState) => state.zones;
@@ -41,7 +43,8 @@ const getPlayerZones = createSelector(
         hand: zones[player.hand],
         battlefield: zones[player.battlefield],
         graveyard: zones[player.graveyard],
-        exile: zones[player.exile]
+        exile: zones[player.exile],
+        command: zones[player.command]
     })
 );
 
@@ -68,6 +71,8 @@ export const playerSelector = createSelector(
         hand: mapZoneToCards(player.hand, cards, gameCards),
         battlefield: mapZoneToCards(player.battlefield, cards, gameCards),
         graveyard: mapZoneToCards(player.graveyard, cards, gameCards),
-        exile: mapZoneToCards(player.exile, cards, gameCards)
+        exile: mapZoneToCards(player.exile, cards, gameCards),
+        command: mapZoneToCards(player.command, cards, gameCards),
+        commanders: mapIdsToGameCardData(player.commanders, cards, gameCards)
     })
 );

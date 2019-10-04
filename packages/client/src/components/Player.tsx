@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { MappedPlayer } from '../containers/Player';
 import BattleField from '../containers/BattleField';
 import Hand from '../containers/Hand';
-import InfoArea from './InfoArea';
+import InfoArea from '../containers/InfoArea';
 import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +30,7 @@ const grid = defaultMemoize((cardHeight: number, style: React.CSSProperties): Re
 }));
 
 const Player: React.FC<PlayerProps> = (props) => {
-    const { player, moveCards, selectCards, setCardsFlipped, setCardsTapped, selected, style } = props;
+    const { player, selected, style } = props;
     const { hand, battlefield, library } = player;
     const classes = useStyles({});
 
@@ -41,17 +41,11 @@ const Player: React.FC<PlayerProps> = (props) => {
             <InfoArea
                 style={{ gridArea: 'info' }}
                 player={player}
-                moveCards={moveCards}
-                selectCards={selectCards}
                 key={library.id}
             />
             <BattleField
                 style={{ gridArea: 'battlefield' }}
                 zone={battlefield}
-                moveCards={moveCards}
-                selectCards={selectCards}
-                setCardsFlipped={setCardsFlipped}
-                setCardsTapped={setCardsTapped}
                 key={battlefield.id}
                 selected={selected}
                 cardHeight={cardHeight}
@@ -59,8 +53,6 @@ const Player: React.FC<PlayerProps> = (props) => {
             <Hand
                 style={{ gridArea: 'hand' }}
                 zone={hand}
-                moveCards={moveCards}
-                selectCards={selectCards}
                 key={hand.id}
                 selected={selected}
                 cardHeight={cardHeight}

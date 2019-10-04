@@ -1,14 +1,14 @@
+import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
+import ChatRoom from './chatroom/ChatRoom';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import clsx from 'clsx';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
-import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MenuIcon from '@material-ui/icons/Menu';
-import clsx from 'clsx';
-import React from 'react';
-import ChatRoom from './chatroom/ChatRoom';
 import PlayerList from './chatroom/PlayerList';
+import React from 'react';
 
 const drawerWidth = 300;
 

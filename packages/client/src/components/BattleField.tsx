@@ -1,19 +1,21 @@
-
 import { BaseComponentProps } from '../util/styling';
-import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
-import { createStyles } from '@material-ui/core';
-import { findDOMNode } from 'react-dom';
-import { setCardsFlipped as flipCardsType, moveCards as moveCardsType, setCardsTapped as tapCardsType } from '../actions/gameCardsActions';
+import { BattleFieldMappedProps, BattleFieldTargetCollectedProps } from '../containers/BattleField';
+import { createStyles, withStyles, WithStyles } from '@material-ui/styles';
 import { gameCardModelsMap } from '@mtg-react-redux/models';
 import { GameCardZone } from '../selectors/player';
 import { SelectableGroup } from '../packages/react-dnd-selectable';
-import { selectCards as selectCardsType } from '../actions/selectActions';
-import { setSnapEnabled, setSnapOverNode, snapToGrid } from '../util/snapToGrid';
+import { setSnapEnabled, setSnapOverNode } from '../util/snapToGrid';
 import { Theme } from '@material-ui/core/styles';
-import { Types } from '../Constants';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-import DraggableCard, { CardDragObject } from './DraggableCard';
+import DraggableCard from '../containers/DraggableCard';
 import React from 'react';
+
+type AllProps = BattleFieldProps & BattleFieldTargetCollectedProps & BattleFieldMappedProps;
+
+interface BattleFieldProps extends WithStyles<typeof styles>, BaseComponentProps {
+    zone: GameCardZone;
+    selected: string[];
+    cardHeight: number;
+}
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -26,49 +28,6 @@ const styles = (theme: Theme) =>
 
         }
     });
-
-const battlefieldTarget: DropTargetSpec<BattleFieldProps> = {
-    drop(props: BattleFieldProps, monitor, component: BattleField) {
-        const { moveCards, zone } = props;
-        const { zoneId, cards } = monitor.getItem() as CardDragObject;
-
-        cards.forEach((id) => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.style.display = 'block';
-            }
-        });
-
-        const node = findDOMNode(component) as Element;
-        const bounds = node.getBoundingClientRect();
-        const { x, y } = monitor.getSourceClientOffset();
-
-        const { x: snapX, y: snapY } = snapToGrid({ x, y });
-
-        const xCoord = snapX - bounds.left;
-        const yCoord = snapY - bounds.top;
-
-        moveCards(zoneId, cards, zone.id, zone.cards.length, xCoord, yCoord);
-    }
-};
-interface BattleFieldProps extends WithStyles<typeof styles>, BaseComponentProps {
-    zone: GameCardZone;
-    moveCards: typeof moveCardsType;
-    selectCards: typeof selectCardsType;
-    setCardsFlipped: typeof flipCardsType;
-    setCardsTapped: typeof tapCardsType;
-    selected: string[];
-    cardHeight: number;
-}
-
-interface BattleFieldTargetCollectedProps {
-    connectDropTarget: ConnectDropTarget;
-    isOver: boolean;
-    canDrop: boolean;
-    dragItem: CardDragObject;
-}
-
-type AllProps = BattleFieldProps & BattleFieldTargetCollectedProps;
 
 class BattleField extends React.PureComponent<AllProps>  {
     public battleFieldRef: React.RefObject<HTMLDivElement>;
@@ -100,7 +59,7 @@ class BattleField extends React.PureComponent<AllProps>  {
             setSnapOverNode(this.battleFieldRef.current);
 
             // chrome hack, can't send display none prop directly to card
-            // https://github.com/react-dnd/react-dnd/issues/477
+            // https://github.com/react-dnd/react-dnd/issues/1085
             const { cards } = this.props.dragItem;
             cards.forEach((id) => {
                 const element = document.getElementById(id);
@@ -155,9 +114,4 @@ class BattleField extends React.PureComponent<AllProps>  {
     }
 }
 
-export default DropTarget(Types.CARD, battlefieldTarget, (connect, monitor) => ({
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop(),
-    dragItem: monitor.getItem()
-}))(withStyles(styles)(BattleField));
+export default withStyles(styles)(BattleField);

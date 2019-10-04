@@ -3,7 +3,7 @@ name: CardList
 ---
 
 import { Playground, Props } from 'docz'
-import Card from '../../src/components/Card'
+import CardDisplay from '../../src/components/CardDisplay'
 import CardList from '../../src/components/CardList'
 import { exampleCardModel } from '../../src/util/docz-helpers/card'
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -34,7 +34,7 @@ No size props here, but weird start transition
     >
         {Array.from({length: 7}).map(()=> {
             return (
-                <Card
+                <CardDisplay
                     card={exampleCardModel()}
                     selected={false}
                     selecting={false}
@@ -66,7 +66,7 @@ No size props here, but weird start transition
     >
         {Array.from({length: 7}).map(()=> {
             return (
-                <Card
+                <CardDisplay
                     card={exampleCardModel()}
                     selected={false}
                     selecting={false}

@@ -1,4 +1,4 @@
-import { addPlayers, deletePlayers, updatePlayers } from '../../actions/playersActions';
+import { addPlayers, deletePlayers, setLife, setPoison, updatePlayers } from '../../actions/playersActions';
 import { allPlayersSelector, Player, PlayersState, singlePlayerSelector } from '../../reducers/playersReducer';
 import deepFreeze from 'deep-freeze';
 import playersReducer from '../../reducers/playersReducer';
@@ -18,7 +18,8 @@ let players: Player[] = [
         hand: 'hand-id',
         battlefield: 'battlefield-id',
         graveyard: 'graveyard-id',
-        exile: 'exile-id'
+        exile: 'exile-id',
+        command: 'command-id'
     },
     {
         id: '2',
@@ -30,7 +31,8 @@ let players: Player[] = [
         hand: 'hand-id2',
         battlefield: 'battlefield-id2',
         graveyard: 'graveyard-id2',
-        exile: 'exile-id2'
+        exile: 'exile-id2',
+        command: 'command-id2'
     }
 ];
 
@@ -60,16 +62,9 @@ it('adds players', () => {
 it('updates players', () => {
     players = [
         {
-            id: '1',
-            dbId: '1111',
+            ...players[0],
             name: 'Player 3',
-            life: 20,
-            poison: 0,
-            library: 'lib-id',
-            hand: 'hand-id',
-            battlefield: 'battlefield-id',
-            graveyard: 'graveyard-id',
-            exile: 'exile-id'
+            command: 'command-id3'
         },
         players[1]
     ];
@@ -88,6 +83,44 @@ it('updates players', () => {
             '2'
         ]
 
+    });
+});
+
+it('sets life', () => {
+    players[0] = {
+        ...players[0],
+        life: 12
+    };
+    const upd = setLife(players[0].id, 12);
+    const oldState = { ...state };
+    deepFreeze(oldState);
+    deepFreeze(upd);
+    state = playersReducer(oldState, upd);
+    expect(state).toEqual({
+        ...oldState,
+        playersById: {
+            ...oldState.playersById,
+            1: players[0]
+        }
+    });
+});
+
+it('sets poison', () => {
+    players[0] = {
+        ...players[0],
+        poison: 9
+    };
+    const upd = setPoison(players[0].id, 9);
+    const oldState = { ...state };
+    deepFreeze(oldState);
+    deepFreeze(upd);
+    state = playersReducer(oldState, upd);
+    expect(state).toEqual({
+        ...oldState,
+        playersById: {
+            ...oldState.playersById,
+            1: players[0]
+        }
     });
 });
 

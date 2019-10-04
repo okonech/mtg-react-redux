@@ -1,6 +1,7 @@
 export interface Player {
     name: string;
     library: string[];
+    commanders: string[];
 }
 
 export const players: Player[] =
@@ -32,7 +33,6 @@ export const players: Player[] =
                 `Aetherflux Reservoir`,
                 `Laboratory Maniac`,
                 `Shimmer Myr`,
-                `Zur the Enchanter`,
                 `Notion Thief`,
                 `Jace, Vryns Prodigy`,
                 `Mystic Remora`,
@@ -108,7 +108,8 @@ export const players: Player[] =
                 `Preordain`,
                 `Demonic Tutor`,
                 `Merchant Scroll`
-            ]
+            ],
+            commanders: [`Zur the Enchanter`]
         },
         {
             name: `Jhoi Rider`,
@@ -151,7 +152,6 @@ export const players: Player[] =
                 `Inventors' Fair`,
                 `Isochron Scepter`,
                 `Izzet Signet`,
-                `Jhoira, Weatherlight Captain`,
                 `Lotus Petal`,
                 `Magus of the Moon`,
                 `Mana Crypt`,
@@ -213,7 +213,8 @@ export const players: Player[] =
                 `Winter Orb`,
                 `Wooded Foothills`,
                 `Words of Wind`
-            ]
+            ],
+            commanders: [`Jhoira, Weatherlight Captain`]
         },
         {
             name: `Hulkster`,
@@ -234,8 +235,6 @@ export const players: Player[] =
                 `Llanowar Elves`,
                 `Noble Hierarch`,
                 `Priest of Titania`,
-                `Thrasios, Triton Hero`,
-                `Tymna the Weaver`,
                 `Notion Thief`,
                 `Sacred Guide`,
                 `Hapless Researcher`,
@@ -318,6 +317,10 @@ export const players: Player[] =
                 `Windfall`,
                 `Merchant Scroll`,
                 `Diabolic Intent`
+            ],
+            commanders: [
+                `Thrasios, Triton Hero`,
+                `Tymna the Weaver`
             ]
         },
         {
@@ -340,7 +343,6 @@ export const players: Player[] =
                 `Grand Arbiter Augustin IV`,
                 `Jace, Vryn's Prodigy`,
                 `Linvala, Keeper of Silence`,
-                `Taigam, Ojutai Master`,
                 `Academy Rector`,
                 `Aven Mindcensor`,
                 `Alms Collector`,
@@ -424,6 +426,7 @@ export const players: Player[] =
                 `Gitaxian Probe`,
                 `Timetwister`
 
-            ]
+            ],
+            commanders: [`Taigam, Ojutai Master`]
         }
     ];

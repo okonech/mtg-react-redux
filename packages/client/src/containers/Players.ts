@@ -1,8 +1,8 @@
+import { AppState } from '../reducers';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import Players from '../components/Players';
-import { AppState } from '../reducers';
 import { GameState } from '../reducers/gameReducer';
+import Players from '../components/Players';
 
 export interface MappedPlayers {
     game: GameState;

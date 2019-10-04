@@ -92,9 +92,23 @@ it('deletes cards', () => {
     );
 });
 
-it('moves cards', () => {
+it('moves cards in same zone without resetting tapped/flipped', () => {
     cards[0] = { ...cards[0], x: 100, y: 250 };
-    const action = moveCards('aaa', [cards[0].id], 'bbb', 1, 100, 250);
+    const action = moveCards('aaa', [cards[0].id], 'aaa', 1, 100, 250);
+    const oldState = { ...state };
+    deepFreeze(oldState);
+    deepFreeze(action);
+    state = gameCardsReducer(oldState, action);
+    expect(state).toEqual(cards.reduce((acc, curr) => {
+        acc[curr.id] = curr;
+        return acc;
+    }, {})
+    );
+});
+
+it(`moves cards to different zones and resets tapped/flipped`, () => {
+    cards[1] = { ...cards[1], x: 100, y: 250, tapped: false, flipped: false };
+    const action = moveCards('aaa', [cards[1].id], 'bbb', 1, 100, 250);
     const oldState = { ...state };
     deepFreeze(oldState);
     deepFreeze(action);
@@ -137,14 +151,17 @@ it('flips cards', () => {
 it('selects card', () => {
     const oldState = { ...state };
     deepFreeze(oldState);
-    expect(singleGameCardSelector(oldState, '2')).toEqual(cards[0]);
+    const key = Object.keys(oldState)[0];
+    expect(singleGameCardSelector(oldState, key)).toEqual(oldState[key]);
 });
 
 it('selects cards', () => {
     const oldState = { ...state };
     deepFreeze(oldState);
+    const key = Object.keys(oldState)[0];
+    const key2 = Object.keys(oldState)[1];
     expect(gameCardsSelector(oldState, ['2', '3'])).toEqual([
-        cards[0],
-        cards[1]
+        oldState[key],
+        oldState[key2]
     ]);
 });

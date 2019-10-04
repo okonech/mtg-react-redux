@@ -9,7 +9,7 @@ export function desc<T extends {}>(a: T, b: T, orderBy: keyof T) {
 }
 
 export function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
-    const stabilizedThis: [T, number][] = array.map((el, index) => [el, index]);
+    const stabilizedThis: Array<[T, number]> = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);
         if (order !== 0) {

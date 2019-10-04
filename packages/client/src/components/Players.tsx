@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
 import { defaultMemoize } from 'reselect';
-import CardCustomDragLayer from '../containers/CardCustomDragLayer';
-import Player from '../containers/Player';
 import { MappedPlayers } from '../containers/Players';
 import { setCardHeight } from '../util/cardSize';
+import CardCustomDragLayer from '../containers/CardCustomDragLayer';
 import LoadingSpinner from './LoadingSpinner';
+import Player from '../containers/Player';
+import React, { useEffect } from 'react';
 
 interface PlayersProps extends MappedPlayers {
     playerRows: number;

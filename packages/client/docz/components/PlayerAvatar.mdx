@@ -1,0 +1,57 @@
+---
+name: Player Avatar
+---
+
+import { Playground, Props } from 'docz'
+import PlayerAvatar from '../../src/components/PlayerAvatar'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+# Player Avatar
+
+<Props of={PlayerAvatar} />
+
+
+## Basic usage
+
+<Playground>
+  <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+    <CssBaseline />
+    <PlayerAvatar
+            player={{name: 'Player 1', id: '1234'}}
+            icon={'https://img.scryfall.com/cards/art_crop/front/2/5/253e19db-28a1-4909-b235-e02631a38c35.jpg?1567181522'}
+            grayscale={false}
+        />
+  </MuiThemeProvider>
+</Playground>
+
+## Grayscale
+
+<Playground>
+  <MuiThemeProvider theme={createMuiTheme({
+        palette: {
+            primary: {
+            main: '#1e88e5'
+            },
+            secondary: {
+            main: '#d81b60'
+            },
+            type: 'dark'
+        }})}>
+    <CssBaseline />
+    <PlayerAvatar
+            player={{name: 'Player 1', id: '1234'}}
+            icon={'https://img.scryfall.com/cards/art_crop/front/2/5/253e19db-28a1-4909-b235-e02631a38c35.jpg?1567181522'}
+            grayscale={true}
+        />
+  </MuiThemeProvider>
+</Playground>

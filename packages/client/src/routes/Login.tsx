@@ -1,3 +1,13 @@
+import { AppState } from '../reducers';
+import { connect } from 'react-redux';
+import { Field, Form } from 'react-final-form';
+import { getFirebase } from 'react-redux-firebase';
+import { LinkProps, Redirect, Link as RouterLink } from 'react-router-dom';
+import { loginAsync } from '../actions/authActions';
+import { makeStyles } from '@material-ui/core/styles';
+import { Omit } from '../util/propsHelper';
+import { TextField } from '../packages/final-form-material-ui';
+import { ValidateEmail } from '../util/validators';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -5,22 +15,12 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import GoogleButton from 'react-google-button';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React from 'react';
-import { Field, Form } from 'react-final-form';
-import GoogleButton from 'react-google-button';
-import { connect } from 'react-redux';
-import { getFirebase } from 'react-redux-firebase';
-import { Link as RouterLink, LinkProps, Redirect } from 'react-router-dom';
-import { loginAsync } from '../actions/authActions';
-import { TextField } from '../packages/final-form-material-ui';
-import { AppState } from '../reducers';
-import { Omit } from '../util/propsHelper';
-import { ValidateEmail } from '../util/validators';
+import Typography from '@material-ui/core/Typography';
 
 const LoginGoogleButton = GoogleButton as any;
 
@@ -104,9 +104,7 @@ const Login = (props: LoginProps) => {
     logIn(values);
   };
 
-  const loginWithGoogle = () => {
-    return firebase.login({ provider: 'google', type: 'popup' });
-  };
+  const loginWithGoogle = () => firebase.login({ provider: 'google', type: 'popup' });
 
   if (auth.uid) {
     return <Redirect to='/' />;
@@ -201,13 +199,11 @@ const Login = (props: LoginProps) => {
   );
 };
 
-const mapStateToProps = (state: AppState) => {
-  return {
-    auth: state.firebase.auth,
-    authError: state.auth.authError,
-    firebase: getFirebase()
-  };
-};
+const mapStateToProps = (state: AppState) => ({
+  auth: state.firebase.auth,
+  authError: state.auth.authError,
+  firebase: getFirebase()
+});
 
 const mapDispatchToProps = {
   logIn: loginAsync.request
