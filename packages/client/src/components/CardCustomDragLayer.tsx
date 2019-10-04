@@ -61,7 +61,7 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
     public renderCards = defaultMemoize(
         (cardHeight: CardCustomDragLayerProps['cardHeight'], selectedCards: CardCustomDragLayerProps['selectedCards']): JSX.Element[] => {
             const renderCards = selectedCards.length > 5 ? selectedCards.slice(0, 5) : selectedCards;
-            return renderCards.reverse().map((card, index) =>
+            return renderCards.map((card, index) =>
                 (
                     <div
                         style={cardStyle(cardHeight, index)}

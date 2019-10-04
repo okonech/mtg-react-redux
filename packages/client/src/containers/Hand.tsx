@@ -56,7 +56,7 @@ const handTarget: DropTargetSpec<HandProps> = {
 
   },
   drop(props: HandProps, monitor, component: Hand) {
-    const { moveCards, selectCards, zone } = props;
+    const { moveCards, zone } = props;
     const { zoneId, cards } = monitor.getItem() as CardDragObject;
     const { placeholderIndex } = component.state;
     cards.forEach((id) => {
@@ -66,7 +66,6 @@ const handTarget: DropTargetSpec<HandProps> = {
       }
     });
     moveCards(zoneId, cards, zone.id, placeholderIndex, 0, 0);
-    selectCards([]);
   }
 };
 

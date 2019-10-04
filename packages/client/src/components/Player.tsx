@@ -30,7 +30,7 @@ const grid = defaultMemoize((cardHeight: number, style: React.CSSProperties): Re
 }));
 
 const Player: React.FC<PlayerProps> = (props) => {
-    const { player, moveCards, selectCards, flipCards, tapCards, selected, style } = props;
+    const { player, moveCards, selectCards, setCardsFlipped, setCardsTapped, selected, style } = props;
     const { hand, battlefield, library } = player;
     const classes = useStyles({});
 
@@ -50,8 +50,8 @@ const Player: React.FC<PlayerProps> = (props) => {
                 zone={battlefield}
                 moveCards={moveCards}
                 selectCards={selectCards}
-                flipCards={flipCards}
-                tapCards={tapCards}
+                setCardsFlipped={setCardsFlipped}
+                setCardsTapped={setCardsTapped}
                 key={battlefield.id}
                 selected={selected}
                 cardHeight={cardHeight}

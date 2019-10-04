@@ -96,7 +96,7 @@ class ZoneInfoDnd extends React.PureComponent<ZoneInfoDndProps & DropTargetColle
             connectDragSource(
                 connectDropTarget(
                     <article
-                        onClick={click}
+                        onDoubleClick={click}
                         style={{ ...style, ...ZoneInfoDndStyle }}
                     >
                         <ZoneInfo
