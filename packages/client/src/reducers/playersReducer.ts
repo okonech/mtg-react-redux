@@ -1,4 +1,4 @@
-import { addPlayers, deletePlayers, PlayersAction, updatePlayers } from '../actions/playersActions';
+import { addPlayers, deletePlayers, PlayersAction, setLife, setPoison, updatePlayers } from '../actions/playersActions';
 import { combineReducers } from 'redux';
 import { getType } from 'typesafe-actions';
 import produce from 'immer';
@@ -23,6 +23,8 @@ export interface Player {
     battlefield: string;
     graveyard: string;
     exile: string;
+    command: string;
+    commanders: string[];
 }
 
 function playersById(state: PlayersById = {}, action: PlayersAction) {
@@ -34,6 +36,12 @@ function playersById(state: PlayersById = {}, action: PlayersAction) {
                 break;
             case getType(deletePlayers):
                 action.payload.forEach((id) => delete draft[id]);
+                break;
+            case getType(setLife):
+                draft[action.payload.player].life = action.payload.life;
+                break;
+            case getType(setPoison):
+                draft[action.payload.player].poison = action.payload.poison;
                 break;
             default:
                 break;

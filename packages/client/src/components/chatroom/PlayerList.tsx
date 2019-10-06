@@ -40,7 +40,7 @@ const styles = (theme: Theme) =>
         }
     });
 
-const PlayerList = (props) => {
+const PlayerList: React.FC = (props: any) => {
 
     const { classes, style } = props;
 

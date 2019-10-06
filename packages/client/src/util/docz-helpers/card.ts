@@ -1,4 +1,4 @@
-import { cardModelsMap, CardPrimitive, TYPES } from '@mtg-react-redux/models';
+import { cardModelsMap, CardPrimitive, gameCardModelsMap, GameCardPrimitive, TYPES } from '@mtg-react-redux/models';
 import { CardsState } from '../../reducers/cardsReducer';
 import { DeckEditorRow, DeckEditorState } from '../../reducers/deckEditorReducer';
 
@@ -47,8 +47,23 @@ export const examplePrimitive: CardPrimitive = {
     }
 };
 
+export const exampleGamePrimitive: GameCardPrimitive = {
+    id: 'naus',
+    dbId: '0a4ce4a1-65e3-4b40-be35-8fc55a968ec8',
+    tapped: false,
+    flipped: false,
+    controller: 'aaa',
+    owner: 'aaa',
+    x: 0,
+    y: 0
+};
+
 export function exampleCardModel() {
     return cardModelsMap.getModel(examplePrimitive);
+}
+
+export function exampleGameCardModel() {
+    return gameCardModelsMap.getModel({ card: examplePrimitive, gameCard: exampleGamePrimitive });
 }
 
 function randType() {

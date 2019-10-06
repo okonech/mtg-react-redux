@@ -28,6 +28,11 @@ export default function gameCardsReducer(state: GameCardsState = def, action: Ga
                 ids.reverse().forEach((cardId, idx) => {
                     draft[cardId].x = xCoord + idx * 10;
                     draft[cardId].y = yCoord + idx * 10;
+                    // reset tapped and flipped if switching zones
+                    if (action.payload.fromZone !== action.payload.toZone) {
+                        draft[cardId].tapped = false;
+                        draft[cardId].flipped = false;
+                    }
                 });
                 break;
             case getType(setCardsTapped):

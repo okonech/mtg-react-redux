@@ -6,7 +6,8 @@ export const noSelect = defaultMemoize((style: React.CSSProperties): React.CSSPr
     WebkitUserSelect: 'none',
     MozUserSelect: 'none',
     msUserSelect: 'none',
-    userSelect: 'none'
+    userSelect: 'none',
+    pointerEvents: 'none'
 }));
 
 export interface BaseComponentProps {

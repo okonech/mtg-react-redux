@@ -1,16 +1,16 @@
+import { BaseComponentProps } from '../util/styling';
+import { makeStyles } from '@material-ui/core/styles';
+import { MappedNavBar } from '../containers/Navbar';
+import { Link as RouterLink } from 'react-router-dom';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { MappedNavBar } from '../containers/Navbar';
-import { BaseComponentProps } from '../util/styling';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const useStyles = makeStyles(() => ({
     grow: {

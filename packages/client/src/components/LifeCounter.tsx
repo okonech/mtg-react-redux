@@ -1,11 +1,12 @@
-import { createStyles, IconButton, SvgIcon, Typography } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Theme } from '@material-ui/core/styles';
-import { CSSProperties } from '@material-ui/core/styles/withStyles';
-import AddCircle from '@material-ui/icons/AddCircle';
-import RemoveCircle from '@material-ui/icons/RemoveCircle';
-import React from 'react';
 import { BaseComponentProps, noSelect } from '../util/styling';
+import { createStyles, IconButton, SvgIcon, Typography } from '@material-ui/core';
+import { CSSProperties } from '@material-ui/core/styles/withStyles';
+import { MappedLifeCounter } from '../containers/LifeCounter';
+import { Theme } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
+import AddCircle from '@material-ui/icons/AddCircle';
+import React from 'react';
+import RemoveCircle from '@material-ui/icons/RemoveCircle';
 
 const styles = (theme: Theme) => {
     const { divider } = theme.palette;
@@ -42,13 +43,18 @@ const styles = (theme: Theme) => {
     });
 };
 
-export interface LifeCounterProps extends WithStyles<typeof styles>, BaseComponentProps {
+export interface LifeCounterProps extends WithStyles<typeof styles>, BaseComponentProps, MappedLifeCounter {
     life: number;
     icon: any;
+    player: string;
 }
 
 const LifeCounter = (props: LifeCounterProps) => {
-    const { life, icon, style, classes } = props;
+    const { life, icon, player, style, classes, setLife } = props;
+
+    const click = (num: number) => () => setLife(player, life + num);
+
+
     return (
         <article
             className={classes.main}
@@ -61,7 +67,11 @@ const LifeCounter = (props: LifeCounterProps) => {
                 {icon}
             </SvgIcon>
             <span className={classes.row} >
-                <IconButton color='secondary' className={classes.button}>
+                <IconButton
+                    onClick={click(-1)}
+                    color='secondary'
+                    className={classes.button}
+                >
                     <RemoveCircle />
                 </IconButton >
                 <Typography
@@ -69,7 +79,11 @@ const LifeCounter = (props: LifeCounterProps) => {
                 >
                     {life}
                 </Typography>
-                <IconButton color='secondary' className={classes.button}>
+                <IconButton
+                    onClick={click(1)}
+                    color='secondary'
+                    className={classes.button}
+                >
                     <AddCircle />
                 </IconButton >
             </span>

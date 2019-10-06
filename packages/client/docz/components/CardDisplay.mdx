@@ -1,17 +1,16 @@
 ---
-name: Card
+name: Card Display
 ---
 
 import { Playground, Props } from 'docz'
-import Card from '../../src/components/Card'
-import HoverCard from '../../src/util/docz-helpers/HoverCard'
-import { exampleGameCardModel } from '../../src/util/docz-helpers/card'
+import CardDisplay from '../../src/components/CardDisplay'
+import { exampleCardModel } from '../../src/util/docz-helpers/card'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
-# Card
+# CardDisplay
 
-<Props of={Card} />
+<Props of={CardDisplay} />
 
 
 ## Basic usage
@@ -28,8 +27,8 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
             type: 'dark'
         }})}>
       <CssBaseline />
-      <Card
-            card={exampleGameCardModel()}
+      <CardDisplay
+            card={exampleCardModel()}
             selected={false}
             selecting={false}
             cardHeight={32}
@@ -52,8 +51,8 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
             type: 'dark'
         }})}>
       <CssBaseline />
-      <Card
-            card={exampleGameCardModel()}
+      <CardDisplay
+            card={exampleCardModel()}
             selected={true}
             selecting={false}
             cardHeight={32}
@@ -76,8 +75,8 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
             type: 'dark'
         }})}>
       <CssBaseline />
-      <HoverCard
-            card={exampleGameCardModel()}
+      <CardDisplay
+            card={exampleCardModel()}
             selected={false}
             selecting={false}
             cardHeight={32}
@@ -86,7 +85,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
     </MuiThemeProvider>
 </Playground>
 
-## With Hover
+## Tapped
 
 <Playground>
   <MuiThemeProvider theme={createMuiTheme({
@@ -100,11 +99,12 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
             type: 'dark'
         }})}>
       <CssBaseline />
-      <HoverCard
-            card={exampleGameCardModel()}
+      <CardDisplay
+            card={exampleCardModel()}
             selected={false}
             selecting={false}
             cardHeight={32}
+            tapped={true}
         />
     </MuiThemeProvider>
 </Playground>

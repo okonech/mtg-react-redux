@@ -1,7 +1,7 @@
+import { AppState } from '../reducers';
 import { connect } from 'react-redux';
 import { logoutAsync } from '../actions/authActions';
 import Navbar from '../components/Navbar';
-import { AppState } from '../reducers';
 
 export interface MappedNavBar {
     auth: any;

@@ -1,14 +1,15 @@
 
 import { BaseComponentProps } from '../util/styling';
 import { CardDragObject } from './DraggableCard';
+import { connect } from 'react-redux';
 import {
     ConnectDragPreview, ConnectDragSource, ConnectDropTarget, DragSource,
     DragSourceSpec, DropTarget, DropTargetSpec
 } from 'react-dnd';
 import { GameCardZone } from '../selectors/player';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { moveCards as moveCardsType } from '../actions/gameCardsActions';
-import { selectCards as selectCardsType } from '../actions/selectActions';
+import { moveCards } from '../actions/gameCardsActions';
+import { selectCards } from '../actions/selectActions';
 import { Types } from '../Constants';
 import React from 'react';
 import ZoneInfo from '../components/ZoneInfo';
@@ -16,8 +17,8 @@ import ZoneInfo from '../components/ZoneInfo';
 export interface ZoneInfoDndProps extends BaseComponentProps {
     zone: GameCardZone;
     icon: any;
-    moveCards: typeof moveCardsType;
-    selectCards: typeof selectCardsType;
+    moveCards: typeof moveCards;
+    selectCards: typeof selectCards;
     // temp
     click?: () => void;
 }
@@ -32,15 +33,15 @@ interface DragSourceCollectedProps {
     connectDragPreview?: ConnectDragPreview;
 }
 
-const cardSource: DragSourceSpec<ZoneInfoDndProps, CardDragObject> = {
+const zoneSource: DragSourceSpec<ZoneInfoDndProps, CardDragObject> = {
 
     beginDrag(props: ZoneInfoDndProps): CardDragObject {
 
-        const { selectCards, zone } = props;
+        const { selectCards: selectCardsAction, zone } = props;
         const { id, cards } = zone;
         const selected = cards[cards.length - 1];
 
-        selectCards([selected.gameCard.id]);
+        selectCardsAction([selected.gameCard.id]);
 
         return {
             cards: [selected.gameCard.id],
@@ -56,7 +57,7 @@ const cardSource: DragSourceSpec<ZoneInfoDndProps, CardDragObject> = {
 
 const zoneTarget: DropTargetSpec<ZoneInfoDndProps> = {
     drop(props: ZoneInfoDndProps, monitor) {
-        const { moveCards, selectCards, zone } = props;
+        const { moveCards: moveCardsAction, zone } = props;
         const { zoneId, cards } = monitor.getItem() as CardDragObject;
         cards.forEach((id) => {
             const element = document.getElementById(id);
@@ -64,8 +65,7 @@ const zoneTarget: DropTargetSpec<ZoneInfoDndProps> = {
                 element.style.display = 'block';
             }
         });
-        moveCards(zoneId, cards, zone.id, zone.cards.length, 0, 0);
-        selectCards([]);
+        moveCardsAction(zoneId, cards, zone.id, zone.cards.length, 0, 0);
     }
 };
 
@@ -111,14 +111,19 @@ class ZoneInfoDnd extends React.PureComponent<ZoneInfoDndProps & DropTargetColle
     }
 }
 
-export default DragSource<ZoneInfoDndProps>(
-    Types.CARD, cardSource, (connect, monitor) => ({
-        connectDragSource: connect.dragSource(),
-        connectDragPreview: connect.dragPreview(),
+const mapDispatchToProps = {
+    selectCards,
+    moveCards
+};
+
+export default connect(null, mapDispatchToProps)(DragSource<ZoneInfoDndProps>(
+    Types.CARD, zoneSource, (connector, monitor) => ({
+        connectDragSource: connector.dragSource(),
+        connectDragPreview: connector.dragPreview(),
         isDragging: monitor.isDragging()
-    }))(DropTarget(Types.CARD, zoneTarget, (connect, monitor) => ({
-        connectDropTarget: connect.dropTarget(),
+    }))(DropTarget(Types.CARD, zoneTarget, (connector, monitor) => ({
+        connectDropTarget: connector.dropTarget(),
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
         dragItem: monitor.getItem()
-    }))(ZoneInfoDnd));
+    }))(ZoneInfoDnd)));

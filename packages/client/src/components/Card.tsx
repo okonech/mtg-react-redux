@@ -10,6 +10,7 @@ export interface CardProps {
   isHovered?: boolean;
   // optional string to decorate top of card. Will show even without hover
   topLabel?: string;
+  id?: string;
 }
 
 interface SelectableProps {
@@ -22,13 +23,13 @@ type AllProps = CardProps & SelectableProps;
 
 const Card: React.FC<AllProps> = (props) => {
 
-  const { card, ...restProps } = props;
+  const { card, id, ...restProps } = props;
 
   return (
     <CardDisplay
       {...restProps}
       card={card.cardData}
-      id={card.id}
+      id={id || card.id}
       tapped={card.tapped}
       flipped={card.flipped}
     />

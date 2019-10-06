@@ -65,9 +65,10 @@ class CardCustomDragLayer extends React.PureComponent<DragLayerProps & CardCusto
                 (
                     <div
                         style={cardStyle(cardHeight, index)}
-                        key={`draglayer-${card.gameCard.id}`}
+                        key={`${card.gameCard.id}-draglayer`}
                     >
                         <Card
+                            id={`${card.gameCard.id}-drag-preview`}
                             card={gameCardModelsMap.getModel(card)}
                             opacity={.95}
                             cardHeight={cardHeight}

@@ -1,7 +1,7 @@
 
-import { XYCoord } from 'dnd-core';
 import { defaultMemoize } from 'reselect';
 import { getCardSizePx } from './cardSize';
+import { XYCoord } from 'dnd-core';
 
 // global snap storage
 let snapEnabled = false;
