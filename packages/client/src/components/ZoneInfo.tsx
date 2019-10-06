@@ -29,6 +29,7 @@ const styles = (theme: Theme) => {
 export interface ZoneInfoProps extends WithStyles<typeof styles>, BaseComponentProps {
     num: number;
     icon: any;
+    id: string;
 }
 
 class ZoneInfo extends React.PureComponent<ZoneInfoProps> {

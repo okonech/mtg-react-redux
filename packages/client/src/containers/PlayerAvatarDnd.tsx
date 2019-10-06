@@ -12,7 +12,7 @@ import { Types } from '../Constants';
 import PlayerAvatar from '../components/PlayerAvatar';
 import React, { useEffect } from 'react';
 
-interface PlayerAvatarDndProps extends BaseComponentProps {
+export interface PlayerAvatarDndProps extends BaseComponentProps {
     player: PlayerData;
     commander: GameCardData;
 }
@@ -88,7 +88,7 @@ type AllProps = PlayerAvatarDndProps & MappedPlayerAvatarProps & DropTargetColle
 
 // TODO: use clip-path for the diagonal effect + layering 2 avatars
 // https://codepen.io/anon/pen/dMNzYG
-const PlayerInfoDnd: React.FC<AllProps> = (props) => {
+const PlayerAvatarDnd: React.FC<AllProps> = (props) => {
     const { connectDragSource, connectDropTarget, connectDragPreview, style, player, commander } = props;
     const cardModel = gameCardModelsMap.getModel(commander);
     const classes = useStyles(props);
@@ -138,5 +138,5 @@ export default connect(null, mapDispatchToProps)(DragSource(
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
         dragItem: monitor.getItem()
-    }))(PlayerInfoDnd)));
+    }))(PlayerAvatarDnd)));
 

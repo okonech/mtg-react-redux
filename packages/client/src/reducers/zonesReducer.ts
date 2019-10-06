@@ -1,6 +1,7 @@
 import { ActionType, getType } from 'typesafe-actions';
-import { addZones, deleteZones, updateZones, ZonesAction } from '../actions/zonesActions';
+import { addZones, deleteZones, shuffleZone, updateZones, ZonesAction } from '../actions/zonesActions';
 import { moveCards } from '../actions/gameCardsActions';
+import { shuffle } from '../util/ordering';
 import produce from 'immer';
 
 // Normalized zone store as object of {unique zone id: array of card ids}
@@ -37,6 +38,9 @@ export default function zonesReducer(state: ZonesState = {}, action: ZoneActions
                     }
                 });
                 draft[toZone].cards.splice(toIdx, 0, ...ids.filter((card) => !(draft[toZone].cards.includes(card))));
+                break;
+            case getType(shuffleZone):
+                draft[action.payload].cards = shuffle(draft[action.payload].cards);
                 break;
             default:
                 break;

@@ -2,6 +2,7 @@ import { defaultMemoize } from 'reselect';
 import { MappedPlayers } from '../containers/Players';
 import { setCardHeight } from '../util/cardSize';
 import CardCustomDragLayer from '../containers/CardCustomDragLayer';
+import ContextMenu from '../containers/context-menu/ContextMenu';
 import LoadingSpinner from './LoadingSpinner';
 import Player from '../containers/Player';
 import React, { useEffect } from 'react';
@@ -54,6 +55,7 @@ const Players: React.SFC<PlayersProps> = (props) => {
             <CardCustomDragLayer
                 cardHeight={cardHeight}
             />
+            <ContextMenu />
         </section>
     );
 

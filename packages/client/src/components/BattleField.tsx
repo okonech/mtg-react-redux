@@ -12,6 +12,7 @@ import React from 'react';
 type AllProps = BattleFieldProps & BattleFieldTargetCollectedProps & BattleFieldMappedProps;
 
 interface BattleFieldProps extends WithStyles<typeof styles>, BaseComponentProps {
+    playerId: string;
     zone: GameCardZone;
     selected: string[];
     cardHeight: number;
@@ -77,12 +78,13 @@ class BattleField extends React.PureComponent<AllProps>  {
     }
 
     public render() {
-        const { zone, connectDropTarget, selected, cardHeight, selectCards, setCardsFlipped, setCardsTapped, style, classes } = this.props;
+        const { zone, playerId, connectDropTarget, selected, cardHeight, selectCards, setCardsFlipped, setCardsTapped, style, classes } = this.props;
         const cards = zone.cards.reduce((acc, curr) => {
             const gameCard = gameCardModelsMap.getModel(curr);
             acc.push(
                 <DraggableCard
                     id={gameCard.id}
+                    playerId={playerId}
                     zoneId={zone.id}
                     card={gameCard}
                     key={'draggable - ' + gameCard.id}

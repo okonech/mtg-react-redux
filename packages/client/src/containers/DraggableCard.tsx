@@ -8,6 +8,7 @@ import { selectCards as selectCardsType } from '../actions/selectActions';
 import { Types } from '../Constants';
 import { WithSelectable } from '../packages/react-dnd-selectable';
 import Card from '../components/Card';
+import ContextMenuTrigger from './context-menu/ContextMenuTrigger';
 import WithHover from '../hocs/WithHover';
 
 // draggable card component with id, key, x, y position
@@ -71,10 +72,11 @@ const cardSource: DragSourceSpec<DraggableCardProps, CardDragObject> = {
 
 };
 
-interface DraggableCardProps {
+export interface DraggableCardProps {
   id: string;
   card: GameCardModel;
   zoneId: string;
+  playerId: string;
   selectedCards: string[];
   selectCards: typeof selectCardsType;
   setCardsFlipped?: typeof flipCardsType;
@@ -123,7 +125,7 @@ class DraggableCard extends React.PureComponent<AllProps> {
   public render() {
     const {
       card, connectDragSource, selectedCards, selecting, selectableRef,
-      cardHeight, xCoord, yCoord, id, isHovered, setCardsFlipped, setCardsTapped
+      cardHeight, xCoord, yCoord, id, isHovered, setCardsFlipped, setCardsTapped, playerId, zoneId
     } = this.props;
     const selected = selectedCards.includes(id);
 
@@ -131,25 +133,32 @@ class DraggableCard extends React.PureComponent<AllProps> {
     const rightClick = setCardsFlipped ? () => setCardsFlipped(selected ? selectedCards : [card.id], !card.flipped) : null;
 
     return (
-      connectDragSource(
-        <div
-          // handles drag transform in non list areas
-          style={dragCardStyle(xCoord, yCoord, cardHeight)}
-          onDoubleClick={doubleClick}
-          onContextMenu={rightClick}
-          ref={selectableRef}
-        >
-          <Card
-            key={'card' + id}
-            card={card}
-            // this can cause chrome to not drag
-            selected={selected}
-            selecting={selecting}
-            cardHeight={cardHeight}
-            isHovered={isHovered}
-          />
-        </div>
-      )
+      <ContextMenuTrigger
+        type={'card'}
+        player={playerId}
+        zone={zoneId}
+        card={card.id}
+      >
+        {connectDragSource(
+          <div
+            // handles drag transform in non list areas
+            style={dragCardStyle(xCoord, yCoord, cardHeight)}
+            onDoubleClick={doubleClick}
+            onContextMenu={rightClick}
+            ref={selectableRef}
+          >
+            <Card
+              key={'card' + id}
+              card={card}
+              // this can cause chrome to not drag
+              selected={selected}
+              selecting={selecting}
+              cardHeight={cardHeight}
+              isHovered={isHovered}
+            />
+          </div>
+        )}
+      </ContextMenuTrigger>
     );
   }
 }

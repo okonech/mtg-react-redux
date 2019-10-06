@@ -4,6 +4,7 @@ import { firebaseReducer } from 'react-redux-firebase';
 import { firestoreReducer } from 'redux-firestore';
 import authReducer, { AuthState } from './authReducer';
 import cardsReducer, { CardsState } from './cardsReducer';
+import clickReducer, { ClickState } from './clickReducer';
 import deckEditorReducer, { DeckEditorState } from './deckEditorReducer';
 import gameCardsReducer, { GameCardsState } from './gameCardsReducer';
 import gameReducer, { GameState } from './gameReducer';
@@ -24,6 +25,7 @@ export interface AppState {
     firebase: any;
     auth: AuthState;
     deckEditor: DeckEditorState;
+    click: ClickState;
 }
 
 export default combineReducers<AppState>({
@@ -37,5 +39,6 @@ export default combineReducers<AppState>({
     firestore: firestoreReducer,
     firebase: firebaseReducer,
     auth: authReducer,
-    deckEditor: deckEditorReducer
+    deckEditor: deckEditorReducer,
+    click: clickReducer
 });

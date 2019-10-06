@@ -46,6 +46,7 @@ const Player: React.FC<PlayerProps> = (props) => {
             <BattleField
                 style={{ gridArea: 'battlefield' }}
                 zone={battlefield}
+                playerId={player.id}
                 key={battlefield.id}
                 selected={selected}
                 cardHeight={cardHeight}
@@ -53,6 +54,7 @@ const Player: React.FC<PlayerProps> = (props) => {
             <Hand
                 style={{ gridArea: 'hand' }}
                 zone={hand}
+                playerId={player.id}
                 key={hand.id}
                 selected={selected}
                 cardHeight={cardHeight}

@@ -61,22 +61,26 @@ const InfoArea: React.FC<InfoAreaProps> = (props) => {
                 life={player.life}
             />
             <ZoneInfoDnd
+                playerId={player.id}
                 style={{ gridArea: 'library' }}
                 zone={library}
                 icon={<BookPileSvg />}
                 click={drawCard}
             />
             <ZoneInfoDnd
+                playerId={player.id}
                 style={{ gridArea: 'hand' }}
                 icon={<PokerHandSvg />}
                 zone={hand}
             />
             <ZoneInfoDnd
+                playerId={player.id}
                 style={{ gridArea: 'graveyard' }}
                 icon={<TombstoneSvg />}
                 zone={graveyard}
             />
             <ZoneInfoDnd
+                playerId={player.id}
                 style={{ gridArea: 'exile' }}
                 icon={<RollingEnergySvg />}
                 zone={exile}
