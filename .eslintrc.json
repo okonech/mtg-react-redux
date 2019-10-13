@@ -119,7 +119,7 @@
             "error",
             {
                 "rulesDirectory": [
-                    ".\\node_modules\\tslint-react\\rules"
+                    "./node_modules/tslint-react/rules"
                 ],
                 "rules": {
                     "align": [
@@ -210,5 +210,10 @@
                 }
             }
         ]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }

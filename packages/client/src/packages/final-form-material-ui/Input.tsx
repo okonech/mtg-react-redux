@@ -1,7 +1,7 @@
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Input from '@material-ui/core/Input';
 import * as React from 'react';
 import { FieldRenderProps } from 'react-final-form';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
 
 const InputWrapper: React.SFC<FieldRenderProps<any, any>> =
 	({ input: { name, onChange, value, ...restInput }, meta, ...rest }) => {
@@ -18,9 +18,11 @@ const InputWrapper: React.SFC<FieldRenderProps<any, any>> =
 					value={value}
 				/>
 				{showError &&
-					<FormHelperText>
-						{meta.error || meta.submitError}
-					</FormHelperText>
+					(
+						<FormHelperText>
+							{meta.error || meta.submitError}
+						</FormHelperText>
+					)
 				}
 			</React.Fragment>
 		);

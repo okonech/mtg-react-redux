@@ -12,31 +12,37 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout repo
+      uses: actions/checkout@v1
       
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
         
-    - uses: actions/cache@v1
+    - name: Load cached dependencies
+      id: cache-dependencies
+      uses: actions/cache@v1
       with:
        path: ~/.npm
        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
        restore-keys: |
         ${{ runner.os }}-node-:  
       
-    - name: build
-      if: steps.cache-primes.outputs.cache-hit != 'true'
+    - name: Install dependencies
       run: |
         npm ci
-        npm install -g lerna@3.16.4
-        scripts/build.sh
+      env:
+        CI: true
+
+    - name: Run build
+      run: |
+        npm run build
       env:
         CI: true
       
-    - name: build and test
+    - name: Run tests
       run: |
-        lerna run test-ci
+        npm run test-ci
       env:
         CI: true

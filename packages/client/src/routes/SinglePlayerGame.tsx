@@ -1,5 +1,5 @@
-import React from 'react';
 import GamePage from '../components/pages/GamePage';
+import React from 'react';
 
 const FourPlayerGameOther = () =>
     (

@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import { moveCards } from '../actions/gameCardsActions';
+import { moveCardsFixCoords } from '../actions/gameCardsActions';
 import InfoArea from '../components/InfoArea';
 
 export interface MappedInfoArea {
-    moveCards: typeof moveCards;
+    moveCardsFixCoords: typeof moveCardsFixCoords;
 }
 
 const mapDispatchToProps = {
-    moveCards
+    moveCardsFixCoords
 };
 
 export default connect(null, mapDispatchToProps)(InfoArea);

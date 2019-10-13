@@ -2,15 +2,14 @@
 import { CardDragObject } from './DraggableCard';
 import { connect } from 'react-redux';
 import { ConnectDropTarget, DropTarget, DropTargetSpec } from 'react-dnd';
-import { findDOMNode } from 'react-dom';
-import { moveCards, setCardsFlipped, setCardsTapped } from '../actions/gameCardsActions';
+import { moveCardsFixCoords, setCardsFlipped, setCardsTapped } from '../actions/gameCardsActions';
 import { selectCards } from '../actions/selectActions';
 import { snapToGrid } from '../util/snapToGrid';
 import { Types } from '../Constants';
 import BattleField from '../components/BattleField';
 
 export interface BattleFieldMappedProps {
-    moveCards: typeof moveCards;
+    moveCardsFixCoords: typeof moveCardsFixCoords;
     selectCards: typeof selectCards;
     setCardsFlipped: typeof setCardsFlipped;
     setCardsTapped: typeof setCardsTapped;
@@ -25,7 +24,7 @@ export interface BattleFieldTargetCollectedProps {
 
 const battlefieldTarget: DropTargetSpec<typeof BattleField.defaultProps> = {
     drop(props: typeof BattleField.defaultProps, monitor, component) {
-        const { moveCards: moveCardsAction, zone } = props;
+        const { moveCardsFixCoords: moveCardsAction, zone } = props;
         const { zoneId, cards } = monitor.getItem() as CardDragObject;
 
         cards.forEach((id) => {
@@ -35,22 +34,21 @@ const battlefieldTarget: DropTargetSpec<typeof BattleField.defaultProps> = {
             }
         });
 
-        const node = findDOMNode(component) as Element;
-        const bounds = node.getBoundingClientRect();
+        const node = component.battleFieldRef.current as HTMLElement;
         const { x, y } = monitor.getSourceClientOffset();
 
         const { x: snapX, y: snapY } = snapToGrid({ x, y });
 
-        const xCoord = snapX - bounds.left;
-        const yCoord = snapY - bounds.top;
+        const xCoord = snapX - node.offsetLeft;
+        const yCoord = snapY - node.offsetTop;
 
-        moveCardsAction(zoneId, cards, zone.id, zone.cards.length, xCoord, yCoord);
+        moveCardsAction(zoneId, zone.id, cards, zone.cards.length, xCoord, yCoord);
     }
 };
 
 const mapDispatchToProps = {
     selectCards,
-    moveCards,
+    moveCardsFixCoords,
     setCardsFlipped,
     setCardsTapped
 };

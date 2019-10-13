@@ -1,6 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../containers/Navbar';
+import React from 'react';
 
 export default class DecksList extends React.PureComponent {
     public render() {

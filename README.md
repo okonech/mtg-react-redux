@@ -26,3 +26,7 @@ preferences:
 
 Game state: must have local option for loading entire replay.
 See about saving off firebase cloud messages for proper replay stuff- it allows for player only or judge style replays
+
+Phases sidebar:
+    Add actions on click and save into redux
+    Untap should untap all permanents

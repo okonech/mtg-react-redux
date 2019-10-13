@@ -1,20 +1,21 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "outDir": "./dist",
-        "rootDir": "src",
-        "jsx": "react",
-        "esModuleInterop": true,
-        "declaration": true,
-        "isolatedModules": false,
         "allowJs": false,
-        "noEmit": false
+        "declaration": true,
+        "esModuleInterop": true,
+        "incremental": true,
+        "isolatedModules": false,
+        "jsx": "react",
+        "noEmit": false,
+        "outDir": "./dist",
+        "rootDir": "src"
     },
+    "exclude": [
+        "node_modules"
+    ],
     "include": [
         "src/**/*.ts",
         "src/**/*.tsx"
-    ],
-    "exclude": [
-        "node_modules"
     ]
 }

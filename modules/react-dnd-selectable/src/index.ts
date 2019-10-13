@@ -1,9 +1,9 @@
-import SelectableGroup from './SelectableGroup';
+import { SelectableGroupFactory } from './SelectableGroup';
 import WithSelectable from './WithSelectable';
 import WithSelectableDragLayer from './WithSelectableDragLayer';
 
 export {
-    SelectableGroup,
+    SelectableGroupFactory,
     WithSelectable,
     WithSelectableDragLayer
 };

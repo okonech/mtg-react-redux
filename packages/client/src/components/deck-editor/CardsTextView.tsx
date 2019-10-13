@@ -60,7 +60,8 @@ const CardsTextView: React.FC<LinksViewProps> = (props) => {
                                 key={cardModel.id}
                                 card={cardModel}
                                 quantity={quantity}
-                            />);
+                            />
+                        );
                     })}
                 </CardTextList>
             </Box>

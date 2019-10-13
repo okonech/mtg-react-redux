@@ -24,14 +24,13 @@ export default function gameCardsReducer(state: GameCardsState = def, action: Ga
                 action.payload.forEach((id) => delete draft[id]);
                 break;
             case getType(moveCards):
-                const { ids, xCoord, yCoord } = action.payload;
-                ids.reverse().forEach((cardId, idx) => {
-                    draft[cardId].x = xCoord + idx * 10;
-                    draft[cardId].y = yCoord + idx * 10;
+                action.payload.ids.forEach(card => {
+                    draft[card.id].x = card.x;
+                    draft[card.id].y = card.y;
                     // reset tapped and flipped if switching zones
                     if (action.payload.fromZone !== action.payload.toZone) {
-                        draft[cardId].tapped = false;
-                        draft[cardId].flipped = false;
+                        draft[card.id].tapped = false;
+                        draft[card.id].flipped = false;
                     }
                 });
                 break;

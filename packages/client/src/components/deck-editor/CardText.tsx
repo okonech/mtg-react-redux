@@ -41,7 +41,7 @@ const CardText: React.FC<CardTextProps> = (props) => {
         <Link className={classes.root} href={card.scryfallUri} underline='none'>
             {<Typography className={classes.quant}>{quantity}</Typography>}
             <HtmlTooltip
-                title={
+                title={(
                     <CardDisplay
                         card={card}
                         id={card.id}
@@ -52,7 +52,7 @@ const CardText: React.FC<CardTextProps> = (props) => {
                         tapped={false}
                         flipped={false}
                     />
-                }
+                )}
                 placement='right'
             >
                 <Typography>{card.name()}</Typography>

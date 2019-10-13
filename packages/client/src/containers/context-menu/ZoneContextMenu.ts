@@ -2,7 +2,7 @@ import { AppState } from '../../reducers';
 import { closeContextMenu } from '../../actions/clickActions';
 import { connect } from 'react-redux';
 import { Data } from '../../components/context-menu/ContextMenuTrigger';
-import { moveCards } from '../../actions/gameCardsActions';
+import { moveCardsFixCoords } from '../../actions/gameCardsActions';
 import { Player, singlePlayerSelector } from '../../reducers/playersReducer';
 import { shuffleZone } from '../../actions/zonesActions';
 import { singleZoneSelector, Zone } from '../../reducers/zonesReducer';
@@ -11,7 +11,7 @@ import ZoneContextMenu from '../../components/context-menu/ZoneContextMenu';
 export interface MappedZoneContextMenuProps {
     player: Player;
     zone: Zone;
-    moveCards: typeof moveCards;
+    moveCardsFixCoords: typeof moveCardsFixCoords;
     shuffleZone: typeof shuffleZone;
 }
 
@@ -21,7 +21,7 @@ const mapStateToProps = (state: AppState, props: { data: Data }) => ({
 });
 
 const mapDispatchToProps = {
-    moveCards,
+    moveCardsFixCoords,
     shuffleZone,
     closeContextMenu
 };

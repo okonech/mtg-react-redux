@@ -4,10 +4,10 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npm run compile",
     "lint": "tslint -c tslint.json src/**/*",
     "compile": "tsc",
-    "exec": "tsc && node dist\\index"
+    "exec": "tsc && node dist\\index",
+    "prepare": "bash ../../scripts/check-changes.sh \"npm run compile\""
   },
   "author": "",
   "license": "MIT",

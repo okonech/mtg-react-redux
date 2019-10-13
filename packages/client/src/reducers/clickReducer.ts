@@ -1,5 +1,5 @@
+import { ClickAction, closeContextMenu, openContextMenu } from '../actions/clickActions';
 import { getType } from 'typesafe-actions';
-import { openContextMenu, closeContextMenu, ClickAction } from '../actions/clickActions';
 import produce from 'immer';
 
 // Context menu

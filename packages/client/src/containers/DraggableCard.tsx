@@ -6,7 +6,7 @@ import { GameCardModel } from '@mtg-react-redux/models';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { selectCards as selectCardsType } from '../actions/selectActions';
 import { Types } from '../Constants';
-import { WithSelectable } from '../packages/react-dnd-selectable';
+import { WithSelectable } from '@mtg-react-redux/react-dnd-selectable';
 import Card from '../components/Card';
 import ContextMenuTrigger from './context-menu/ContextMenuTrigger';
 import WithHover from '../hocs/WithHover';

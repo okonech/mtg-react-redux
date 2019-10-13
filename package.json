@@ -4,15 +4,16 @@
   "scripts": {
     "build": "bash scripts/build.sh",
     "prod": "bash scripts/serve.sh",
-    "watch": "bash scripts/watch.sh"
+    "watch": "bash scripts/watch.sh",
+    "test-ci": "lerna run test-ci"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
-    "@typescript-eslint/eslint-plugin": "^2.2.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^2.2.0",
-    "@typescript-eslint/parser": "^2.2.0",
-    "@typescript-eslint/typescript-estree": "^2.2.0",
+    "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
+    "@typescript-eslint/typescript-estree": "^2.9.0",
     "eslint": "^6.4.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-eslint-plugin": "^2.1.0",
@@ -25,7 +26,7 @@
     "husky": "^3.0.5",
     "lerna": "^3.16.4",
     "tslint": "^5.20.0",
-    "tslint-react": "^4.0.0",
+    "tslint-react": "^4.1.0",
     "typescript": "^3.6.3"
   },
   "husky": {

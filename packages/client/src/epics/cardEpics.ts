@@ -1,12 +1,12 @@
-import { CardModel, CardPrimitive } from '@mtg-react-redux/models';
-import { Epic } from 'redux-observable';
-import { combineEpics } from 'redux-observable';
-import { from, of, pipe } from 'rxjs';
-import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
-import { CardIdentifier, Cards } from 'scryfall-sdk';
-import { isActionOf } from 'typesafe-actions';
-import { cardsAsync } from '../actions/cardsActions';
 import { AppState } from '../reducers';
+import { CardIdentifier, Cards } from 'scryfall-sdk';
+import { CardModel, CardPrimitive } from '@mtg-react-redux/models';
+import { cardsAsync } from '../actions/cardsActions';
+import { catchError, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { combineEpics } from 'redux-observable';
+import { Epic } from 'redux-observable';
+import { from, of, pipe } from 'rxjs';
+import { isActionOf } from 'typesafe-actions';
 import { singleCardByNameSelector, singleCardSelector } from '../reducers/cardsReducer';
 
 async function getCardsData(ids: string[], type: 'id' | 'name', state: AppState): Promise<CardPrimitive[]> {

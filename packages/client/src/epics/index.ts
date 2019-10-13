@@ -4,6 +4,7 @@ import authEpics from './authEpics';
 import cardEpics from './cardEpics';
 import deckEditorEpics from './deckEditorEpics';
 import firebase from 'firebase';
+import gameCardEpics from './gameCardEpics';
 import gameInitEpics from './gameInitEpics';
 
 export interface FBConfig {
@@ -14,6 +15,7 @@ export interface FBConfig {
 const epics = combineEpics(
     authEpics,
     cardEpics,
+    gameCardEpics,
     deckEditorEpics,
     gameInitEpics
 );

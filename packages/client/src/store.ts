@@ -1,11 +1,11 @@
-import { getFirebase, reactReduxFirebase } from 'react-redux-firebase';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { getFirestore, reduxFirestore } from 'redux-firestore';
-import logger from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
+import { getFirebase, reactReduxFirebase } from 'react-redux-firebase';
+import { getFirestore, reduxFirestore } from 'redux-firestore';
 import epics from './epics';
 import firebaseConfig from './firebaseConfig';
+import logger from 'redux-logger';
 import rootReducer, { AppState } from './reducers';
 
 // pass dependencies to each epic

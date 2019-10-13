@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {
     ConnectDragPreview, ConnectDragSource, ConnectDropTarget,
-    DragSource, DragSourceSpec, DropTarget, DropTargetSpec, XYCoord
+    DragSource as DragSourceType, DragSourceSpec, DropTarget as DropTargetType,
+    DropTargetSpec, XYCoord
 } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import { defaultContext, SelectableContext, SelectableProvider } from './SelectableContext';
 import rectIntersect from './util/rectanglesIntersect';
 import { BaseComponentProps } from './util/styling';
-
-import { defaultContext, SelectableContext, SelectableProvider } from './SelectableContext';
 
 // draggable card component with id, key, x, y position
 
@@ -15,7 +15,7 @@ export const Types = {
     SELECTABLE: 'SELECTABLE_TYPE'
 };
 
-export interface DragSelectable {
+interface DragSelectable {
     id: string;
     clientBounds: ClientRect | DOMRect;
 }
@@ -32,7 +32,7 @@ const defStyle: React.CSSProperties = {
     width: '100%'
 };
 
-const cardSource: DragSourceSpec<SelectableGroupProps, DragSelectable> = {
+const selectableDragSource: DragSourceSpec<SelectableGroupProps, DragSelectable> = {
     beginDrag(props, monitor, dropTargetComponent): DragSelectable {
         const { onSelectionClear } = props;
         // wrapped in DropTarget, need that ref to reach actual component
@@ -57,7 +57,7 @@ const cardSource: DragSourceSpec<SelectableGroupProps, DragSelectable> = {
     }
 };
 
-const battlefieldTarget: DropTargetSpec<SelectableGroupProps> = {
+const selectableDropTarget: DropTargetSpec<SelectableGroupProps> = {
     drop(props, monitor, component: SelectableGroup) {
         const { onSelectionFinish } = props;
         const { selecting } = component.state;
@@ -122,7 +122,7 @@ interface SelectableGroupTargetCollectedProps {
 
 type AllProps = SelectableGroupProps & SelectableGroupSourceCollectedProps & SelectableGroupTargetCollectedProps;
 
-class SelectableGroup extends React.PureComponent<AllProps, SelectableContext> {
+export class SelectableGroup extends React.PureComponent<AllProps, SelectableContext> {
 
     public state = defaultContext();
 
@@ -166,11 +166,13 @@ class SelectableGroup extends React.PureComponent<AllProps, SelectableContext> {
     }
 }
 
-export default DragSource<SelectableGroupProps, SelectableGroupSourceCollectedProps>(
-    Types.SELECTABLE, cardSource, (connect) => ({
-        connectDragSource: connect.dragSource(),
-        connectDragPreview: connect.dragPreview()
-    }))(DropTarget(Types.SELECTABLE, battlefieldTarget, (connect, monitor) => ({
-        connectDropTarget: connect.dropTarget(),
-        offset: monitor.getClientOffset()
-    }))(SelectableGroup));
+export const SelectableGroupFactory = (DragSource: typeof DragSourceType, DropTarget: typeof DropTargetType) => (
+    DragSource<SelectableGroupProps, SelectableGroupSourceCollectedProps>(
+        Types.SELECTABLE, selectableDragSource, (connect) => ({
+            connectDragSource: connect.dragSource(),
+            connectDragPreview: connect.dragPreview()
+        }))(DropTarget(Types.SELECTABLE, selectableDropTarget, (connect, monitor) => ({
+            connectDropTarget: connect.dropTarget(),
+            offset: monitor.getClientOffset()
+        }))(SelectableGroup))
+);

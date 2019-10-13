@@ -31,13 +31,13 @@ export default function zonesReducer(state: ZonesState = {}, action: ZoneActions
             case getType(moveCards):
                 const { fromZone, ids, toIdx, toZone } = action.payload;
                 const delCards = draft[fromZone].cards;
-                ids.forEach((cardId) => {
-                    const idx = delCards.indexOf(cardId);
+                ids.forEach((card) => {
+                    const idx = delCards.indexOf(card.id);
                     if (idx > -1) {
                         delCards.splice(idx, 1);
                     }
                 });
-                draft[toZone].cards.splice(toIdx, 0, ...ids.filter((card) => !(draft[toZone].cards.includes(card))));
+                draft[toZone].cards.splice(toIdx, 0, ...ids.filter((card) => !(draft[toZone].cards.includes(card.id))).map(card => card.id));
                 break;
             case getType(shuffleZone):
                 draft[action.payload].cards = shuffle(draft[action.payload].cards);

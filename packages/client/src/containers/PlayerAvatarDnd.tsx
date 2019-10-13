@@ -6,7 +6,7 @@ import { GameCardData, PlayerData } from '../selectors/player';
 import { gameCardModelsMap } from '@mtg-react-redux/models';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { makeStyles } from '@material-ui/core/styles';
-import { moveCards } from '../actions/gameCardsActions';
+import { moveCardsFixCoords } from '../actions/gameCardsActions';
 import { selectCards } from '../actions/selectActions';
 import { Types } from '../Constants';
 import PlayerAvatar from '../components/PlayerAvatar';
@@ -18,7 +18,7 @@ export interface PlayerAvatarDndProps extends BaseComponentProps {
 }
 
 interface MappedPlayerAvatarProps {
-    moveCards: typeof moveCards;
+    moveCardsFixCoords: typeof moveCardsFixCoords;
     selectCards: typeof selectCards;
 }
 
@@ -60,7 +60,7 @@ const zoneTarget: DropTargetSpec<AllProps> = {
         return cards.every(cardId => cardId === commander.gameCard.id);
     },
     drop(props, monitor) {
-        const { moveCards: moveCardsAction, player } = props;
+        const { moveCardsFixCoords: moveCardsAction, player } = props;
         const { zoneId, cards } = monitor.getItem() as CardDragObject;
         cards.forEach((id) => {
             const element = document.getElementById(id);
@@ -68,7 +68,7 @@ const zoneTarget: DropTargetSpec<AllProps> = {
                 element.style.display = 'block';
             }
         });
-        moveCardsAction(zoneId, cards, player.command.id, player.command.cards.length, 0, 0);
+        moveCardsAction(zoneId, player.command.id, cards, player.command.cards.length, 0, 0);
     }
 };
 
@@ -125,7 +125,7 @@ const PlayerAvatarDnd: React.FC<AllProps> = (props) => {
 
 const mapDispatchToProps = {
     selectCards,
-    moveCards
+    moveCardsFixCoords
 };
 
 export default connect(null, mapDispatchToProps)(DragSource(

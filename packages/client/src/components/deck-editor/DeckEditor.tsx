@@ -1,16 +1,16 @@
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
 import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import React from 'react';
+import Box from '@material-ui/core/Box';
 import CardsTextView from '../../containers/deck-editor/CardsTextView';
 import CardsView from '../../containers/deck-editor/CardsView';
 import CMCBar from '../../containers/deck-editor/CMCBar';
 import Colors from '../../containers/deck-editor/Colors';
+import Container from '@material-ui/core/Container';
+import LoadingSpinner from '../LoadingSpinner';
+import Navbar from '../../containers/Navbar';
+import React from 'react';
 import Table from '../../containers/deck-editor/Table';
 import Title from '../../containers/deck-editor/Title';
-import Navbar from '../../containers/Navbar';
-import LoadingSpinner from '../LoadingSpinner';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 export const VIEWS = {
     table: 'Table',

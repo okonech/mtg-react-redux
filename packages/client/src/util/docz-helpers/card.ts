@@ -79,7 +79,7 @@ export function exampleCardState(): CardsState {
             acc[id] = primitiveClone;
             return acc;
         }, {}),
-        cardsbyName: {
+        cardsByName: {
             [examplePrimitive.name]: examplePrimitive.id
         }
     };

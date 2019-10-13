@@ -82,7 +82,7 @@ it('moves card', () => {
             ]
         }
     ];
-    const action = moveCards('1', ['31'], '2', 1, 0, 0);
+    const action = moveCards('1', '2', [{id: '31', x: 0, y: 0}], 1);
     const oldState = { ...state };
     deepFreeze(oldState);
     deepFreeze(action);
@@ -112,7 +112,7 @@ it('doesnt duplicate cards', () => {
             ]
         }
     ];
-    const action = moveCards('1', ['20', '21'], '2', 1, 0, 0);
+    const action = moveCards('1', '2', [{id: '20', x: 0, y: 0}, {id: '21', x: 0, y: 0}], 1);
     const oldState = { ...state };
     deepFreeze(oldState);
     deepFreeze(action);

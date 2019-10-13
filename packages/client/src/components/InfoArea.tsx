@@ -36,15 +36,14 @@ interface InfoAreaProps extends WithStyles<typeof styles>, BaseComponentProps, M
 
 const InfoArea: React.FC<InfoAreaProps> = (props) => {
 
-    const { player, moveCards, style, classes } = props;
+    const { player, moveCardsFixCoords, style, classes } = props;
     const { hand, library, graveyard, exile } = player;
     const libCards = library.cards;
     const drawCard = () => {
         if (libCards.length === 0) {
             return null;
         }
-        return moveCards(library.id, [libCards[libCards.length - 1].gameCard.id],
-            hand.id, hand.cards.length, 0, 0);
+        return moveCardsFixCoords(library.id, hand.id, [libCards[libCards.length - 1].gameCard.id], hand.cards.length, 0, 0);
     };
 
     return (

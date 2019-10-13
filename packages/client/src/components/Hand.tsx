@@ -1,10 +1,11 @@
 import { BaseComponentProps } from '../util/styling';
 import { createStyles, withStyles, WithStyles } from '@material-ui/styles';
+import { DragSource, DropTarget } from 'react-dnd';
 import { gameCardModelsMap } from '@mtg-react-redux/models';
 import { GameCardZone } from '../selectors/player';
 import { HandMappedProps, HandTargetCollectedProps } from '../containers/Hand';
 import { placeholderPrimitive } from '../util/card';
-import { SelectableGroup } from '../packages/react-dnd-selectable';
+import { SelectableGroupFactory } from '@mtg-react-redux/react-dnd-selectable';
 import { Theme } from '@material-ui/core/styles';
 import Card from './Card';
 import DraggableCard from '../containers/DraggableCard';
@@ -39,6 +40,7 @@ const styles = (theme: Theme) => createStyles({
 });
 
 const ScrollingComponent: any = withScrolling('section' as any);
+const SelectableGroup = SelectableGroupFactory(DragSource as any, DropTarget as any);
 
 interface HandProps extends WithStyles<typeof styles>, BaseComponentProps {
     playerId: string;
@@ -54,6 +56,13 @@ interface HandState {
 }
 
 class Hand extends React.PureComponent<AllProps, HandState> {
+    public handRef: React.RefObject<HTMLDivElement>;
+
+    constructor(props: AllProps) {
+        super(props);
+
+        this.handRef = React.createRef();
+    }
 
     public state: HandState = {
         placeholderIndex: undefined
@@ -127,7 +136,7 @@ class Hand extends React.PureComponent<AllProps, HandState> {
 
         return (
             connectDropTarget(
-                <div className={classes.main} style={style} >
+                <div className={classes.main} style={style} ref={this.handRef}>
                     <SelectableGroup
                         groupId={`${zone.id}-selectable-group`}
                         onSelectionFinish={this.setSelected}

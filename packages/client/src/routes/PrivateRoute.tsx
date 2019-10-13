@@ -1,10 +1,10 @@
-import React from 'react';
+import { AppState } from '../reducers';
+import { AuthState } from '../reducers/authReducer';
 import { connect } from 'react-redux';
 import { isEmpty, isLoaded } from 'react-redux-firebase';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { AppState } from '../reducers';
-import { AuthState } from '../reducers/authReducer';
+import React from 'react';
 
 interface PrivateRouteProps extends RouteProps {
     auth: any;

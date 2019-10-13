@@ -11,22 +11,22 @@ import produce from 'immer';
 export type Card = CardPrimitive;
 export interface CardsState {
   cards: { [id: string]: Card };
-  cardsbyName: { [name: string]: string };
+  cardsByName: { [name: string]: string };
 }
 
-const def = {
+export const INITIAL_STATE: CardsState = {
   cards: {},
-  cardsbyName: {}
+  cardsByName: {}
 };
 
-export default function cardsReducer(state: CardsState = def, action: CardsAction): CardsState {
+export default function cardsReducer(state: CardsState = INITIAL_STATE, action: CardsAction): CardsState {
   return produce(state, (draft) => {
     switch (action.type) {
       case getType(cardsAsync.success):
         action.payload.forEach((card) => {
           if (card.name && card.id) {
             draft.cards[card.id] = card;
-            draft.cardsbyName[card.name] = card.id;
+            draft.cardsByName[card.name] = card.id;
           }
         });
         break;
@@ -45,7 +45,7 @@ export function cardsSelector(state: CardsState, ids: string[]): Card[] {
 }
 
 export function singleCardByNameSelector(state: CardsState, name: string): Card {
-  return singleCardSelector(state, state.cardsbyName[name]);
+  return singleCardSelector(state, state.cardsByName[name]);
 }
 
 export function cardsByNameSelector(state: CardsState, names: string[]): Card[] {

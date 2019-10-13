@@ -1,7 +1,11 @@
 import { addCards, deleteCards, moveCards, setCardsFlipped, setCardsTapped, updateCards } from '../../actions/gameCardsActions';
 import { GameCardPrimitive } from '@mtg-react-redux/models';
+import { setAutoFreeze } from 'immer';
 import deepFreeze from 'deep-freeze';
 import gameCardsReducer, { gameCardsSelector, GameCardsState, singleGameCardSelector } from '../../reducers/gameCardsReducer';
+
+// explicitly set immer to freeze output state
+setAutoFreeze(true);
 
 let state: GameCardsState = {};
 let cards: GameCardPrimitive[] = [
@@ -27,16 +31,21 @@ let cards: GameCardPrimitive[] = [
     }
 ];
 
+function cardsToState(): GameCardsState {
+    return cards.reduce((acc, curr) => {
+        acc[curr.id] = curr;
+        return acc;
+    }, {});
+}
+
 it('initial state', () => {
     expect(gameCardsReducer(undefined, {} as any)).toEqual(state);
 });
 
 it('adds cards', () => {
     const action = addCards(cards);
-    const oldState = { ...state };
-    deepFreeze(oldState);
     deepFreeze(action);
-    state = gameCardsReducer(oldState, action);
+    state = gameCardsReducer(state, action);
     expect(state).toEqual({
         [cards[0].id]: cards[0],
         [cards[1].id]: cards[1]
@@ -68,56 +77,37 @@ it('updates cards', () => {
         }
     ];
     const action = updateCards(cards);
-    const oldState = { ...state };
-    deepFreeze(oldState);
     deepFreeze(action);
-    state = gameCardsReducer(oldState, action);
-    expect(state).toEqual(cards.reduce((acc, curr) => {
-        acc[curr.id] = curr;
-        return acc;
-    }, {}));
+    state = gameCardsReducer(state, action);
+    expect(state).toEqual(cardsToState());
 });
 
 it('deletes cards', () => {
-    const action = deleteCards([cards[0].id]);
+    const delId = cards[0].id;
     cards = cards.slice(1);
-    const oldState = { ...state };
-    deepFreeze(oldState);
+    const action = deleteCards([delId]);
     deepFreeze(action);
-    state = gameCardsReducer(oldState, action);
-    expect(state).toEqual(cards.reduce((acc, curr) => {
-        acc[curr.id] = curr;
-        return acc;
-    }, {})
-    );
+    state = gameCardsReducer(state, action);
+    expect(state).toEqual(cardsToState());
 });
 
 it('moves cards in same zone without resetting tapped/flipped', () => {
     cards[0] = { ...cards[0], x: 100, y: 250 };
-    const action = moveCards('aaa', [cards[0].id], 'aaa', 1, 100, 250);
+    const action = moveCards('aaa', 'aaa', [{ id: cards[0].id, x: 100, y: 250 }], 1);
     const oldState = { ...state };
-    deepFreeze(oldState);
     deepFreeze(action);
     state = gameCardsReducer(oldState, action);
-    expect(state).toEqual(cards.reduce((acc, curr) => {
-        acc[curr.id] = curr;
-        return acc;
-    }, {})
-    );
+    expect(state).toEqual(cardsToState());
 });
 
 it(`moves cards to different zones and resets tapped/flipped`, () => {
     cards[1] = { ...cards[1], x: 100, y: 250, tapped: false, flipped: false };
-    const action = moveCards('aaa', [cards[1].id], 'bbb', 1, 100, 250);
+    const action = moveCards('aaa', 'bbb', [{ id: cards[1].id, x: 100, y: 250 }], 1);
     const oldState = { ...state };
     deepFreeze(oldState);
     deepFreeze(action);
     state = gameCardsReducer(oldState, action);
-    expect(state).toEqual(cards.reduce((acc, curr) => {
-        acc[curr.id] = curr;
-        return acc;
-    }, {})
-    );
+    expect(state).toEqual(cardsToState());
 });
 
 it('taps cards', () => {
@@ -127,11 +117,7 @@ it('taps cards', () => {
     deepFreeze(oldState);
     deepFreeze(action);
     state = gameCardsReducer(oldState, action);
-    expect(state).toEqual(cards.reduce((acc, curr) => {
-        acc[curr.id] = curr;
-        return acc;
-    }, {})
-    );
+    expect(state).toEqual(cardsToState());
 });
 
 it('flips cards', () => {
@@ -141,11 +127,7 @@ it('flips cards', () => {
     deepFreeze(oldState);
     deepFreeze(action);
     state = gameCardsReducer(oldState, action);
-    expect(state).toEqual(cards.reduce((acc, curr) => {
-        acc[curr.id] = curr;
-        return acc;
-    }, {})
-    );
+    expect(state).toEqual(cardsToState());
 });
 
 it('selects card', () => {

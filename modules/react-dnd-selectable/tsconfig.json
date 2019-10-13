@@ -1,12 +1,19 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
+        "declaration": true,
+        "esModuleInterop": true,
+        "incremental": true,
+        "jsx": "react",
+        "lib": [
+            "es7",
+            "dom"
+        ],
+        "moduleResolution": "node",
         "outDir": "./dist",
         "rootDir": "src",
-        "jsx": "react",
-        "esModuleInterop": true,
-        "declaration": true,
         "isolatedModules": false,
+        "noEmit": false
     },
     "include": [
         "src/**/*.ts",

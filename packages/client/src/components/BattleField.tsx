@@ -1,9 +1,10 @@
 import { BaseComponentProps } from '../util/styling';
 import { BattleFieldMappedProps, BattleFieldTargetCollectedProps } from '../containers/BattleField';
 import { createStyles, withStyles, WithStyles } from '@material-ui/styles';
+import { DragSource, DropTarget } from 'react-dnd';
 import { gameCardModelsMap } from '@mtg-react-redux/models';
 import { GameCardZone } from '../selectors/player';
-import { SelectableGroup } from '../packages/react-dnd-selectable';
+import { SelectableGroupFactory } from '@mtg-react-redux/react-dnd-selectable';
 import { setSnapEnabled, setSnapOverNode } from '../util/snapToGrid';
 import { Theme } from '@material-ui/core/styles';
 import DraggableCard from '../containers/DraggableCard';
@@ -29,6 +30,8 @@ const styles = (theme: Theme) =>
 
         }
     });
+
+const SelectableGroup = SelectableGroupFactory(DragSource as any, DropTarget as any);
 
 class BattleField extends React.PureComponent<AllProps>  {
     public battleFieldRef: React.RefObject<HTMLDivElement>;

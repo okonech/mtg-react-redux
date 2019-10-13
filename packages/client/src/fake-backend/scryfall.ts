@@ -2,6 +2,7 @@
 export async function getCards(cards: string[]): Promise<ScryfallCollectionCard[]> {
     const batches = await Promise.all(chunk(cards, 50).map((chunks) => search(chunks)));
     const jsonBatches = await Promise.all(batches.map((res) => res.json()));
+    // eslint-disable-next-line prefer-spread
     return [].concat.apply([], jsonBatches.map((json) => json.data));
 }
 

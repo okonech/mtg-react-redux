@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "christian-kohler.path-intellisense",
+        "eamodio.gitlens",
+        "ms-vscode.vscode-typescript-tslint-plugin",
+        "msjsdiag.debugger-for-chrome",
+        "firefox-devtools.vscode-firefox-debug",
+        "q.typescript-mono-repo-import-helper"
+    ]
+}

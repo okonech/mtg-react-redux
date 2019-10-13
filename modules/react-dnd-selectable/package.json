@@ -3,10 +3,10 @@
     "version": "1.2.0",
     "description": "Drag select HOC for react-dnd",
     "scripts": {
-        "build": "npm run compile",
-        "lint": "tslint -c tslint.json src/**/*",
+        "lint": "eslint src/**/*.ts*",
         "compile": "tsc",
-        "prepare": "bash ../../scripts/check-changes.sh \"npm run build\""
+        "prepare": "bash ../../scripts/check-changes.sh \"npm run compile\"",
+        "watch": "tsc -w"
     },
     "main": "./dist/index",
     "types": "./dist/index",
@@ -15,8 +15,14 @@
     "private": false,
     "devDependencies": {
         "@types/react": "^16.9.2",
+        "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
+    "@typescript-eslint/typescript-estree": "^2.9.0",
         "dnd-core": "^7.4.4",
-        "react": "^16.9.0",
+        "eslint": "^6.4.0",
+        "eslint-plugin-sort-imports-es6-autofix": "^0.5.0",
+        "react": "^16.10.2",
         "react-dnd": "^7.4.5",
         "react-dnd-html5-backend": "^7.4.4",
         "tslint": "^5.20.0",
@@ -25,7 +31,7 @@
     },
     "peerDependencies": {
         "dnd-core": "^7.4.4",
-        "react": "^16.9.0",
+        "react": "^16.10.2",
         "react-dnd": "^7.4.5",
         "react-dnd-html5-backend": "^7.4.4"
     },

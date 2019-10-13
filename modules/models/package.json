@@ -3,11 +3,10 @@
     "version": "0.0.1",
     "description": "Models and types shared between front end, cloud functions, and backend",
     "scripts": {
-        "build": "npm run compile",
         "lint": "tslint -c tslint.json src/**/*",
         "compile": "tsc",
         "watch": "tsc -w",
-        "prepare": "bash ../../scripts/check-changes.sh \"npm run build\""
+        "prepare": "bash ../../scripts/check-changes.sh \"npm run compile\""
     },
     "main": "./dist/index",
     "types": "./dist/index",

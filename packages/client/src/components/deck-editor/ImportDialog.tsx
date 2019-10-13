@@ -1,16 +1,16 @@
+import * as parser from 'mtg-parser';
+import { CardByName } from '../../actions/deckEditorActions';
+import { cardsSelector, CardsState } from '../../reducers/cardsReducer';
+import { DeckEditorState } from '../../reducers/deckEditorReducer';
+import { getSorting, stableSort } from '../../util/ordering';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import * as parser from 'mtg-parser';
 import React, { useEffect } from 'react';
-import { CardByName } from '../../actions/deckEditorActions';
-import { cardsSelector, CardsState } from '../../reducers/cardsReducer';
-import { DeckEditorState } from '../../reducers/deckEditorReducer';
-import { getSorting, stableSort } from '../../util/ordering';
+import TextField from '@material-ui/core/TextField';
 
 // TODO: make proper types for this elsewhere
 type ParsedCardsList = Array<{ name: string; number: number }>;

@@ -1,10 +1,10 @@
-import FormControl from '@material-ui/core/FormControl';
+import * as React from 'react';
+import { FieldRenderProps } from 'react-final-form';
 import { FormControlProps } from '@material-ui/core/FormControl';
+import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-import * as React from 'react';
-import { FieldRenderProps } from 'react-final-form';
 
 interface FormHelperTextWrapperProps extends FieldRenderProps<any, any> {
 	label?: string;

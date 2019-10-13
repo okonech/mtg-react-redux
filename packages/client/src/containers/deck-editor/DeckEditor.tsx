@@ -1,6 +1,6 @@
+import { AppState } from '../../reducers';
 import { connect } from 'react-redux';
 import DeckEditor from '../../components/deck-editor/DeckEditor';
-import { AppState } from '../../reducers';
 
 const mapStateToProps = (state: AppState) =>
     ({

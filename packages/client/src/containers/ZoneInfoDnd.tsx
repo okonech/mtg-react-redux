@@ -8,7 +8,7 @@ import {
 } from 'react-dnd';
 import { GameCardZone } from '../selectors/player';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { moveCards } from '../actions/gameCardsActions';
+import { moveCardsFixCoords } from '../actions/gameCardsActions';
 import { selectCards } from '../actions/selectActions';
 import { Types } from '../Constants';
 import ContextMenuTrigger from './context-menu/ContextMenuTrigger';
@@ -19,7 +19,7 @@ export interface ZoneInfoDndProps extends BaseComponentProps {
     playerId: string;
     zone: GameCardZone;
     icon: any;
-    moveCards: typeof moveCards;
+    moveCardsFixCoords: typeof moveCardsFixCoords;
     selectCards: typeof selectCards;
     // temp
     click?: () => void;
@@ -59,7 +59,7 @@ const zoneSource: DragSourceSpec<ZoneInfoDndProps, CardDragObject> = {
 
 const zoneTarget: DropTargetSpec<ZoneInfoDndProps> = {
     drop(props: ZoneInfoDndProps, monitor) {
-        const { moveCards: moveCardsAction, zone } = props;
+        const { moveCardsFixCoords: moveCardsAction, zone } = props;
         const { zoneId, cards } = monitor.getItem() as CardDragObject;
         cards.forEach((id) => {
             const element = document.getElementById(id);
@@ -67,7 +67,7 @@ const zoneTarget: DropTargetSpec<ZoneInfoDndProps> = {
                 element.style.display = 'block';
             }
         });
-        moveCardsAction(zoneId, cards, zone.id, zone.cards.length, 0, 0);
+        moveCardsAction(zoneId, zone.id, cards, zone.cards.length, 0, 0);
     }
 };
 
@@ -122,7 +122,7 @@ class ZoneInfoDnd extends React.PureComponent<ZoneInfoDndProps & DropTargetColle
 
 const mapDispatchToProps = {
     selectCards,
-    moveCards
+    moveCardsFixCoords
 };
 
 export default connect(null, mapDispatchToProps)(DragSource<ZoneInfoDndProps>(

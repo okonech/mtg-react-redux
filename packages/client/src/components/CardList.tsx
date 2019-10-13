@@ -76,13 +76,17 @@ const CardList: React.FC<CardListProps> = (props) => {
         <div style={{ display: 'flex', flexDirection: direction }}>
             {React.Children.map(children, (child, idx) => {
                 if (cellSize) {
-                    return (<HoverCardListCellFixed size={cellSize} direction={direction} fullSize={idx === childLength - 1}>
-                        {child}
-                    </HoverCardListCellFixed>);
+                    return (
+                        <HoverCardListCellFixed size={cellSize} direction={direction} fullSize={idx === childLength - 1}>
+                            {child}
+                        </HoverCardListCellFixed>
+                    );
                 } else {
-                    return (<HoverCardListCellAuto direction={direction} fullSize={idx === childLength - 1}>
-                        {child}
-                    </HoverCardListCellAuto>);
+                    return (
+                        <HoverCardListCellAuto direction={direction} fullSize={idx === childLength - 1}>
+                            {child}
+                        </HoverCardListCellAuto>
+                    );
                 }
 
             })}

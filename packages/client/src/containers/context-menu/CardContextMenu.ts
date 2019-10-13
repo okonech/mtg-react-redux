@@ -3,7 +3,7 @@ import { closeContextMenu } from '../../actions/clickActions';
 import { connect } from 'react-redux';
 import { Data } from '../../components/context-menu/ContextMenuTrigger';
 import { GameCardPrimitive } from '@mtg-react-redux/models';
-import { moveCards } from '../../actions/gameCardsActions';
+import { moveCardsFixCoords } from '../../actions/gameCardsActions';
 import { Player, singlePlayerSelector } from '../../reducers/playersReducer';
 import { selectCards } from '../../actions/selectActions';
 import { selectedSelector } from '../../selectors/selected';
@@ -16,7 +16,7 @@ export interface MappedCardContextMenuProps {
     zone: Zone;
     card: GameCardPrimitive;
     selected: string[];
-    moveCards: typeof moveCards;
+    moveCardsFixCoords: typeof moveCardsFixCoords;
     selectCards: typeof selectCards;
 }
 
@@ -29,7 +29,7 @@ const mapStateToProps = (state: AppState, props: { data: Data }) => ({
 
 const mapDispatchToProps = {
     selectCards,
-    moveCards,
+    moveCardsFixCoords,
     closeContextMenu
 };
 

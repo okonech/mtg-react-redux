@@ -1,12 +1,12 @@
-import { setId, nextTurn, setCurrentPlayer } from '../../actions/gameActions';
+import { nextTurn, setCurrentPlayer, setId } from '../../actions/gameActions';
 import deepFreeze from 'deep-freeze';
 import gameReducer, { GameState } from '../../reducers/gameReducer';
 
-let state: GameState = {
+const state: GameState = {
     id: null,
     turn: 0,
     currentPlayer: null
-}
+};
 
 it('initial state', () => {
     expect(gameReducer(undefined, {} as any)).toEqual(state);

@@ -1,13 +1,13 @@
+import { addCardByNameAsync } from '../../actions/deckEditorActions';
+import { Cards } from 'scryfall-sdk';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Autosuggest from 'react-autosuggest';
+import match from 'autosuggest-highlight/match';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import React from 'react';
-import Autosuggest from 'react-autosuggest';
-import { Cards } from 'scryfall-sdk';
-import { addCardByNameAsync } from '../../actions/deckEditorActions';
+import TextField from '@material-ui/core/TextField';
 
 function renderInputComponent(inputProps: any) {
     const { classes, inputRef = () => ({}), ref, ...other } = inputProps;

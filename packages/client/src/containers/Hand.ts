@@ -1,16 +1,16 @@
 import { CardDragObject } from './DraggableCard';
 import { connect } from 'react-redux';
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
-import { findDOMNode } from 'react-dom';
 import { GameCardZone } from '../selectors/player';
-import { moveCards } from '../actions/gameCardsActions';
+import { moveCardsFixCoords } from '../actions/gameCardsActions';
 import { selectCards } from '../actions/selectActions';
 import { Types } from '../Constants';
 import Hand from '../components/Hand';
 
 const handTarget: DropTargetSpec<typeof Hand.defaultProps> = {
   hover(props: typeof Hand.defaultProps, monitor: DropTargetMonitor, component) {
-    const node = findDOMNode(component) as Element;
+
+    const node = component.handRef.current as HTMLElement;
     const placeholderIndex = getPlaceholderIndex(props.zone, monitor, node);
     if (component.state.placeholderIndex !== placeholderIndex) {
       component.setState({ placeholderIndex });
@@ -18,7 +18,7 @@ const handTarget: DropTargetSpec<typeof Hand.defaultProps> = {
 
   },
   drop(props: typeof Hand.defaultProps, monitor, component) {
-    const { moveCards: moveCardsAction, zone } = props;
+    const { moveCardsFixCoords: moveCardsAction, zone } = props;
     const { zoneId, cards } = monitor.getItem() as CardDragObject;
     const { placeholderIndex } = component.state;
     cards.forEach((id) => {
@@ -27,12 +27,12 @@ const handTarget: DropTargetSpec<typeof Hand.defaultProps> = {
         element.style.display = 'block';
       }
     });
-    moveCardsAction(zoneId, cards, zone.id, placeholderIndex, 0, 0);
+    moveCardsAction(zoneId, zone.id, cards, placeholderIndex, 0, 0);
   }
 };
 
 export interface HandMappedProps {
-  moveCards: typeof moveCards;
+  moveCardsFixCoords: typeof moveCardsFixCoords;
   selectCards: typeof selectCards;
 }
 
@@ -43,16 +43,15 @@ export interface HandTargetCollectedProps {
   dragItem: CardDragObject;
 }
 
-function getPlaceholderIndex(zone: GameCardZone, monitor: DropTargetMonitor, handElement: Element) {
+function getPlaceholderIndex(zone: GameCardZone, monitor: DropTargetMonitor, handElement: HTMLElement) {
 
   if (zone.cards.length === 0) {
     return 0;
   }
   const selectable = handElement.firstChild.lastChild as Element;
   const mouseX = monitor.getClientOffset().x;
-  const bounds = handElement.getBoundingClientRect();
   // shift placeholder if x position more than card width / 2
-  const xPos = mouseX - bounds.left + selectable.scrollLeft;
+  const xPos = mouseX - handElement.offsetLeft + selectable.scrollLeft;
 
   let cardWidth = 0;
 
@@ -79,7 +78,7 @@ function getPlaceholderIndex(zone: GameCardZone, monitor: DropTargetMonitor, han
 }
 const mapDispatchToProps = {
   selectCards,
-  moveCards
+  moveCardsFixCoords
 };
 
 export default connect(null, mapDispatchToProps)(

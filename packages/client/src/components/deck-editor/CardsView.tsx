@@ -66,7 +66,8 @@ const CardsView: React.FC<CardsViewProps> = (props) => {
                                 topLabel={quantity > 1 ? quantity.toString() : null}
                                 tapped={false}
                                 flipped={false}
-                            />);
+                            />
+                        );
                     })}
                 </CardList>
             </Box>

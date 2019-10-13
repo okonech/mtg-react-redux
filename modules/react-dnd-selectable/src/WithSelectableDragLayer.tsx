@@ -1,7 +1,7 @@
 import { Identifier, XYCoord } from 'dnd-core';
-import React from 'react';
 import { SelectableContext } from './SelectableContext';
 import { Types } from './SelectableGroup';
+import React from 'react';
 
 interface SelectableDragLayerProps {
     context?: SelectableContext;
@@ -37,10 +37,8 @@ const getStyle = (initialOffset: XYCoord, currentOffset: XYCoord,
     };
 };
 
-// only wrapped components can be selected
-const WithSelectableDragLayer = <P extends object>(Component: React.ComponentType<P>) =>
-
-    (props: P & SelectableDragLayerProps) => {
+const WithSelectableDragLayer = <P extends {}>(Component: React.ComponentType<P>) => {
+    const SelectableDragLayer: React.FC<P & SelectableDragLayerProps> = (props) => {
         const { isDragging, itemType, item, currentClientOffset, initialClientOffset } = props;
 
         if (!isDragging || !initialClientOffset) {
@@ -62,5 +60,7 @@ const WithSelectableDragLayer = <P extends object>(Component: React.ComponentTyp
             />
         );
     };
+    return SelectableDragLayer;
+};
 
 export default WithSelectableDragLayer;

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { DragLayer, XYCoord } from 'react-dnd';
 import { Identifier } from 'dnd-core';
 import { mapIdsToGameCardData } from '../selectors/player';
-import { WithSelectableDragLayer } from '../packages/react-dnd-selectable';
+import { WithSelectableDragLayer } from '@mtg-react-redux/react-dnd-selectable';
 import CardCustomDragLayer, { CardCustomDragLayerProps } from '../components/CardCustomDragLayer';
 
 export interface DragLayerProps {

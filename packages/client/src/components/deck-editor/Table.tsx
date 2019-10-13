@@ -178,9 +178,11 @@ const EnhancedTableRow: React.FC<EnhancedTableRowProps> = (props) => {
                     {cardModel.name()}
                 </TableCell>
                 {xsRow ? null :
-                    <TableCell align='left'>
-                        {cardModel.typeLine()}
-                    </TableCell>}
+                    (
+                        <TableCell align='left'>
+                            {cardModel.typeLine()}
+                        </TableCell>
+                    )}
                 <TableCell align='left'>
                     {cardModel.setName}
                 </TableCell>
@@ -205,16 +207,19 @@ const EnhancedTableRow: React.FC<EnhancedTableRowProps> = (props) => {
                     />
                 </TableCell>
                 {xsRow ? null :
-                    <TableCell align='right'>
-                        <TextField
-                            id={`${data.id}:::owned`}
-                            value={data.owned}
-                            onChange={handleRowChange()}
-                            type='number'
-                            margin='dense'
-                            variant='outlined'
-                        />
-                    </TableCell>}
+                    (
+                        <TableCell align='right'>
+                            <TextField
+                                id={`${data.id}:::owned`}
+                                value={data.owned}
+                                onChange={handleRowChange()}
+                                type='number'
+                                margin='dense'
+                                variant='outlined'
+                            />
+                        </TableCell>
+                    )
+                }
             </React.Fragment>
         );
     }

@@ -85,6 +85,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const DrawerLeftMini = (props) => {
+    const { style } = props;
     const classes = useStyles({});
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -111,6 +112,7 @@ const DrawerLeftMini = (props) => {
 
     return (
         <Drawer
+            style={style}
             variant='permanent'
             className={clsx(classes.drawer, {
                 [classes.drawerOpen]: open,
