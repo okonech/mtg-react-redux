@@ -53,15 +53,17 @@ const mapZoneToCards = (zone: Zone, cardsState: CardsState, gameCardsState: Game
     cards: mapIdsToGameCardData(zone.cards, cardsState, gameCardsState)
 });
 
+export const mapIdToGameCardData = (id: string, cardsState: CardsState, gameCardsState: GameCardsState): GameCardData => {
+    const gameCard = singleGameCardSelector(gameCardsState, id);
+    const card = singleCardSelector(cardsState, gameCard.dbId);
+    return {
+        card,
+        gameCard
+    };
+};
+
 export const mapIdsToGameCardData = (ids: string[], cardsState: CardsState, gameCardsState: GameCardsState): GameCardData[] =>
-    ids.map((cardId) => {
-        const gameCard = singleGameCardSelector(gameCardsState, cardId);
-        const card = singleCardSelector(cardsState, gameCard.dbId);
-        return {
-            card,
-            gameCard
-        };
-    });
+    ids.map((cardId) => mapIdToGameCardData(cardId, cardsState, gameCardsState));
 
 export const playerSelector = createSelector(
     [getPlayerZones, getCards, getGameCards],

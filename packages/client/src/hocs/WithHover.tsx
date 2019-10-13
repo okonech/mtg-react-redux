@@ -1,47 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-const WithHover = <P extends Omit<{}, 'isHovered'>>(Component: React.ComponentType<P>) =>
-    class WithHoverHoc extends React.PureComponent<P & { isHovered?: boolean }> {
-        public state = {
-            isHovered: false
-        };
+const WithHover = <P extends Omit<{}, 'isHovered'>>(Component: React.ComponentType<P>) => {
+    const WithHoverHoc: React.SFC<P> = (props) => {
+        const [isHovered, setIsHovered] = useState(false);
+        const onMouseEnter = () => setIsHovered(true);
+        const onMouseLeave = () => setIsHovered(false);
+        useEffect(() => {
+            setIsHovered(false);
+        }, [props]);
+        return (
+            <div
+                style={{ display: 'initial' }}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+            >
+                <Component
+                    isHovered={isHovered}
+                    {...props as P}
+                />
+            </div>
 
-        public onMouseEnter = () => {
-            this.setState({ isHovered: true });
-        }
-
-        public onMouseLeave = () => {
-            this.setState({ isHovered: false });
-        }
-
-        public componentDidMount() {
-            if (this.state.isHovered) {
-                this.setState({ isHovered: false });
-            }
-        }
-
-        public componentDidUpdate(prevProps, prevState) {
-            if (prevState.isHovered) {
-                this.setState({ isHovered: false });
-            }
-        }
-
-        public render() {
-            const { ...props } = this.props;
-            return (
-                <div
-                    style={{ display: 'initial' }}
-                    onMouseEnter={this.onMouseEnter}
-                    onMouseLeave={this.onMouseLeave}
-                >
-                    <Component
-                        isHovered={this.state.isHovered}
-                        {...props as P}
-                    />
-                </div>
-
-            );
-        }
+        );
     };
+    return WithHoverHoc;
+};
 
 export default WithHover;

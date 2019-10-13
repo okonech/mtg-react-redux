@@ -41,6 +41,7 @@ const styles = (theme: Theme) => createStyles({
 const ScrollingComponent: any = withScrolling('section' as any);
 
 interface HandProps extends WithStyles<typeof styles>, BaseComponentProps {
+    playerId: string;
     zone: GameCardZone;
     selected: string[];
     cardHeight: number;
@@ -90,7 +91,7 @@ class Hand extends React.PureComponent<AllProps, HandState> {
     }
 
     public render() {
-        const { zone, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards, style, classes } = this.props;
+        const { zone, playerId, connectDropTarget, isOver, canDrop, selected, cardHeight, selectCards, style, classes } = this.props;
         const { placeholderIndex } = this.state;
 
         let indexShift = 0;
@@ -101,6 +102,7 @@ class Hand extends React.PureComponent<AllProps, HandState> {
                 <DraggableCard
                     id={gameCard.id}
                     zoneId={zone.id}
+                    playerId={playerId}
                     card={gameCard}
                     key={'draggable-' + gameCard.id}
                     selectedCards={selected}

@@ -1,4 +1,5 @@
 import { CardDragObject } from './DraggableCard';
+import { connect } from 'react-redux';
 import { ConnectDropTarget, DropTarget, DropTargetMonitor, DropTargetSpec } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
 import { GameCardZone } from '../selectors/player';
@@ -6,7 +7,6 @@ import { moveCards } from '../actions/gameCardsActions';
 import { selectCards } from '../actions/selectActions';
 import { Types } from '../Constants';
 import Hand from '../components/Hand';
-import { connect } from 'react-redux';
 
 const handTarget: DropTargetSpec<typeof Hand.defaultProps> = {
   hover(props: typeof Hand.defaultProps, monitor: DropTargetMonitor, component) {
@@ -18,7 +18,7 @@ const handTarget: DropTargetSpec<typeof Hand.defaultProps> = {
 
   },
   drop(props: typeof Hand.defaultProps, monitor, component) {
-    const { moveCards, zone } = props;
+    const { moveCards: moveCardsAction, zone } = props;
     const { zoneId, cards } = monitor.getItem() as CardDragObject;
     const { placeholderIndex } = component.state;
     cards.forEach((id) => {
@@ -27,7 +27,7 @@ const handTarget: DropTargetSpec<typeof Hand.defaultProps> = {
         element.style.display = 'block';
       }
     });
-    moveCards(zoneId, cards, zone.id, placeholderIndex, 0, 0);
+    moveCardsAction(zoneId, cards, zone.id, placeholderIndex, 0, 0);
   }
 };
 
@@ -82,9 +82,10 @@ const mapDispatchToProps = {
   moveCards
 };
 
-export default connect(null, mapDispatchToProps)(DropTarget<typeof Hand.defaultProps, HandTargetCollectedProps>(Types.CARD, handTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop(),
-  dragItem: monitor.getItem()
-}))(Hand));
+export default connect(null, mapDispatchToProps)(
+  DropTarget<typeof Hand.defaultProps, HandTargetCollectedProps>(Types.CARD, handTarget, (connector, monitor) => ({
+    connectDropTarget: connector.dropTarget(),
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop(),
+    dragItem: monitor.getItem()
+  }))(Hand));

@@ -11,10 +11,12 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 import { moveCards } from '../actions/gameCardsActions';
 import { selectCards } from '../actions/selectActions';
 import { Types } from '../Constants';
+import ContextMenuTrigger from './context-menu/ContextMenuTrigger';
 import React from 'react';
 import ZoneInfo from '../components/ZoneInfo';
 
 export interface ZoneInfoDndProps extends BaseComponentProps {
+    playerId: string;
     zone: GameCardZone;
     icon: any;
     moveCards: typeof moveCards;
@@ -91,22 +93,29 @@ class ZoneInfoDnd extends React.PureComponent<ZoneInfoDndProps & DropTargetColle
     }
 
     public render() {
-        const { zone, icon, style, click, connectDragSource, connectDropTarget } = this.props;
+        const { zone, icon, style, click, connectDragSource, connectDropTarget, playerId } = this.props;
         return (
-            connectDragSource(
-                connectDropTarget(
-                    <article
-                        onDoubleClick={click}
-                        style={{ ...style, ...ZoneInfoDndStyle }}
-                    >
-                        <ZoneInfo
-                            num={zone.cards.length}
-                            icon={icon}
-                        />
-                    </article>
-                )
-            )
+            <ContextMenuTrigger
+                type={'zone'}
+                player={playerId}
+                zone={zone.id}
+            >
+                {connectDragSource(
+                    connectDropTarget(
+                        <article
+                            onDoubleClick={click}
+                            style={{ ...style, ...ZoneInfoDndStyle }}
+                        >
 
+                            <ZoneInfo
+                                id={zone.id}
+                                num={zone.cards.length}
+                                icon={icon}
+                            />
+                        </article>
+                    )
+                )}
+            </ContextMenuTrigger>
         );
     }
 }
