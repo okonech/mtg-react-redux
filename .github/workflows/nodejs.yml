@@ -20,6 +20,7 @@ jobs:
     - name: build and test
       run: |
         npm ci
+        npm install -g lerna@3.16.4
         scripts/build.sh
         lerna run test-ci
       env:
