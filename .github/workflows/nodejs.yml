@@ -1,4 +1,4 @@
-name: Node CI
+name: Run Jest Tests
 
 on: [push]
 
@@ -17,10 +17,11 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - name: globally install lerna
+    - uses: m19c/action-lerna@v1
     - name: build and test
       run: |
         npm ci
-        npm install -g lerna@3.16.4
         scripts/build.sh
         lerna run test-ci
       env:
