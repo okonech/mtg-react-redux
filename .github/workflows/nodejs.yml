@@ -19,13 +19,24 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         
-    - name: globally install lerna
-      uses: MrBoolean/action-lerna@master
+    - uses: actions/cache@v1
+      with:
+       path: ~/.npm
+       key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+       restore-keys: |
+        ${{ runner.os }}-node-:  
+      
+    - name: build
+      if: steps.cache-primes.outputs.cache-hit != 'true'
+      run: |
+        npm ci
+        npm install -g lerna@3.16.4
+        scripts/build.sh
+      env:
+        CI: true
       
     - name: build and test
       run: |
-        npm ci
-        scripts/build.sh
         lerna run test-ci
       env:
         CI: true
