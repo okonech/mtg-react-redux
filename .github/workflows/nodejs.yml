@@ -20,7 +20,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         
     - name: globally install lerna
-      uses: m19c/action-lerna@v1
+      uses: MrBoolean/action-lerna@master
       
     - name: build and test
       run: |
