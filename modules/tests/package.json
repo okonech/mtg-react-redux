@@ -1,6 +1,6 @@
 {
     "name": "@mtg-react-redux/tests",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "Testing for various components in monorepo",
     "scripts": {
         "build": "npm run compile",
@@ -12,11 +12,9 @@
     "author": "",
     "license": "MIT",
     "private": true,
-    "dependencies": {},
     "devDependencies": {
         "@mtg-react-redux/models": "0.0.1",
         "tslint-react": "^4.0.0",
         "typescript": "^3.6.3"
-    },
-    "peerDependencies": {}
+    }
 }
