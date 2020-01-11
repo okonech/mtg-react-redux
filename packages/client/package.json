@@ -6,7 +6,7 @@
     "@material-ui/core": "^4.5.0",
     "@material-ui/icons": "^4.4.3",
     "@mtg-react-redux/models": "0.0.1",
-    "@mtg-react-redux/react-dnd-selectable": "1.1.3",
+    "@mtg-react-redux/react-dnd-selectable": "^1.2.0",
     "@neises/pw-react-dnd-scrollzone": "^7.0.0",
     "autosuggest-highlight": "^3.1.1",
     "docz": "^1.3.2",

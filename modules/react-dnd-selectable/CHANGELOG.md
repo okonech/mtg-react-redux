@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.2.0 (2020-01-11)
+
+
+### Features
+
+* **handle-auth:** add auth actions/epics + store addl data in profile ([784fac4](https://github.com/okonech/mtg-react-redux/commit/784fac43ad33dee3996b037f966a642839c1389e))
+* cloud ([d8a9580](https://github.com/okonech/mtg-react-redux/commit/d8a9580294de157e994fc94fd9a59103c3eb0346))
+* **deck-editor:** initial editor, new folder struct, fix drag issue ([a2edd86](https://github.com/okonech/mtg-react-redux/commit/a2edd86316bbe7b2b4aadac6fd673aea884fea33))
+
+
+
+
+
+
 ## [1.1.3](https://github.com/okonech/mtg-react-redux/compare/@mtg-react-redux/react-dnd-selectable@1.1.2...@mtg-react-redux/react-dnd-selectable@1.1.3) (2019-06-28)
 
 **Note:** Version bump only for package @mtg-react-redux/react-dnd-selectable
