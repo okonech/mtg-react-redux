@@ -14,5 +14,10 @@
   "dependencies": {
     "firebase-admin": "^8.5.0",
     "scryfall-sdk": "^1.5.1"
+  },
+  "devDependencies": {
+    "tslint": "^5.20.0",
+    "tslint-react": "^4.0.0",
+    "typescript": "^3.6.3"
   }
 }

@@ -6,7 +6,8 @@
         "build": "npm run compile",
         "lint": "tslint -c tslint.json src/**/*",
         "compile": "tsc",
-        "watch": "tsc -w"
+        "watch": "tsc -w",
+        "prepare": "bash ../../scripts/check-changes.sh \"npm run build\""
     },
     "main": "./dist/index",
     "types": "./dist/index",

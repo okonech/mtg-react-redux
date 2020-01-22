@@ -1,11 +1,18 @@
 {
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
         "outDir": "./dist",
         "rootDir": "src",
         "jsx": "react",
         "esModuleInterop": true,
-        "declaration": true
+        "declaration": true,
+        "isolatedModules": false,
     },
-    "include": ["src/**/*.ts","src/**/*.tsx"],
-    "exclude": ["node_modules"]
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }
