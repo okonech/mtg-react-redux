@@ -1,6 +1,15 @@
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
 [![Actions Status](https://github.com/okonech/mtg-react-redux/workflows/Node%20CI/badge.svg)](https://github.com/okonech/mtg-react-redux/actions)
 
+An MTG Web app player using firebase as a back end and firebase cloud messaging for updating game state when players act.
+This is intended to maximize free tier usage, and there is currently no limit to Firebase Cloud Messaging usage.
+
+Each game subscribes to a new channel unique to the specific game, and back end state changes are pushed to each player. They must perform GET requests with their player secret in order to retrieve private game information.
+
+Coded in Node + React + Redux using a monorepo. Class modules are used to share code between front and back ends.
+
+
+
 TODO:
 
 hover over playerinfo will show commander tax and commander damage
